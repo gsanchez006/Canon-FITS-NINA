@@ -19,9 +19,10 @@ packages/
 *.user
 *.sln.iml
 
-# Build output
+# Build output (but include final package)
 dist/
-package/
+!package/
+!package/NINA.Plugin.Canon.EDSDK.zip
 
 # Temporary files
 *.tmp
