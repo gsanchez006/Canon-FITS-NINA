@@ -2,6 +2,8 @@
 
 **Version 1.0.0** | A professional FITS converter plugin for NINA (Nighttime Imaging 'N' Astronomy)
 
+![NINA Canon FITS Converter](nina_canon_fits.png)
+
 ## Overview
 
 This plugin automatically converts Canon RAW files (CR2, CR3, CRW) to FITS format using NINA's in-memory image data. It preserves full 14/16-bit dynamic range without demosaicing or processing, ideal for scientific astrophotography workflows.
