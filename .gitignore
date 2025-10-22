@@ -1,0 +1,38 @@
+# Build and object files
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+*.so
+*.dylib
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Visual Studio
+.vs/
+.vscode/
+*.user
+*.sln.iml
+
+# Build output
+dist/
+package/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+.idea/
+
+# IDE
+.vscode/launch.json
+.vscode/settings.json

@@ -1,0 +1,142 @@
+<ResourceDictionary
+    x:Class="NINA.Plugin.Canon.EDSDK.Options"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ninactrl="clr-namespace:NINACustomControlLibrary;assembly=NINACustomControlLibrary"
+    xmlns:local="clr-namespace:NINA.Plugin.Canon.EDSDK">
+
+    <DataTemplate x:Key="Canon RAW to FITS Converter_Options">
+        <Grid Margin="5,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <TextBlock Grid.Row="0" 
+                       Text="Canon RAW to FITS Converter" 
+                       FontSize="16" 
+                       FontWeight="Bold" 
+                       Margin="0,10,0,10" />
+
+            <!-- Description -->
+            <TextBlock Grid.Row="1" 
+                       TextWrapping="Wrap" 
+                       Margin="0,0,0,15"
+                       Opacity="0.7">
+                <Run Text="Automatically converts all Canon RAW files (CR2, CR3, CRW, and newer formats) to FITS format using NINA's in-memory image data." />
+                <LineBreak />
+                <Run Text="FITS files are saved in the same directory as the original RAW files with all available NINA metadata preserved. Full 14/16-bit dynamic range is preserved without demosaicing or processing." />
+                <LineBreak />
+                <Run Text="Supports dual FITS writers: CSharpFITS (pure C#, cross-platform) or cfitsio (native library, higher performance)." />
+            </TextBlock>
+
+            <!-- Enable Auto-Convert -->
+            <Grid Grid.Row="2" Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" 
+                           VerticalAlignment="Center" 
+                           Text="Enable Auto-Conversion:" />
+                
+                <CheckBox Grid.Column="1" 
+                          VerticalAlignment="Center"
+                          IsChecked="{Binding AutoConvertEnabled, Mode=TwoWay}" 
+                          ToolTip="Automatically convert Canon RAW files to FITS format during image capture" />
+            </Grid>
+
+            <!-- FITS Engine Selection -->
+            <Grid Grid.Row="3" Margin="0,15,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" 
+                           VerticalAlignment="Center" 
+                           Text="FITS Engine:" 
+                           FontWeight="Bold" />
+                
+                <ComboBox Grid.Column="1" 
+                          VerticalAlignment="Center"
+                          SelectedIndex="{Binding FitsEngineIndex, Mode=TwoWay}"
+                          ToolTip="Select FITS file creation engine">
+                    <ComboBoxItem Content="CSharpFITS (NINA Standard)" />
+                    <ComboBoxItem Content="NASA CFitsio" />
+                </ComboBox>
+            </Grid>
+
+            <!-- CFitsio Compression Method (shown only when CFitsio engine selected) -->
+            <Grid Grid.Row="4" Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.Visibility>
+                    <Binding Path="FitsEngineIndex">
+                        <Binding.Converter>
+                            <local:IntToVisibilityConverter TrueValue="1" />
+                        </Binding.Converter>
+                    </Binding>
+                </Grid.Visibility>
+                
+                <TextBlock Grid.Column="0" 
+                           VerticalAlignment="Center" 
+                           Text="Compression Method:" 
+                           FontWeight="Bold" />
+                
+                <ComboBox Grid.Column="1" 
+                          VerticalAlignment="Center"
+                          SelectedIndex="{Binding CFitsioCompressionType, Mode=TwoWay}"
+                          ToolTip="Select CFitsio compression algorithm">
+                    <ComboBoxItem Content="RICE (Recommended)" ToolTip="RICE lossless compression - best for most images, ~30-50% reduction" />
+                    <ComboBoxItem Content="GZIP Level 1 (Fast)" ToolTip="Fast GZIP compression - moderate file size reduction" />
+                    <ComboBoxItem Content="GZIP Level 2 (Better)" ToolTip="Better GZIP compression - higher reduction, slower" />
+                    <ComboBoxItem Content="HCOMPRESS (Lossy)" ToolTip="H-Compress - adjustable lossy compression for large files" />
+                    <ComboBoxItem Content="None (Uncompressed)" ToolTip="No compression - largest file size" />
+                </ComboBox>
+            </Grid>
+
+            <!-- Delete Original Files -->
+            <Grid Grid.Row="5" Margin="0,15,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" 
+                           VerticalAlignment="Center" 
+                           Text="Delete Original RAW Files:" />
+                
+                <CheckBox Grid.Column="1" 
+                          VerticalAlignment="Center"
+                          IsChecked="{Binding DeleteOriginalFiles, Mode=TwoWay}" 
+                          ToolTip="Delete Canon RAW files after successful FITS conversion" />
+            </Grid>
+
+            <!-- Engine Description -->
+            <TextBlock Grid.Row="6" 
+                       TextWrapping="Wrap" 
+                       Margin="0,5,0,15"
+                       Opacity="0.6"
+                       FontSize="11">
+                <Run Text="• CSharpFITS: Pure C# implementation used by NINA, no compression" />
+                <LineBreak />
+                <Run Text="• NASA CFitsio: Native library with compression support (RICE: 30-50% smaller, GZIP: 20-40% smaller)" />
+            </TextBlock>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>
+
+

@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <AssemblyName>NINA.Plugin.Canon.EDSDK</AssemblyName>
+    <RootNamespace>NINA.Plugin.Canon.EDSDK</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NINA.Core" Version="3.0.*" />
+    <PackageReference Include="NINA.Equipment" Version="3.0.*" />
+    <PackageReference Include="NINA.Image" Version="3.0.*" />
+    <PackageReference Include="NINA.Plugin" Version="3.0.*" />
+    <PackageReference Include="NINA.Profile" Version="3.0.*" />
+    <PackageReference Include="NINA.WPF.Base" Version="3.0.*" />
+    <PackageReference Include="NINACustomControlLibrary" Version="2.3.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="CSharpFITS_v1.1">
+      <HintPath>lib\CSharpFITS_v1.1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EDSDK\**\*.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="lib\*.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
+
