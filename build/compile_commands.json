@@ -1,0 +1,402 @@
+[
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\buffers.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\buffers.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/buffers.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\cfileio.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\cfileio.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/cfileio.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\checksum.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\checksum.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/checksum.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\drvrfile.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\drvrfile.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/drvrfile.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\drvrmem.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\drvrmem.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/drvrmem.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\drvrnet.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\drvrnet.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/drvrnet.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\drvrsmem.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\drvrsmem.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/drvrsmem.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\editcol.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\editcol.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/editcol.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\edithdu.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\edithdu.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/edithdu.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\eval_f.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\eval_f.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/eval_f.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\eval_l.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\eval_l.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/eval_l.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\eval_y.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\eval_y.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/eval_y.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\f77_wrap1.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\f77_wrap1.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/f77_wrap1.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\f77_wrap2.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\f77_wrap2.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/f77_wrap2.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\f77_wrap3.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\f77_wrap3.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/f77_wrap3.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\f77_wrap4.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\f77_wrap4.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/f77_wrap4.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\fits_hcompress.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\fits_hcompress.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/fits_hcompress.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\fits_hdecompress.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\fits_hdecompress.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/fits_hdecompress.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\fitscore.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\fitscore.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/fitscore.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcol.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcol.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcol.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcolb.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcolb.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcolb.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcold.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcold.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcold.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcole.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcole.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcole.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcoli.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcoli.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcoli.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcolj.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcolj.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcolj.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcolk.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcolk.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcolk.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcoll.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcoll.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcoll.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcols.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcols.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcols.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcolsb.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcolsb.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcolsb.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcolui.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcolui.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcolui.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcoluj.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcoluj.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcoluj.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getcoluk.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getcoluk.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getcoluk.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\getkey.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\getkey.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/getkey.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\group.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\group.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/group.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\grparser.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\grparser.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/grparser.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\histo.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\histo.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/histo.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\imcompress.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\imcompress.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/imcompress.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\iraffits.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\iraffits.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/iraffits.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\modkey.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\modkey.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/modkey.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\pliocomp.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\pliocomp.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/pliocomp.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcol.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcol.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcol.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcolb.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcolb.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcolb.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcold.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcold.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcold.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcole.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcole.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcole.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcoli.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcoli.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcoli.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcolj.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcolj.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcolj.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcolk.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcolk.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcolk.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcoll.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcoll.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcoll.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcols.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcols.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcols.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcolsb.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcolsb.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcolsb.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcolu.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcolu.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcolu.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcolui.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcolui.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcolui.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcoluj.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcoluj.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcoluj.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putcoluk.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putcoluk.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putcoluk.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\putkey.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\putkey.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/putkey.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\quantize.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\quantize.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/quantize.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\region.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\region.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/region.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\ricecomp.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\ricecomp.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/ricecomp.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\scalnull.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\scalnull.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/scalnull.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\simplerng.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\simplerng.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/simplerng.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\swapproc.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\swapproc.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/swapproc.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\wcssub.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\wcssub.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/wcssub.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\wcsutil.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\wcsutil.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/wcsutil.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\zcompress.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\zcompress.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/zcompress.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cfitsio.dir/includes_C.rsp -g -o CMakeFiles\\cfitsio.dir\\zuncompress.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\zuncompress.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/zuncompress.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/TestProg.dir/includes_C.rsp -g -o CMakeFiles\\TestProg.dir\\utilities\\testprog.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\testprog.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/testprog.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -DSTANDALONE -Dcfitsio_EXPORTS @CMakeFiles/fitsverify.dir/includes_C.rsp -g -o CMakeFiles\\fitsverify.dir\\utilities\\ftverify.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\ftverify.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/ftverify.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -DSTANDALONE -Dcfitsio_EXPORTS @CMakeFiles/fitsverify.dir/includes_C.rsp -g -o CMakeFiles\\fitsverify.dir\\utilities\\fvrf_data.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fvrf_data.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fvrf_data.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -DSTANDALONE -Dcfitsio_EXPORTS @CMakeFiles/fitsverify.dir/includes_C.rsp -g -o CMakeFiles\\fitsverify.dir\\utilities\\fvrf_file.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fvrf_file.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fvrf_file.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -DSTANDALONE -Dcfitsio_EXPORTS @CMakeFiles/fitsverify.dir/includes_C.rsp -g -o CMakeFiles\\fitsverify.dir\\utilities\\fvrf_head.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fvrf_head.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fvrf_head.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -DSTANDALONE -Dcfitsio_EXPORTS @CMakeFiles/fitsverify.dir/includes_C.rsp -g -o CMakeFiles\\fitsverify.dir\\utilities\\fvrf_key.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fvrf_key.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fvrf_key.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -DSTANDALONE -Dcfitsio_EXPORTS @CMakeFiles/fitsverify.dir/includes_C.rsp -g -o CMakeFiles\\fitsverify.dir\\utilities\\fvrf_misc.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fvrf_misc.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fvrf_misc.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/cookbook.dir/includes_C.rsp -g -o CMakeFiles\\cookbook.dir\\utilities\\cookbook.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\cookbook.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/cookbook.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/fitscopy.dir/includes_C.rsp -g -o CMakeFiles\\fitscopy.dir\\utilities\\fitscopy.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fitscopy.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fitscopy.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/fpack.dir/includes_C.rsp -g -o CMakeFiles\\fpack.dir\\utilities\\fpack.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fpack.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fpack.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/fpack.dir/includes_C.rsp -g -o CMakeFiles\\fpack.dir\\utilities\\fpackutil.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fpackutil.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fpackutil.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/funpack.dir/includes_C.rsp -g -o CMakeFiles\\funpack.dir\\utilities\\funpack.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\funpack.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/funpack.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/funpack.dir/includes_C.rsp -g -o CMakeFiles\\funpack.dir\\utilities\\fpackutil.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\fpackutil.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/fpackutil.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/imcopy.dir/includes_C.rsp -g -o CMakeFiles\\imcopy.dir\\utilities\\imcopy.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\imcopy.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/imcopy.c"
+},
+{
+  "directory": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DHAVE_FTRUNCATE -DHAVE_UNISTD_H -Dcfitsio_EXPORTS @CMakeFiles/speed.dir/includes_C.rsp -g -o CMakeFiles\\speed.dir\\utilities\\speed.c.obj -c \"C:\\Users\\Gus\\Documents\\VS Code Projects\\NINA Canon\\NINA.Plugin.Canon.EDSDK.CFitsio\\cfitsio-4.6.3\\utilities\\speed.c\"",
+  "file": "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/NINA.Plugin.Canon.EDSDK.CFitsio/cfitsio-4.6.3/utilities/speed.c"
+}
+]

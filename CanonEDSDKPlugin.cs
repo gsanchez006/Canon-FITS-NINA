@@ -12,6 +12,7 @@ using NINA.Plugin.Canon.EDSDK.Services;
 using NINA.WPF.Base.Mediator;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.IO;
@@ -23,6 +24,17 @@ using System.Windows.Input;
 
 namespace NINA.Plugin.Canon.EDSDK
 {
+    /// <summary>
+    /// Tracks information about a pending FITS conversion task
+    /// </summary>
+    internal class TaskInfo
+    {
+        public DateTime CreatedAt { get; set; }
+        public string FileName { get; set; }
+        public string Status { get; set; }
+        public DateTime? CompletedAt { get; set; }
+    }
+
     /// <summary>
     /// Main plugin class that implements the NINA plugin interface
     /// This plugin automatically converts all Canon RAW files (CR2, CR3, CRW, and newer formats) to FITS format
@@ -42,8 +54,12 @@ namespace NINA.Plugin.Canon.EDSDK
         // Track processed CR3 files to prevent duplicate conversions
         private static readonly ConcurrentDictionary<string, bool> processedFiles = new ConcurrentDictionary<string, bool>();
         
-        // Track all pending conversion tasks to ensure they complete
-        private static readonly ConcurrentBag<Task> pendingConversions = new ConcurrentBag<Task>();
+        // Track all pending conversion tasks with detailed info to ensure they complete
+        // Using ConcurrentDictionary allows us to remove completed tasks and track status
+        private static readonly ConcurrentDictionary<Task, TaskInfo> pendingConversions = new ConcurrentDictionary<Task, TaskInfo>();
+        
+        // Counter for total conversions to help with diagnostics
+        private static int totalConversionsQueued = 0;
 
         [ImportingConstructor]
         public CanonEDSDKPlugin(IProfileService profileService, IOptionsVM options, IImageSaveMediator imageSaveMediator)
@@ -83,27 +99,73 @@ namespace NINA.Plugin.Canon.EDSDK
             imageSaveMediator.BeforeImageSaved -= ImageSaveMediator_BeforeImageSaved;
             profileService.ProfileChanged -= ProfileService_ProfileChanged;
 
+            // Give a brief moment for any final tasks to be queued
+            // This handles the race condition where the last image's BeforeImageSaved
+            // event is still being processed when sequence ends
+            if (!pendingConversions.IsEmpty)
+            {
+                Logger.Info("Sequence ended, waiting for any final conversions to be queued...");
+                await Task.Delay(2000); // 2 second grace period
+            }
+
             // Wait for all pending conversions to complete
             if (!pendingConversions.IsEmpty)
             {
-                Logger.Info($"Waiting for {pendingConversions.Count} pending FITS conversions to complete...");
+                var pendingTasks = pendingConversions.Keys.ToList();
+                var pendingCount = pendingTasks.Count;
+                
+                Logger.Info($"Waiting for {pendingCount} pending FITS conversion(s) to complete...");
+                
+                // Log details of pending conversions
+                foreach (var kvp in pendingConversions)
+                {
+                    var info = kvp.Value;
+                    var elapsed = (DateTime.Now - info.CreatedAt).TotalSeconds;
+                    Logger.Info($"  - {info.FileName}: {info.Status} (queued {elapsed:F1}s ago)");
+                }
+                
                 try
                 {
                     // Wait up to 2 minutes for all conversions to finish
-                    await Task.WhenAll(pendingConversions).WaitAsync(TimeSpan.FromMinutes(2));
-                    Logger.Info("All pending conversions completed");
+                    var timeout = TimeSpan.FromMinutes(2);
+                    var waitTask = Task.WhenAll(pendingTasks);
+                    var completedTask = await Task.WhenAny(waitTask, Task.Delay(timeout));
+                    
+                    if (completedTask == waitTask)
+                    {
+                        // All tasks completed successfully
+                        Logger.Info($"All {pendingCount} pending conversion(s) completed successfully");
+                    }
+                    else
+                    {
+                        // Timeout occurred
+                        var remaining = pendingConversions.Count;
+                        Logger.Warning($"Teardown timeout after {timeout.TotalSeconds}s: {remaining} conversion(s) may not have completed");
+                        
+                        // Log which ones are still pending
+                        foreach (var kvp in pendingConversions)
+                        {
+                            var info = kvp.Value;
+                            Logger.Warning($"  - Still pending: {info.FileName} ({info.Status})");
+                        }
+                    }
                 }
                 catch (TimeoutException)
                 {
-                    Logger.Warning($"Teardown timeout: Some conversions may not have completed");
+                    var remaining = pendingConversions.Count;
+                    Logger.Warning($"Teardown timeout: {remaining} conversion(s) may not have completed");
                 }
                 catch (Exception ex)
                 {
                     Logger.Error($"Error waiting for pending conversions: {ex.Message}");
                 }
             }
+            else
+            {
+                Logger.Info("No pending conversions at teardown");
+            }
 
-            Logger.Info("Canon RAW to FITS Converter teardown complete");
+            Logger.Info($"Canon RAW to FITS Converter teardown complete (Total conversions queued: {totalConversionsQueued})");
             await base.Teardown();
         }
 
@@ -152,24 +214,38 @@ namespace NINA.Plugin.Canon.EDSDK
                 var exposureStart = imageData.MetaData.Image.ExposureStart;
                 var eventTime = DateTime.Now;  // When BeforeImageSaved fires (close to when CR3 will be saved)
                 
-                Logger.Info($"📸 Canon camera detected, saving FITS file from in-memory data");
+                // Increment counter and log
+                var conversionNumber = Interlocked.Increment(ref totalConversionsQueued);
+                
+                Logger.Info($"📸 Canon camera detected, queuing FITS conversion #{conversionNumber}");
                 Logger.Info($"   Camera: {cameraName}");
                 Logger.Info($"   Exposure started: {exposureStart:HH:mm:ss.fff}");
+
+                // Create task info for tracking (before creating the task)
+                var taskInfo = new TaskInfo
+                {
+                    CreatedAt = DateTime.Now,
+                    FileName = $"Conversion #{conversionNumber}",
+                    Status = "Queued"
+                };
 
                 // Wait for NINA to save the CR3 file, then save FITS in same directory
                 // Track this task to ensure it completes even at end of sequence
                 var conversionTask = Task.Run(async () =>
                 {
-                    // Limit concurrent conversions to prevent resource exhaustion
-                    await conversionSemaphore.WaitAsync();
-                    
                     try
                     {
+                        taskInfo.Status = "Waiting for semaphore";
+                        
+                        // Limit concurrent conversions to prevent resource exhaustion
+                        await conversionSemaphore.WaitAsync();
+                        
+                        taskInfo.Status = "Processing";
+                        
                         var startWait = DateTime.Now;
-                        Logger.Debug($"   [Burst] Started polling for CR3 at {startWait:HH:mm:ss.fff}");
+                        Logger.Debug($"   [Burst #{conversionNumber}] Started polling for CR3 at {startWait:HH:mm:ss.fff}");
                         
                         // Poll for the CR3 file instead of fixed delay
-                        var fileSettings = profileService.ActiveProfile.ImageFileSettings;
                         string baseDir = fileSettings.FilePath;
                         FileInfo cr3Files = null;
                         int attempts = 0;
@@ -199,10 +275,11 @@ namespace NINA.Plugin.Canon.EDSDK
                                     if (processedFiles.TryAdd(foundFiles.FullName, true))
                                     {
                                         cr3Files = foundFiles;
+                                        taskInfo.FileName = Path.GetFileNameWithoutExtension(foundFiles.Name);
                                     }
                                 }
                                 var waitTime = (DateTime.Now - startWait).TotalMilliseconds;
-                                Logger.Debug($"   [Burst] Found CR3 after {attempts} attempts ({waitTime:F0}ms), timestamp delta: {Math.Abs((foundFiles.LastWriteTime - eventTime).TotalMilliseconds):F0}ms");
+                                Logger.Debug($"   [Burst #{conversionNumber}] Found CR3 after {attempts} attempts ({waitTime:F0}ms), timestamp delta: {Math.Abs((foundFiles.LastWriteTime - eventTime).TotalMilliseconds):F0}ms");
                             }
                         }
 
@@ -212,24 +289,35 @@ namespace NINA.Plugin.Canon.EDSDK
                             string cr3Name = Path.GetFileNameWithoutExtension(cr3Files.Name);
                             string fitsPath = Path.Combine(cr3Dir, cr3Name + ".fits");
 
-                            Logger.Info($"   Found CR3: {cr3Files.FullName}");
-                            Logger.Info($"   Saving FITS: {fitsPath}");
+                            Logger.Info($"   [#{conversionNumber}] Found CR3: {cr3Files.FullName}");
+                            Logger.Info($"   [#{conversionNumber}] Saving FITS: {fitsPath}");
 
+                            taskInfo.Status = "Converting";
+                            
                             // Use selected FITS engine and compression type
                             bool useCfitsio = (FitsEngineIndex == 1);
                             int compressionType = GetCFitsioCompressionConstant();
                             await rawConverter.ConvertImageDataToFitsAsync(imageData, cr3Dir, cr3Files.FullName, DeleteOriginalFiles, useCfitsio, compressionType);
-                            Logger.Info($"✅ FITS file saved successfully");
+                            
+                            taskInfo.Status = "Completed";
+                            taskInfo.CompletedAt = DateTime.Now;
+                            var totalTime = (taskInfo.CompletedAt.Value - taskInfo.CreatedAt).TotalSeconds;
+                            
+                            Logger.Info($"✅ [#{conversionNumber}] FITS file saved successfully ({totalTime:F1}s total)");
                         }
                         else
                         {
                             var totalWait = (DateTime.Now - startWait).TotalSeconds;
-                            Logger.Warning($"Could not find recently saved CR3 file after {attempts} attempts ({totalWait:F1}s)");
+                            taskInfo.Status = "Failed - CR3 not found";
+                            taskInfo.CompletedAt = DateTime.Now;
+                            Logger.Warning($"[#{conversionNumber}] Could not find recently saved CR3 file after {attempts} attempts ({totalWait:F1}s)");
                         }
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error($"Error in delayed FITS save: {ex.Message}", ex);
+                        taskInfo.Status = $"Failed - {ex.Message}";
+                        taskInfo.CompletedAt = DateTime.Now;
+                        Logger.Error($"[#{conversionNumber}] Error in delayed FITS save: {ex.Message}", ex);
                     }
                     finally
                     {
@@ -238,8 +326,30 @@ namespace NINA.Plugin.Canon.EDSDK
                     }
                 });
                 
-                // Add to pending conversions list (so we can wait for all to complete)
-                pendingConversions.Add(conversionTask);
+                // CRITICAL: Add to pending conversions BEFORE returning from event handler
+                // This ensures the task is tracked even if NINA immediately proceeds to teardown
+                if (pendingConversions.TryAdd(conversionTask, taskInfo))
+                {
+                    Logger.Debug($"   [#{conversionNumber}] Task registered in pending conversions (Total pending: {pendingConversions.Count})");
+                    
+                    // Set up continuation to remove from dictionary when complete
+                    // We intentionally don't await this - it's a fire-and-forget cleanup task
+                    _ = conversionTask.ContinueWith(t =>
+                    {
+                        TaskInfo removedInfo;
+                        if (pendingConversions.TryRemove(t, out removedInfo))
+                        {
+                            var elapsed = removedInfo.CompletedAt.HasValue 
+                                ? (removedInfo.CompletedAt.Value - removedInfo.CreatedAt).TotalSeconds 
+                                : -1;
+                            Logger.Debug($"   [#{conversionNumber}] Task removed from pending conversions (Status: {removedInfo.Status}, Elapsed: {elapsed:F1}s, Remaining: {pendingConversions.Count})");
+                        }
+                    }, TaskScheduler.Default);
+                }
+                else
+                {
+                    Logger.Warning($"   [#{conversionNumber}] Failed to register task in pending conversions!");
+                }
                 
             }
             catch (Exception ex)

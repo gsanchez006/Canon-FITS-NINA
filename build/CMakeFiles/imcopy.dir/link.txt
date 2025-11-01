@@ -1,0 +1,3 @@
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E rm -f CMakeFiles\imcopy.dir/objects.a
+C:\msys64\ucrt64\bin\ar.exe cr CMakeFiles\imcopy.dir/objects.a @CMakeFiles\imcopy.dir\objects1.rsp
+C:\msys64\ucrt64\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\imcopy.dir/objects.a -Wl,--no-whole-archive -o imcopy.exe -Wl,--out-implib,libimcopy.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\imcopy.dir\linklibs.rsp
