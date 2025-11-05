@@ -75,6 +75,39 @@ try {
         Write-Host "  - WARNING: cfitsio.dll not found" -ForegroundColor Yellow
     }
 
+    # Copy Visual C++ Runtime dependencies (required by cfitsio.dll)
+    Write-Host ""
+    Write-Host "  Copying Visual C++ Runtime dependencies..." -ForegroundColor Cyan
+    
+    $vcRuntimeFiles = @(
+        "vcruntime140.dll",
+        "msvcp140.dll"
+    )
+    
+    $vcRuntimeCopied = 0
+    foreach ($file in $vcRuntimeFiles) {
+        # Try System32 first
+        $systemPath = "C:\Windows\System32\$file"
+        if (Test-Path $systemPath) {
+            Copy-Item $systemPath $OutputDir -Force
+            Write-Host "  - Copied $file from System32" -ForegroundColor Green
+            $vcRuntimeCopied++
+        }
+        # Try SysWOW64 for 32-bit DLLs on 64-bit system
+        elseif (Test-Path "C:\Windows\SysWOW64\$file") {
+            Copy-Item "C:\Windows\SysWOW64\$file" $OutputDir -Force
+            Write-Host "  - Copied $file from SysWOW64" -ForegroundColor Green
+            $vcRuntimeCopied++
+        }
+        else {
+            Write-Host "  - WARNING: $file not found (cfitsio.dll may not work on systems without VC++ runtime)" -ForegroundColor Yellow
+        }
+    }
+    
+    if ($vcRuntimeCopied -eq $vcRuntimeFiles.Count) {
+        Write-Host "  - VC++ Runtime dependencies: OK" -ForegroundColor Green
+    }
+
     # Verify all required dependencies are present
     Write-Host ""
     Write-Host "Verifying dependencies:" -ForegroundColor Yellow
@@ -86,6 +119,8 @@ try {
         "EDSDK.dll" = "$OutputDir\EDSDK.dll"
         "EdsImage.dll" = "$OutputDir\EdsImage.dll"
         "cfitsio.dll" = "$OutputDir\cfitsio.dll"
+        "vcruntime140.dll" = "$OutputDir\vcruntime140.dll"
+        "msvcp140.dll" = "$OutputDir\msvcp140.dll"
         "EDSDK\DPP4Lib" = "$OutputDir\EDSDK\DPP4Lib"
         "EDSDK\IHL" = "$OutputDir\EDSDK\IHL"
     }

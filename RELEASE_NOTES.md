@@ -1,5 +1,30 @@
 # Canon EDSDK to FITS Converter - CFitsio Edition
-## Version 1.0.0
+
+## Version 1.0.3 - January 2025 (CURRENT)
+
+### 🔧 Critical Bug Fix Release
+
+**Fixed: cfitsio.dll Loading Failure on Production Systems**
+- Bundles Visual C++ runtime dependencies (vcruntime140.dll, msvcp140.dll)
+- Fixes error 0x8007007E on systems without Visual Studio installed
+- No user action required - runtime DLLs included automatically
+- See [RELEASE_NOTES_v1.0.3.md](RELEASE_NOTES_v1.0.3.md) for details
+
+---
+
+## Version 1.0.2 - January 2025
+
+### 🎯 Multi-Format Support Enhancement
+
+**Added: CR2 and CRW File Format Support**
+- Extended detection to support older Canon RAW formats (CR2, CRW)
+- Improved file search using LINQ SelectMany for multiple extensions
+- Comprehensive documentation and release preparation
+- See [RELEASE_NOTES_v1.0.2.md](RELEASE_NOTES_v1.0.2.md) for details
+
+---
+
+## Version 1.0.0 - October 2025
 
 ### Release Date: October 22, 2025
 
