@@ -51,7 +51,7 @@ namespace NINA.Plugin.Canon.EDSDK
         // Semaphore to limit concurrent conversions (prevents resource exhaustion during burst sequences)
         private static readonly SemaphoreSlim conversionSemaphore = new SemaphoreSlim(3, 3);
         
-        // Track processed CR3 files to prevent duplicate conversions
+        // Track processed Canon RAW files (CR3, CR2, CRW) to prevent duplicate conversions
         private static readonly ConcurrentDictionary<string, bool> processedFiles = new ConcurrentDictionary<string, bool>();
         
         // Track all pending conversion tasks with detailed info to ensure they complete
@@ -243,22 +243,24 @@ namespace NINA.Plugin.Canon.EDSDK
                         taskInfo.Status = "Processing";
                         
                         var startWait = DateTime.Now;
-                        Logger.Debug($"   [Burst #{conversionNumber}] Started polling for CR3 at {startWait:HH:mm:ss.fff}");
+                        Logger.Debug($"   [Burst #{conversionNumber}] Started polling for Canon RAW file at {startWait:HH:mm:ss.fff}");
                         
-                        // Poll for the CR3 file instead of fixed delay
+                        // Poll for the Canon RAW file (CR3, CR2, or CRW) instead of fixed delay
                         string baseDir = fileSettings.FilePath;
-                        FileInfo cr3Files = null;
+                        FileInfo rawFile = null;
                         int attempts = 0;
 
                         // Check every 1000ms for up to 60 seconds (handles delayed I/O after many large files)
-                        for (int i = 0; i < 60 && cr3Files == null; i++)
+                        for (int i = 0; i < 60 && rawFile == null; i++)
                         {
                             await Task.Delay(1000);
                             attempts++;
                             
-                            // Look for CR3 files saved near when this event fired (within +/- 15 seconds)
+                            // Look for Canon RAW files (CR3, CR2, CRW) saved near when this event fired (within +/- 15 seconds)
                             // Use eventTime (not exposureStart) so long exposures work correctly
-                            var foundFiles = Directory.GetFiles(baseDir, "*.cr3", SearchOption.AllDirectories)
+                            var rawPatterns = new[] { "*.cr3", "*.cr2", "*.crw" };
+                            var foundFiles = rawPatterns
+                                .SelectMany(pattern => Directory.GetFiles(baseDir, pattern, SearchOption.AllDirectories))
                                 .Select(f => new FileInfo(f))
                                 .Where(fi => Math.Abs((fi.LastWriteTime - eventTime).TotalSeconds) < 15)
                                 .Where(fi => !processedFiles.ContainsKey(fi.FullName))  // Skip already processed files
@@ -274,22 +276,24 @@ namespace NINA.Plugin.Canon.EDSDK
                                 {
                                     if (processedFiles.TryAdd(foundFiles.FullName, true))
                                     {
-                                        cr3Files = foundFiles;
+                                        rawFile = foundFiles;
                                         taskInfo.FileName = Path.GetFileNameWithoutExtension(foundFiles.Name);
                                     }
                                 }
                                 var waitTime = (DateTime.Now - startWait).TotalMilliseconds;
-                                Logger.Debug($"   [Burst #{conversionNumber}] Found CR3 after {attempts} attempts ({waitTime:F0}ms), timestamp delta: {Math.Abs((foundFiles.LastWriteTime - eventTime).TotalMilliseconds):F0}ms");
+                                var fileExt = Path.GetExtension(foundFiles.Name).ToUpper();
+                                Logger.Debug($"   [Burst #{conversionNumber}] Found {fileExt} after {attempts} attempts ({waitTime:F0}ms), timestamp delta: {Math.Abs((foundFiles.LastWriteTime - eventTime).TotalMilliseconds):F0}ms");
                             }
                         }
 
-                        if (cr3Files != null)
+                        if (rawFile != null)
                         {
-                            string cr3Dir = Path.GetDirectoryName(cr3Files.FullName);
-                            string cr3Name = Path.GetFileNameWithoutExtension(cr3Files.Name);
-                            string fitsPath = Path.Combine(cr3Dir, cr3Name + ".fits");
+                            string rawDir = Path.GetDirectoryName(rawFile.FullName);
+                            string rawName = Path.GetFileNameWithoutExtension(rawFile.Name);
+                            string rawExt = Path.GetExtension(rawFile.Name).ToUpper();
+                            string fitsPath = Path.Combine(rawDir, rawName + ".fits");
 
-                            Logger.Info($"   [#{conversionNumber}] Found CR3: {cr3Files.FullName}");
+                            Logger.Info($"   [#{conversionNumber}] Found Canon RAW {rawExt}: {rawFile.FullName}");
                             Logger.Info($"   [#{conversionNumber}] Saving FITS: {fitsPath}");
 
                             taskInfo.Status = "Converting";
@@ -297,7 +301,7 @@ namespace NINA.Plugin.Canon.EDSDK
                             // Use selected FITS engine and compression type
                             bool useCfitsio = (FitsEngineIndex == 1);
                             int compressionType = GetCFitsioCompressionConstant();
-                            await rawConverter.ConvertImageDataToFitsAsync(imageData, cr3Dir, cr3Files.FullName, DeleteOriginalFiles, useCfitsio, compressionType);
+                            await rawConverter.ConvertImageDataToFitsAsync(imageData, rawDir, rawFile.FullName, DeleteOriginalFiles, useCfitsio, compressionType);
                             
                             taskInfo.Status = "Completed";
                             taskInfo.CompletedAt = DateTime.Now;
@@ -308,9 +312,9 @@ namespace NINA.Plugin.Canon.EDSDK
                         else
                         {
                             var totalWait = (DateTime.Now - startWait).TotalSeconds;
-                            taskInfo.Status = "Failed - CR3 not found";
+                            taskInfo.Status = "Failed - RAW file not found";
                             taskInfo.CompletedAt = DateTime.Now;
-                            Logger.Warning($"[#{conversionNumber}] Could not find recently saved CR3 file after {attempts} attempts ({totalWait:F1}s)");
+                            Logger.Warning($"[#{conversionNumber}] Could not find recently saved Canon RAW file (CR3/CR2/CRW) after {attempts} attempts ({totalWait:F1}s)");
                         }
                     }
                     catch (Exception ex)

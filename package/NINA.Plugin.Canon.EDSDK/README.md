@@ -1,6 +1,6 @@
 # Canon RAW to FITS Converter - NINA Plugin
 
-**Version 1.0.0** | A professional FITS converter plugin for NINA (Nighttime Imaging 'N' Astronomy)
+**Version 1.0.1** | A professional FITS converter plugin for NINA (Nighttime Imaging 'N' Astronomy)
 
 ![NINA Canon FITS Converter](nina_canon_fits.png)
 

@@ -20,8 +20,8 @@ namespace NINA.Plugin.Canon.EDSDK.Services
 
         /// <summary>
         /// Convert NINA's in-memory image data directly to FITS
-        /// This bypasses the need to process CR3 files with Canon EDSDK!
-        /// NINA will save the CR3, and we save a FITS file from the same data.
+        /// This bypasses the need to process Canon RAW files with Canon EDSDK!
+        /// NINA will save the RAW file (CR3/CR2/CRW), and we save a FITS file from the same data.
         /// </summary>
         public async Task<string> ConvertImageDataToFitsAsync(NINA.Image.Interfaces.IImageData imageData, string outputDirectory, string originalFilePath, bool deleteOriginal = false, bool useCfitsio = false, int compressionType = 11)
         {
@@ -31,7 +31,7 @@ namespace NINA.Plugin.Canon.EDSDK.Services
                 {
                     Logger.Info($"  Converting in-memory image data to FITS (using {(useCfitsio ? "cfitsio native" : "CSharpFITS")})...");
 
-                    // Generate output filename based on original CR3 filename
+                    // Generate output filename based on original Canon RAW filename (CR3/CR2/CRW)
                     string outputPath = GenerateOutputPath(originalFilePath, outputDirectory);
 
                     // Get image properties
@@ -67,7 +67,7 @@ namespace NINA.Plugin.Canon.EDSDK.Services
 
                     Logger.Info($"  FITS file: {Path.GetFileName(outputPath)} ({new FileInfo(outputPath).Length / 1024 / 1024:F2} MB)");
                     
-                    // Optionally delete the CR3 file after saving FITS
+                    // Optionally delete the Canon RAW file after saving FITS
                     if (deleteOriginal && File.Exists(originalFilePath))
                     {
                         // Wait a bit longer to ensure NINA has completely released the file
@@ -80,7 +80,7 @@ namespace NINA.Plugin.Canon.EDSDK.Services
                             try
                             {
                                 File.Delete(originalFilePath);
-                                Logger.Info($"  Deleted original CR3 file");
+                                Logger.Info($"  Deleted original Canon RAW file");
                                 deleted = true;
                             }
                             catch (Exception ex)
