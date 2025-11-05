@@ -75,37 +75,38 @@ try {
         Write-Host "  - WARNING: cfitsio.dll not found" -ForegroundColor Yellow
     }
 
-    # Copy Visual C++ Runtime dependencies (required by cfitsio.dll)
+    # Copy GCC/UCRT64 Runtime dependencies (required by cfitsio.dll built with GCC)
     Write-Host ""
-    Write-Host "  Copying Visual C++ Runtime dependencies..." -ForegroundColor Cyan
+    Write-Host "  Copying GCC/UCRT64 Runtime dependencies..." -ForegroundColor Cyan
     
-    $vcRuntimeFiles = @(
-        "vcruntime140.dll",
-        "msvcp140.dll"
+    $gccRuntimePath = "C:\msys64\ucrt64\bin"
+    $gccRuntimeFiles = @(
+        "libgcc_s_seh-1.dll",
+        "libstdc++-6.dll",
+        "libwinpthread-1.dll",
+        "zlib1.dll"
     )
     
-    $vcRuntimeCopied = 0
-    foreach ($file in $vcRuntimeFiles) {
-        # Try System32 first
-        $systemPath = "C:\Windows\System32\$file"
-        if (Test-Path $systemPath) {
-            Copy-Item $systemPath $OutputDir -Force
-            Write-Host "  - Copied $file from System32" -ForegroundColor Green
-            $vcRuntimeCopied++
-        }
-        # Try SysWOW64 for 32-bit DLLs on 64-bit system
-        elseif (Test-Path "C:\Windows\SysWOW64\$file") {
-            Copy-Item "C:\Windows\SysWOW64\$file" $OutputDir -Force
-            Write-Host "  - Copied $file from SysWOW64" -ForegroundColor Green
-            $vcRuntimeCopied++
-        }
-        else {
-            Write-Host "  - WARNING: $file not found (cfitsio.dll may not work on systems without VC++ runtime)" -ForegroundColor Yellow
+    $gccRuntimeCopied = 0
+    if (Test-Path $gccRuntimePath) {
+        foreach ($file in $gccRuntimeFiles) {
+            $sourcePath = Join-Path $gccRuntimePath $file
+            if (Test-Path $sourcePath) {
+                Copy-Item $sourcePath $OutputDir -Force
+                Write-Host "  - Copied $file from MSYS2/UCRT64" -ForegroundColor Green
+                $gccRuntimeCopied++
+            }
+            else {
+                Write-Host "  - WARNING: $file not found in $gccRuntimePath" -ForegroundColor Yellow
+            }
         }
     }
+    else {
+        Write-Host "  - WARNING: MSYS2/UCRT64 path not found - cfitsio.dll may not work" -ForegroundColor Yellow
+    }
     
-    if ($vcRuntimeCopied -eq $vcRuntimeFiles.Count) {
-        Write-Host "  - VC++ Runtime dependencies: OK" -ForegroundColor Green
+    if ($gccRuntimeCopied -eq $gccRuntimeFiles.Count) {
+        Write-Host "  - GCC Runtime dependencies: OK" -ForegroundColor Green
     }
 
     # Verify all required dependencies are present
@@ -119,8 +120,10 @@ try {
         "EDSDK.dll" = "$OutputDir\EDSDK.dll"
         "EdsImage.dll" = "$OutputDir\EdsImage.dll"
         "cfitsio.dll" = "$OutputDir\cfitsio.dll"
-        "vcruntime140.dll" = "$OutputDir\vcruntime140.dll"
-        "msvcp140.dll" = "$OutputDir\msvcp140.dll"
+        "libgcc_s_seh-1.dll" = "$OutputDir\libgcc_s_seh-1.dll"
+        "libstdc++-6.dll" = "$OutputDir\libstdc++-6.dll"
+        "libwinpthread-1.dll" = "$OutputDir\libwinpthread-1.dll"
+        "zlib1.dll" = "$OutputDir\zlib1.dll"
         "EDSDK\DPP4Lib" = "$OutputDir\EDSDK\DPP4Lib"
         "EDSDK\IHL" = "$OutputDir\EDSDK\IHL"
     }
@@ -161,6 +164,10 @@ try {
     # Copy all dependencies from build output
     $filesToCopy = @(
         "cfitsio.dll",
+        "libgcc_s_seh-1.dll",
+        "libstdc++-6.dll",
+        "libwinpthread-1.dll",
+        "zlib1.dll",
         "CSharpFITS_v1.1.dll",
         "EDSDK.dll",
         "EdsImage.dll"
