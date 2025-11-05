@@ -80,19 +80,19 @@ namespace NINA.Plugin.Canon.EDSDK.Services
                             try
                             {
                                 File.Delete(originalFilePath);
-                                Logger.Info($"  Deleted original Canon RAW file");
+                                Logger.Info($"  Deleted original Canon RAW file: {originalFilePath}");
                                 deleted = true;
                             }
                             catch (Exception ex)
                             {
                                 if (i < 4)
                                 {
-                                    Logger.Debug($"  Delete attempt {i + 1} failed, retrying... ({ex.Message})");
+                                    Logger.Debug($"  Delete attempt {i + 1} failed for {originalFilePath}, retrying... ({ex.Message})");
                                     await Task.Delay(1000);
                                 }
                                 else
                                 {
-                                    Logger.Warning($"  Could not delete original file after 5 attempts: {ex.Message}");
+                                    Logger.Warning($"  Could not delete original file {originalFilePath} after 5 attempts: {ex.Message}");
                                 }
                             }
                         }

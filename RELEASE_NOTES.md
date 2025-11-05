@@ -1,6 +1,17 @@
 # Canon EDSDK to FITS Converter - CFitsio Edition
 
-## Version 1.0.3 - January 2025 (CURRENT)
+## Version 1.0.4 - November 2025 (CURRENT)
+
+### 🔍 Enhancement: Better Logging
+
+**Enhanced auto-delete file logging with full paths**
+- See exactly which Canon RAW files are being deleted
+- Improved troubleshooting information in NINA logs
+- See [RELEASE_NOTES_v1.0.4.md](RELEASE_NOTES_v1.0.4.md) for details
+
+---
+
+## Version 1.0.3 - January 2025
 
 ### 🔧 Critical Bug Fix Release
 
