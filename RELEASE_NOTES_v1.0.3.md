@@ -11,24 +11,22 @@ Version 1.0.3 addresses a critical production deployment issue where cfitsio com
 
 ### Bug Fixes
 
-#### **Fixed: cfitsio.dll Fails to Load on Clean Windows Systems**
-- **Issue**: On systems without Visual Studio, cfitsio compression would fail with error 0x8007007E
-- **Root Cause**: Missing Visual C++ runtime dependencies (vcruntime140.dll, msvcp140.dll)
-- **Impact**: Plugin would fall back to CSharpFITS, losing FITS compression capability
-- **Resolution**: Now bundles VC++ runtime DLLs with the plugin package
+#### **Fixed: cfitsio.dll Fails to Load on Production Systems**
+- **Issue**: cfitsio compression would fail with error 0x8007007E on production systems
+- **Root Cause**: Missing GCC runtime dependencies - cfitsio.dll was built with GCC (MSYS2/UCRT64), not MSVC
+- **Missing Dependency**: zlib1.dll (compression library that cfitsio requires)
+- **Resolution**: Now bundles all required GCC runtime DLLs with the plugin package
 
 **Error that occurred in v1.0.2:**
 ```
 ERROR|CFitsioWriter.cs|WriteFitsFile|173|CFitsio writer error: 
 Unable to load DLL 'cfitsio.dll' or one of its dependencies: 
 The specified module could not be found. (0x8007007E)
-
-WARNING|RawToFitsConverter.cs|ConvertImageDataToFitsAsync|59|
-cfitsio writer failed, falling back to CSharpFITS
 ```
 
 **Now resolved in v1.0.3:**
-- Plugin includes vcruntime140.dll and msvcp140.dll
+- Plugin includes all GCC/UCRT64 runtime DLLs
+- zlib1.dll (compression) now bundled
 - cfitsio loads successfully on all Windows systems
 - No user action required (dependencies bundled automatically)
 
@@ -36,9 +34,11 @@ cfitsio writer failed, falling back to CSharpFITS
 
 ### Build Changes
 
-Modified `build.ps1` to automatically bundle Visual C++ runtime DLLs:
-- Copies vcruntime140.dll from System32
-- Copies msvcp140.dll from System32
+Modified `build.ps1` to automatically bundle GCC runtime DLLs from MSYS2/UCRT64:
+- Copies libgcc_s_seh-1.dll (GCC runtime)
+- Copies libstdc++-6.dll (C++ standard library)
+- Copies libwinpthread-1.dll (POSIX threads)
+- Copies zlib1.dll (compression library)
 - Adds verification step to ensure all dependencies are present
 - Distribution package now includes all required native dependencies
 
@@ -47,8 +47,11 @@ Modified `build.ps1` to automatically bundle Visual C++ runtime DLLs:
 The plugin package now includes:
 - **NINA.Plugin.Canon.EDSDK.dll** (Plugin assembly)
 - **cfitsio.dll** (FITS compression library)
-- **vcruntime140.dll** (VC++ runtime - NEW)
-- **msvcp140.dll** (VC++ C++ library - NEW)
+- **GCC Runtime DLLs** (NEW):
+  - libgcc_s_seh-1.dll (GCC runtime)
+  - libstdc++-6.dll (C++ standard library)
+  - libwinpthread-1.dll (POSIX threads)
+  - zlib1.dll (compression library)
 - **CSharpFITS_v1.1.dll** (Fallback FITS writer)
 - **EDSDK.dll** (Canon SDK)
 - **EdsImage.dll** (Canon image library)
@@ -94,8 +97,9 @@ For issues, please:
 ## Full Changelog
 
 ### v1.0.3 (January 2025)
-- **[BUG FIX]** Bundle Visual C++ runtime DLLs (vcruntime140.dll, msvcp140.dll) to fix cfitsio loading on production systems
-- **[BUILD]** Modified build.ps1 to automatically copy VC++ runtime dependencies
+- **[BUG FIX]** Add missing zlib1.dll dependency for cfitsio compression
+- **[BUG FIX]** Bundle all GCC runtime DLLs (libgcc_s_seh-1.dll, libstdc++-6.dll, libwinpthread-1.dll) required by cfitsio.dll
+- **[BUILD]** Modified build.ps1 to copy GCC runtime dependencies from MSYS2/UCRT64
 - **[BUILD]** Added runtime DLL verification to dependency checking
 
 ### v1.0.2 (January 2025)
