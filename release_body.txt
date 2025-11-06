@@ -1,0 +1,53 @@
+## 🔧 Critical Bug Fix: Last Image Conversion Failure
+
+### The Issue
+When performing long sequences of shots (30+ images), the last image(s) in the sequence would fail to convert to FITS format, leaving RAW files without corresponding FITS conversions.
+
+### Root Cause
+The plugin was using timestamp-based file matching to associate queued conversion tasks with saved RAW files. During burst sequences, timing jitter caused task #N+1 to claim the file meant for task #N, resulting in skipped conversions.
+
+### The Solution ✅
+Implemented a **queue-based sequential processing system**:
+- All image save events are now added to a `ConcurrentQueue<PendingImageData>` in chronological order
+- A background `ProcessQueueAsync()` worker processes items FIFO (First-In-First-Out)
+- Files are matched by their position in the queue, not by timestamp proximity
+- Concurrent processing preserved: Up to 3 conversions run in parallel for efficiency
+- Proper queue drainage on shutdown ensures no conversions are lost
+
+### Verified Results
+Production testing with 90 consecutive images confirmed:
+- ✅ All 90 conversions completed successfully
+- ✅ Last images (#30, #60, #90) converted without issues
+- ✅ Queue-based architecture prevents file mismatches regardless of conversion duration
+
+## Technical Changes
+
+**Removed:**
+- Timestamp-based matching that spawned independent tasks
+
+**Added:**
+- `ConcurrentQueue<PendingImageData>` for FIFO queueing
+- `ProcessQueueAsync(CancellationToken)` background worker
+- `queueSemaphore` for inter-task signaling
+
+**Modified:**
+- `ImageSaveMediator_BeforeImageSaved()` now only enqueues items
+- `Teardown()` now waits for queue drainage before plugin unload
+
+## Compatibility
+- ✅ NINA 3.0+
+- ✅ .NET 8.0
+- ✅ All Canon RAW formats (CR2, CR3, CRW)
+- ✅ Windows 10/11 (x64)
+
+## Installation
+Download `NINA.Plugin.Canon.EDSDK.zip` and extract to:
+```
+%LOCALAPPDATA%\NINA\Plugins\3.0.0\NINA.Plugin.Canon.EDSDK
+```
+
+Then restart NINA to load the updated plugin.
+
+---
+
+**Full Release Notes:** See [RELEASE_NOTES_v1.0.5.md](https://github.com/gsanchez006/Canon-FITS-NINA/blob/main/RELEASE_NOTES_v1.0.5.md)
