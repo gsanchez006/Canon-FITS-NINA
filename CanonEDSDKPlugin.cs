@@ -36,6 +36,16 @@ namespace NINA.Plugin.Canon.EDSDK
     }
 
     /// <summary>
+    /// Stores image data temporarily between BeforeImageSaved and AfterFinalizeImageSaved
+    /// </summary>
+    internal class PendingImageData
+    {
+        public IImageData ImageData { get; set; }
+        public DateTime QueuedAt { get; set; }
+        public int ConversionNumber { get; set; }
+    }
+
+    /// <summary>
     /// Main plugin class that implements the NINA plugin interface
     /// This plugin automatically converts all Canon RAW files (CR2, CR3, CRW, and newer formats) to FITS format
     /// using NINA's in-memory image data. Preserves full 14/16-bit dynamic range without demosaicing or processing.
@@ -57,6 +67,17 @@ namespace NINA.Plugin.Canon.EDSDK
         // Track all pending conversion tasks with detailed info to ensure they complete
         // Using ConcurrentDictionary allows us to remove completed tasks and track status
         private static readonly ConcurrentDictionary<Task, TaskInfo> pendingConversions = new ConcurrentDictionary<Task, TaskInfo>();
+        
+        // Queue to hold image data in STRICT order for sequential processing
+        // This ensures conversion #N always gets file #N (prevents file mismatch during bursts)
+        private static readonly ConcurrentQueue<PendingImageData> imageQueue = new ConcurrentQueue<PendingImageData>();
+        
+        // Semaphore to signal when new items are added to the queue
+        private static readonly SemaphoreSlim queueSemaphore = new SemaphoreSlim(0);
+        
+        // Processing task that runs continuously
+        private Task queueProcessingTask;
+        private CancellationTokenSource queueCancellationSource;
         
         // Counter for total conversions to help with diagnostics
         private static int totalConversionsQueued = 0;
@@ -90,6 +111,10 @@ namespace NINA.Plugin.Canon.EDSDK
             // requiring external RAW processing libraries or Canon EDSDK.
             // InitializeFileWatcher();
 
+            // Start the queue processing task
+            queueCancellationSource = new CancellationTokenSource();
+            queueProcessingTask = Task.Run(() => ProcessQueueAsync(queueCancellationSource.Token));
+
             Logger.Info("Canon RAW to FITS Converter loaded successfully - will convert from in-memory data");
         }
 
@@ -99,13 +124,30 @@ namespace NINA.Plugin.Canon.EDSDK
             imageSaveMediator.BeforeImageSaved -= ImageSaveMediator_BeforeImageSaved;
             profileService.ProfileChanged -= ProfileService_ProfileChanged;
 
+            // Signal the queue processor to stop accepting new items
+            Logger.Info("Sequence ended, stopping queue processor...");
+            queueCancellationSource?.Cancel();
+
             // Give a brief moment for any final tasks to be queued
             // This handles the race condition where the last image's BeforeImageSaved
             // event is still being processed when sequence ends
-            if (!pendingConversions.IsEmpty)
+            if (!imageQueue.IsEmpty)
             {
-                Logger.Info("Sequence ended, waiting for any final conversions to be queued...");
+                Logger.Info($"Waiting for {imageQueue.Count} queued conversions to be processed...");
                 await Task.Delay(2000); // 2 second grace period
+            }
+
+            // Wait for the queue processing task to complete
+            if (queueProcessingTask != null)
+            {
+                try
+                {
+                    await Task.WhenAny(queueProcessingTask, Task.Delay(TimeSpan.FromMinutes(2)));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warning($"Queue processing task threw exception: {ex.Message}");
+                }
             }
 
             // Wait for all pending conversions to complete
@@ -208,158 +250,205 @@ namespace NINA.Plugin.Canon.EDSDK
                     return;
                 }
 
-                // Store image and timestamp - we'll save after NINA creates the CR3
-                var imageData = e.Image;
-                // Use the image's exposure start time from metadata (matches NINA's filename timestamp)
-                var exposureStart = imageData.MetaData.Image.ExposureStart;
-                var eventTime = DateTime.Now;  // When BeforeImageSaved fires (close to when CR3 will be saved)
-                
                 // Increment counter and log
                 var conversionNumber = Interlocked.Increment(ref totalConversionsQueued);
                 
                 Logger.Info($"📸 Canon camera detected, queuing FITS conversion #{conversionNumber}");
                 Logger.Info($"   Camera: {cameraName}");
-                Logger.Info($"   Exposure started: {exposureStart:HH:mm:ss.fff}");
+                Logger.Info($"   Exposure started: {e.Image.MetaData.Image.ExposureStart:HH:mm:ss.fff}");
 
-                // Create task info for tracking (before creating the task)
-                var taskInfo = new TaskInfo
+                // Add to the FIFO queue for sequential processing
+                // This ensures conversions are processed in the exact order images are saved
+                var pendingImage = new PendingImageData
                 {
-                    CreatedAt = DateTime.Now,
-                    FileName = $"Conversion #{conversionNumber}",
-                    Status = "Queued"
+                    ImageData = e.Image,
+                    QueuedAt = DateTime.Now,
+                    ConversionNumber = conversionNumber
                 };
-
-                // Wait for NINA to save the CR3 file, then save FITS in same directory
-                // Track this task to ensure it completes even at end of sequence
-                var conversionTask = Task.Run(async () =>
-                {
-                    try
-                    {
-                        taskInfo.Status = "Waiting for semaphore";
-                        
-                        // Limit concurrent conversions to prevent resource exhaustion
-                        await conversionSemaphore.WaitAsync();
-                        
-                        taskInfo.Status = "Processing";
-                        
-                        var startWait = DateTime.Now;
-                        Logger.Debug($"   [Burst #{conversionNumber}] Started polling for Canon RAW file at {startWait:HH:mm:ss.fff}");
-                        
-                        // Poll for the Canon RAW file (CR3, CR2, or CRW) instead of fixed delay
-                        string baseDir = fileSettings.FilePath;
-                        FileInfo rawFile = null;
-                        int attempts = 0;
-
-                        // Check every 1000ms for up to 60 seconds (handles delayed I/O after many large files)
-                        for (int i = 0; i < 60 && rawFile == null; i++)
-                        {
-                            await Task.Delay(1000);
-                            attempts++;
-                            
-                            // Look for Canon RAW files (CR3, CR2, CRW) saved near when this event fired (within +/- 15 seconds)
-                            // Use eventTime (not exposureStart) so long exposures work correctly
-                            var rawPatterns = new[] { "*.cr3", "*.cr2", "*.crw" };
-                            var foundFiles = rawPatterns
-                                .SelectMany(pattern => Directory.GetFiles(baseDir, pattern, SearchOption.AllDirectories))
-                                .Select(f => new FileInfo(f))
-                                .Where(fi => Math.Abs((fi.LastWriteTime - eventTime).TotalSeconds) < 15)
-                                .Where(fi => !processedFiles.ContainsKey(fi.FullName))  // Skip already processed files
-                                .OrderBy(fi => Math.Abs((fi.LastWriteTime - eventTime).TotalSeconds))
-                                .FirstOrDefault();
-                            
-                            if (foundFiles != null && (DateTime.Now - foundFiles.LastWriteTime).TotalMilliseconds > 500)
-                            {
-                                // File exists and has been stable for 500ms (wait for complete write)
-                                // Atomically claim this file to prevent duplicate processing
-                                var timeDelta = Math.Abs((foundFiles.LastWriteTime - eventTime).TotalSeconds);
-                                if (timeDelta < 12.0)  // Must be within 12 seconds to match
-                                {
-                                    if (processedFiles.TryAdd(foundFiles.FullName, true))
-                                    {
-                                        rawFile = foundFiles;
-                                        taskInfo.FileName = Path.GetFileNameWithoutExtension(foundFiles.Name);
-                                    }
-                                }
-                                var waitTime = (DateTime.Now - startWait).TotalMilliseconds;
-                                var fileExt = Path.GetExtension(foundFiles.Name).ToUpper();
-                                Logger.Debug($"   [Burst #{conversionNumber}] Found {fileExt} after {attempts} attempts ({waitTime:F0}ms), timestamp delta: {Math.Abs((foundFiles.LastWriteTime - eventTime).TotalMilliseconds):F0}ms");
-                            }
-                        }
-
-                        if (rawFile != null)
-                        {
-                            string rawDir = Path.GetDirectoryName(rawFile.FullName);
-                            string rawName = Path.GetFileNameWithoutExtension(rawFile.Name);
-                            string rawExt = Path.GetExtension(rawFile.Name).ToUpper();
-                            string fitsPath = Path.Combine(rawDir, rawName + ".fits");
-
-                            Logger.Info($"   [#{conversionNumber}] Found Canon RAW {rawExt}: {rawFile.FullName}");
-                            Logger.Info($"   [#{conversionNumber}] Saving FITS: {fitsPath}");
-
-                            taskInfo.Status = "Converting";
-                            
-                            // Use selected FITS engine and compression type
-                            bool useCfitsio = (FitsEngineIndex == 1);
-                            int compressionType = GetCFitsioCompressionConstant();
-                            await rawConverter.ConvertImageDataToFitsAsync(imageData, rawDir, rawFile.FullName, DeleteOriginalFiles, useCfitsio, compressionType);
-                            
-                            taskInfo.Status = "Completed";
-                            taskInfo.CompletedAt = DateTime.Now;
-                            var totalTime = (taskInfo.CompletedAt.Value - taskInfo.CreatedAt).TotalSeconds;
-                            
-                            Logger.Info($"✅ [#{conversionNumber}] FITS file saved successfully ({totalTime:F1}s total)");
-                        }
-                        else
-                        {
-                            var totalWait = (DateTime.Now - startWait).TotalSeconds;
-                            taskInfo.Status = "Failed - RAW file not found";
-                            taskInfo.CompletedAt = DateTime.Now;
-                            Logger.Warning($"[#{conversionNumber}] Could not find recently saved Canon RAW file (CR3/CR2/CRW) after {attempts} attempts ({totalWait:F1}s)");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        taskInfo.Status = $"Failed - {ex.Message}";
-                        taskInfo.CompletedAt = DateTime.Now;
-                        Logger.Error($"[#{conversionNumber}] Error in delayed FITS save: {ex.Message}", ex);
-                    }
-                    finally
-                    {
-                        // Release the semaphore to allow next conversion
-                        conversionSemaphore.Release();
-                    }
-                });
                 
-                // CRITICAL: Add to pending conversions BEFORE returning from event handler
-                // This ensures the task is tracked even if NINA immediately proceeds to teardown
-                if (pendingConversions.TryAdd(conversionTask, taskInfo))
-                {
-                    Logger.Debug($"   [#{conversionNumber}] Task registered in pending conversions (Total pending: {pendingConversions.Count})");
-                    
-                    // Set up continuation to remove from dictionary when complete
-                    // We intentionally don't await this - it's a fire-and-forget cleanup task
-                    _ = conversionTask.ContinueWith(t =>
-                    {
-                        TaskInfo removedInfo;
-                        if (pendingConversions.TryRemove(t, out removedInfo))
-                        {
-                            var elapsed = removedInfo.CompletedAt.HasValue 
-                                ? (removedInfo.CompletedAt.Value - removedInfo.CreatedAt).TotalSeconds 
-                                : -1;
-                            Logger.Debug($"   [#{conversionNumber}] Task removed from pending conversions (Status: {removedInfo.Status}, Elapsed: {elapsed:F1}s, Remaining: {pendingConversions.Count})");
-                        }
-                    }, TaskScheduler.Default);
-                }
-                else
-                {
-                    Logger.Warning($"   [#{conversionNumber}] Failed to register task in pending conversions!");
-                }
+                imageQueue.Enqueue(pendingImage);
                 
+                // Signal the queue processor that a new item is available
+                queueSemaphore.Release();
+                
+                Logger.Debug($"   [#{conversionNumber}] Added to processing queue (Queue size: {imageQueue.Count})");
+                
+                // Return immediately - processing happens asynchronously
+                await Task.CompletedTask;
             }
             catch (Exception ex)
             {
                 Logger.Error($"Error in BeforeImageSaved handler: {ex.Message}", ex);
             }
+        }
+
+        /// <summary>
+        /// Background task that processes the conversion queue in strict FIFO order
+        /// This ensures conversion #N always gets file #N, preventing file mismatch during bursts
+        /// </summary>
+        private async Task ProcessQueueAsync(CancellationToken cancellationToken)
+        {
+            Logger.Info("Queue processor started");
+            
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    // Wait for a new item to be added to the queue (or cancellation)
+                    await queueSemaphore.WaitAsync(cancellationToken);
+                    
+                    // Try to dequeue the next item
+                    if (imageQueue.TryDequeue(out var pendingImage))
+                    {
+                        var conversionNumber = pendingImage.ConversionNumber;
+                        var imageData = pendingImage.ImageData;
+                        var queuedAt = pendingImage.QueuedAt;
+                        
+                        Logger.Debug($"   [#{conversionNumber}] Dequeued for processing (waited {(DateTime.Now - queuedAt).TotalMilliseconds:F0}ms in queue)");
+                        
+                        // Create task info for tracking
+                        var taskInfo = new TaskInfo
+                        {
+                            CreatedAt = queuedAt,
+                            FileName = $"Conversion #{conversionNumber}",
+                            Status = "Processing"
+                        };
+
+                        // Process this conversion (wait for it to complete before moving to next)
+                        var conversionTask = Task.Run(async () =>
+                        {
+                            try
+                            {
+                                // Limit concurrent conversions to prevent resource exhaustion
+                                await conversionSemaphore.WaitAsync(cancellationToken);
+                                
+                                var startWait = DateTime.Now;
+                                var eventTime = queuedAt;
+                                var fileSettings = profileService.ActiveProfile.ImageFileSettings;
+                                string baseDir = fileSettings.FilePath;
+                                
+                                Logger.Debug($"   [#{conversionNumber}] Started polling for Canon RAW file");
+                                
+                                // Poll for the Canon RAW file (CR3, CR2, or CRW)
+                                FileInfo rawFile = null;
+                                int attempts = 0;
+
+                                // Check every 1000ms for up to 60 seconds
+                                for (int i = 0; i < 60 && rawFile == null; i++)
+                                {
+                                    await Task.Delay(1000, cancellationToken);
+                                    attempts++;
+                                    
+                                    // Look for the NEXT unprocessed Canon RAW file
+                                    var rawPatterns = new[] { "*.cr3", "*.cr2", "*.crw" };
+                                    var foundFiles = rawPatterns
+                                        .SelectMany(pattern => Directory.GetFiles(baseDir, pattern, SearchOption.AllDirectories))
+                                        .Select(f => new FileInfo(f))
+                                        .Where(fi => Math.Abs((fi.LastWriteTime - eventTime).TotalSeconds) < 15)
+                                        .Where(fi => !processedFiles.ContainsKey(fi.FullName))  // Skip already processed files
+                                        .OrderBy(fi => fi.LastWriteTime)  // Get OLDEST unprocessed file (FIFO order)
+                                        .FirstOrDefault();
+                                    
+                                    if (foundFiles != null && (DateTime.Now - foundFiles.LastWriteTime).TotalMilliseconds > 500)
+                                    {
+                                        // File exists and has been stable for 500ms
+                                        // Atomically claim this file
+                                        if (processedFiles.TryAdd(foundFiles.FullName, true))
+                                        {
+                                            rawFile = foundFiles;
+                                            taskInfo.FileName = Path.GetFileNameWithoutExtension(foundFiles.Name);
+                                            
+                                            var waitTime = (DateTime.Now - startWait).TotalMilliseconds;
+                                            var fileExt = Path.GetExtension(foundFiles.Name).ToUpper();
+                                            Logger.Debug($"   [#{conversionNumber}] Found {fileExt} after {attempts} attempts ({waitTime:F0}ms)");
+                                        }
+                                    }
+                                }
+
+                                if (rawFile != null)
+                                {
+                                    string rawDir = Path.GetDirectoryName(rawFile.FullName);
+                                    string rawName = Path.GetFileNameWithoutExtension(rawFile.Name);
+                                    string rawExt = Path.GetExtension(rawFile.Name).ToUpper();
+                                    string fitsPath = Path.Combine(rawDir, rawName + ".fits");
+
+                                    Logger.Info($"   [#{conversionNumber}] Found Canon RAW {rawExt}: {rawFile.FullName}");
+                                    Logger.Info($"   [#{conversionNumber}] Saving FITS: {fitsPath}");
+
+                                    taskInfo.Status = "Converting";
+                                    
+                                    // Use selected FITS engine and compression type
+                                    bool useCfitsio = (FitsEngineIndex == 1);
+                                    int compressionType = GetCFitsioCompressionConstant();
+                                    await rawConverter.ConvertImageDataToFitsAsync(imageData, rawDir, rawFile.FullName, DeleteOriginalFiles, useCfitsio, compressionType);
+                                    
+                                    taskInfo.Status = "Completed";
+                                    taskInfo.CompletedAt = DateTime.Now;
+                                    var totalTime = (taskInfo.CompletedAt.Value - taskInfo.CreatedAt).TotalSeconds;
+                                    
+                                    Logger.Info($"✅ [#{conversionNumber}] FITS file saved successfully ({totalTime:F1}s total)");
+                                }
+                                else
+                                {
+                                    var totalWait = (DateTime.Now - startWait).TotalSeconds;
+                                    taskInfo.Status = "Failed - RAW file not found";
+                                    taskInfo.CompletedAt = DateTime.Now;
+                                    Logger.Warning($"[#{conversionNumber}] Could not find recently saved Canon RAW file (CR3/CR2/CRW) after {attempts} attempts ({totalWait:F1}s)");
+                                }
+                            }
+                            catch (OperationCanceledException)
+                            {
+                                taskInfo.Status = "Cancelled";
+                                taskInfo.CompletedAt = DateTime.Now;
+                                Logger.Info($"[#{conversionNumber}] Conversion cancelled");
+                            }
+                            catch (Exception ex)
+                            {
+                                taskInfo.Status = $"Failed - {ex.Message}";
+                                taskInfo.CompletedAt = DateTime.Now;
+                                Logger.Error($"[#{conversionNumber}] Error in FITS conversion: {ex.Message}", ex);
+                            }
+                            finally
+                            {
+                                // Release the semaphore to allow next conversion
+                                conversionSemaphore.Release();
+                            }
+                        });
+                        
+                        // Add to pending conversions for tracking
+                        if (pendingConversions.TryAdd(conversionTask, taskInfo))
+                        {
+                            // Set up continuation to remove from dictionary when complete
+                            _ = conversionTask.ContinueWith(t =>
+                            {
+                                TaskInfo removedInfo;
+                                if (pendingConversions.TryRemove(t, out removedInfo))
+                                {
+                                    var elapsed = removedInfo.CompletedAt.HasValue 
+                                        ? (removedInfo.CompletedAt.Value - removedInfo.CreatedAt).TotalSeconds 
+                                        : -1;
+                                    Logger.Debug($"   [#{conversionNumber}] Task removed from pending conversions (Status: {removedInfo.Status}, Remaining: {pendingConversions.Count})");
+                                }
+                            }, TaskScheduler.Default);
+                        }
+                        
+                        // Don't wait for conversion to complete - process next item in queue
+                        // This allows conversions to run concurrently (up to semaphore limit)
+                        // but they'll always grab files in FIFO order
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    Logger.Info("Queue processor cancelled");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Error in queue processor: {ex.Message}", ex);
+                }
+            }
+            
+            Logger.Info("Queue processor stopped");
         }
 
         /// <summary>
