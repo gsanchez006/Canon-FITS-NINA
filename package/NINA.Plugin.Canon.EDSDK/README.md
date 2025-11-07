@@ -117,9 +117,9 @@ Automatically delete Canon RAW files after successful FITS conversion (use with 
 - **Canon Camera**: Any Canon EOS camera supported by NINA
 
 ### Dependencies (Included)
-- **Canon EDSDK 13.19.0**: Canon camera SDK libraries
+- **Canon EDSDK 13.19.0**: Canon camera SDK libraries (Windows-native)
 - **CSharpFITS v1.1**: Pure C# FITS library
-- **CFitsio 4.6.3**: NASA FITS library (custom build with GCC 15.2.0)
+- **CFitsio 4.6.3**: NASA FITS library (Windows-native, built with MSVC)
 
 ## Usage Workflow
 
