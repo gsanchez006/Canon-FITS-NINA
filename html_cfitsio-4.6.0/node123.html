@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>13. Optimizing Programs </TITLE>
+<META NAME="description" CONTENT="13. Optimizing Programs ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node126.html">
+<LINK REL="previous" HREF="node116.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node124.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1843"
+  HREF="node124.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1839"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1833"
+  HREF="node122.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1841"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1844"
+  HREF="node124.html">13.1 How CFITSIO Manages</A>
+<B>Up:</B> <A NAME="tex2html1840"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html1834"
+  HREF="node122.html">12.6 Tile-Compressed Image Format</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001400000000000000000">
+<SPAN CLASS="arabic">13</SPAN>.   Optimizing Programs </A>
+</H1>
+
+<P>
+CFITSIO has been carefully designed to obtain the highest possible
+speed when reading and writing FITS files.  In order to achieve the
+best performance, however, application programmers must be careful to
+call the CFITSIO routines appropriately and in an efficient sequence;
+inappropriate usage of CFITSIO routines can greatly slow down the
+execution speed of a program.
+
+<P>
+The maximum possible I/O speed of CFITSIO depends of course on the type
+of computer system that it is running on.  To get a general idea of what
+data I/O speeds are possible on a particular machine, build the speed.c
+program that is distributed with CFITSIO (type 'make speed' in the CFITSIO
+directory).  This diagnostic program measures the speed of writing and reading
+back a test FITS image, a binary table, and an ASCII table.
+
+<P>
+The following 2 sections provide some background on how CFITSIO
+internally manages the data I/O and describes some strategies that may
+be used to optimize the processing speed of software that uses
+CFITSIO.
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1845"
+  HREF="node124.html"><SPAN CLASS="arabic">13</SPAN>.<SPAN CLASS="arabic">1</SPAN> How CFITSIO Manages Data I/O</A>
+<LI><A NAME="tex2html1846"
+  HREF="node125.html"><SPAN CLASS="arabic">13</SPAN>.<SPAN CLASS="arabic">2</SPAN> Optimization Strategies</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

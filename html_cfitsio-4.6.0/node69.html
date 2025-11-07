@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.3.1 Header Information Routines</TITLE>
+<META NAME="description" CONTENT="9.3.1 Header Information Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node70.html">
+<LINK REL="previous" HREF="node68.html">
+<LINK REL="up" HREF="node68.html">
+<LINK REL="next" HREF="node70.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1157"
+  HREF="node70.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1153"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1147"
+  HREF="node68.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1155"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1158"
+  HREF="node70.html">9.3.2 Read and Write</A>
+<B>Up:</B> <A NAME="tex2html1154"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1148"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001031000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">1</SPAN> Header Information Routines</A>
+</H2>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Reserve space in the CHU for MOREKEYS more header keywords.
+    This routine may be called to allocate space for additional keywords
+    at the time the header is created (prior to writing any data).
+    CFITSIO can dynamically add more space to the header when needed,
+    however it is more efficient to preallocate the required space
+   if the size is known in advance. <A NAME="ffhdef"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_set_hdrsize / ffhdef
+      (fitsfile *fptr, int morekeys, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Return the number of keywords in the header (not counting the END
+    keyword) and the current position
+    in the header.  The position is the number of the keyword record that
+    will be read next (or one greater than the position of the last keyword
+    that was read). A value of 1 is returned if the pointer is
+   positioned at the beginning of the header. <A NAME="ffghps"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_hdrpos / ffghps
+      (fitsfile *fptr, &gt; int *keysexist, int *keynum, int *status)
+</PRE>
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>12.1 64-Bit Long Integers</TITLE>
+<META NAME="description" CONTENT="12.1 64-Bit Long Integers">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node118.html">
+<LINK REL="previous" HREF="node116.html">
+<LINK REL="up" HREF="node116.html">
+<LINK REL="next" HREF="node118.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1773"
+  HREF="node118.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1769"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1763"
+  HREF="node116.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1771"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1774"
+  HREF="node118.html">12.2 Long String Keyword</A>
+<B>Up:</B> <A NAME="tex2html1770"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1764"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001310000000000000000">
+<SPAN CLASS="arabic">12</SPAN>.<SPAN CLASS="arabic">1</SPAN> 64-Bit Long Integers</A>
+</H1>
+
+<P>
+CFITSIO supports reading and writing FITS images or table columns containing
+64-bit integer data values. Support for 64-bit integers was added to the
+official FITS Standard in December 2005.
+ FITS 64-bit images have BITPIX =
+64, and the 64-bit binary table columns have TFORMn = 'K'.  CFITSIO also
+supports the 'Q' variable-length array table column format which is
+analogous to the 'P' column format except that the array descriptor
+is stored as a pair of 64-bit integers.
+
+<P>
+For the convenience of C programmers, the fitsio.h include file
+defines (with a typedef statement) the 'LONGLONG' datatype to be
+equivalent to an appropriate 64-bit integer datatype on each platform.
+Since there is currently no universal standard
+for the name of the 64-bit integer datatype (it might be defined as
+'long long', 'long', or '__int64' depending on the platform)
+C programmers may prefer to use the 'LONGLONG' datatype when
+declaring or allocating 64-bit integer quantities when writing
+code which needs to run on multiple platforms.
+Note that CFITSIO will implicitly convert the datatype when reading
+or writing FITS 64-bit integer images and columns with data arrays of
+a different integer or floating point datatype, but there is an
+increased risk of loss of numerical precision or
+numerical overflow  in this case.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1773"
+  HREF="node118.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1769"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1763"
+  HREF="node116.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1771"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1774"
+  HREF="node118.html">12.2 Long String Keyword</A>
+<B>Up:</B> <A NAME="tex2html1770"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1764"
+  HREF="node116.html">12. Local FITS Conventions</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

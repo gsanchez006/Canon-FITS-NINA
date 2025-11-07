@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>6.1 The Iterator Work Function</TITLE>
+<META NAME="description" CONTENT="6.1 The Iterator Work Function">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node55.html">
+<LINK REL="previous" HREF="node53.html">
+<LINK REL="up" HREF="node53.html">
+<LINK REL="next" HREF="node55.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html954"
+  HREF="node55.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html950"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html944"
+  HREF="node53.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html952"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html955"
+  HREF="node55.html">6.2 The Iterator Driver</A>
+<B>Up:</B> <A NAME="tex2html951"
+  HREF="node53.html">6. The CFITSIO Iterator</A>
+<B> Previous:</B> <A NAME="tex2html945"
+  HREF="node53.html">6. The CFITSIO Iterator</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00710000000000000000">
+<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">1</SPAN> The Iterator Work Function</A>
+</H1>
+
+<P>
+The user-supplied iterator work function must have the following set of
+input parameters (the function can be given any desired name):
+
+<P>
+<PRE>
+  int user_fn( long totaln, long offset, long firstn, long nvalues,
+               int narrays, iteratorCol *data,  void *userPointer )
+</PRE>
+
+<P>
+
+<UL>
+<LI>totaln - the total number of table rows or image pixels
+            that will be passed to the work function
+            during 1 or more iterations.
+
+<P>
+</LI>
+<LI>offset     - the offset applied to the first table row or image
+                pixel to be passed to the work function.  In other
+                words, this is the number of rows or pixels that
+                are skipped over before starting the iterations. If
+                offset = 0, then all the table rows or image pixels
+                will be passed to the work function.
+
+<P>
+</LI>
+<LI>firstn     - the number of the first table row or image pixel
+                (starting with 1)  that is being passed in this
+                particular call to the work function.
+
+<P>
+</LI>
+<LI>nvalues    - the number of table rows or image pixels that are
+                being passed in this particular call to the work
+                function.  nvalues will always be less than or
+                equal to totaln and will have the same value on
+                each iteration, except possibly on the last
+                call which may have a smaller value.
+
+<P>
+</LI>
+<LI>narrays     - the number of arrays of data that are being passed
+                 to the work function.  There is one array for each
+                 image or table column.
+
+<P>
+</LI>
+<LI>*data   - array of structures, one for each
+             column or image.  Each structure contains a pointer
+             to the array of data as well as other descriptive
+             parameters about that array.
+
+<P>
+</LI>
+<LI>*userPointer - a user supplied pointer that can be used
+                 to pass ancillary information from the driver function
+                 to the work function.
+                 This pointer is passed to the CFITSIO iterator function
+                 which then passes it on to the
+                 work function without any modification.
+                 It may point to a single number, to an array of values,
+                 to a structure containing an arbitrary set of parameters
+                 of different types,
+                 or it may be a null pointer if it is not needed.
+                 The work function must cast this pointer to the
+                 appropriate data type before using it it.
+</LI>
+</UL>
+
+<P>
+The totaln, offset, narrays, data, and userPointer parameters are
+guaranteed to have the same value on each iteration.  Only firstn,
+nvalues, and the arrays of data pointed to by the data structures may
+change on each iterative call to the work function.
+
+<P>
+Note that the iterator treats an image as a long 1-D array of pixels
+regardless of it's intrinsic dimensionality.  The total number of
+pixels is just the product of the size of each dimension, and the order
+of the pixels is the same as the order that they are stored in the FITS
+file. If the work function needs to know the number and size of the
+image dimensions then these parameters can be passed via the
+userPointer structure.
+
+<P>
+The iteratorCol structure is currently defined as follows:
+
+<P>
+<PRE>
+typedef struct  /* structure for the iterator function column information */
+{
+   /* structure elements required as input to fits_iterate_data: */
+
+  fitsfile *fptr;       /* pointer to the HDU containing the column or image */
+  int      colnum;      /* column number in the table; ignored for images    */
+  char     colname[70]; /* name (TTYPEn) of the column; null for images      */
+  int      datatype;    /* output data type (converted if necessary) */
+  int      iotype;      /* type: InputCol, InputOutputCol, or OutputCol */
+
+  /* output structure elements that may be useful for the work function: */
+
+  void     *array;    /* pointer to the array (and the null value) */
+  long     repeat;    /* binary table vector repeat value; set     */
+                      /*     equal to 1 for images                 */
+  long     tlmin;     /* legal minimum data value, if any          */
+  long     tlmax;     /* legal maximum data value, if any          */
+  char     unit[70];  /* physical unit string (BUNIT or TUNITn)    */
+  char     tdisp[70]; /* suggested display format; null if none    */
+
+} iteratorCol;
+</PRE>
+
+<P>
+Instead of directly reading or writing the elements in this structure,
+it is recommended that programmers use the access functions that are
+provided for this purpose.
+
+<P>
+The first five elements in this structure must be initially defined by
+the driver routine before calling the iterator routine.  The CFITSIO
+iterator routine uses this information to determine what column or
+array to pass to the work function, and whether the array is to be
+input to the work function, output from the work function, or both.
+The CFITSIO iterator function fills in the values of the remaining
+structure elements before passing it to the work function.
+
+<P>
+The array structure element is a pointer to the actual data array and
+it must be cast to the correct data type before it is used.  The
+`repeat' structure element give the number of data values in each row
+of the table, so that the total number of data values in the array is
+given by repeat * nvalues.  In the case of image arrays and ASCII
+tables, repeat will always be equal to 1.  When the data type is a
+character string, the array pointer is actually a pointer to an array
+of string pointers (i.e., char **array).  The other output structure
+elements are provided for convenience in case that information is
+needed within the work function.  Any other information may be passed
+from the driver routine to the work function via the userPointer
+parameter.
+
+<P>
+Upon completion, the work routine must return an integer status value,
+with 0 indicating success and any other value indicating an error which
+will cause the iterator function to immediately exit at that point.  Return status
+values in the range 1 - 1000 should be avoided since these are
+reserved for use by CFITSIO.  A return status value of -1 may be used to
+force the CFITSIO iterator function to stop at that point and return
+control to the driver routine after writing any output arrays to the
+FITS file.  CFITSIO does not considered this to be an error condition,
+so any further processing by the application program will continue normally.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html954"
+  HREF="node55.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html950"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html944"
+  HREF="node53.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html952"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html955"
+  HREF="node55.html">6.2 The Iterator Driver</A>
+<B>Up:</B> <A NAME="tex2html951"
+  HREF="node53.html">6. The CFITSIO Iterator</A>
+<B> Previous:</B> <A NAME="tex2html945"
+  HREF="node53.html">6. The CFITSIO Iterator</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

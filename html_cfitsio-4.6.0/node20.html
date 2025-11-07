@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.1 CFITSIO Definitions</TITLE>
+<META NAME="description" CONTENT="4.1 CFITSIO Definitions">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node21.html">
+<LINK REL="previous" HREF="node19.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node21.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html522"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html518"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html512"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html520"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html523"
+  HREF="node21.html">4.2 Current Header Data</A>
+<B>Up:</B> <A NAME="tex2html519"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html513"
+  HREF="node19.html">4. Programming Guidelines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00510000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">1</SPAN> CFITSIO Definitions</A>
+</H1>
+
+<P>
+Any program that uses the CFITSIO interface must include the fitsio.h
+header file with the statement
+
+<P>
+<PRE>
+  #include "fitsio.h"
+</PRE>
+This header file contains the prototypes for all the CFITSIO user
+interface routines as well as the definitions of various constants used
+in the interface.  It also defines a C structure of type `fitsfile'
+that is used by CFITSIO to store the relevant parameters that define
+the format of a particular FITS file.  Application programs must define
+a pointer to this structure for each FITS file that is to be opened.
+This structure is initialized (i.e., memory is allocated for the
+structure) when the FITS file is first opened or created with the
+fits_open_file or fits_create_file routines.  This fitsfile pointer
+is then passed as the first argument to every other CFITSIO routine
+that operates on the FITS file.  Application programs must not directly
+read or write elements in this fitsfile structure because the
+definition of the structure may change in future versions of CFITSIO.
+
+<P>
+A number of symbolic constants are also defined in fitsio.h for the
+convenience of application programmers.  Use of these symbolic
+constants rather than the actual numeric value will help to make the
+source code more readable and easier for others to understand.
+
+<P>
+<PRE>
+String Lengths, for use when allocating character arrays:
+
+  #define FLEN_FILENAME 1025 /* max length of a filename                  */
+  #define FLEN_KEYWORD   72  /* max length of a keyword                   */
+  #define FLEN_CARD      81  /* max length of a FITS header card          */
+  #define FLEN_VALUE     71  /* max length of a keyword value string      */
+  #define FLEN_COMMENT   73  /* max length of a keyword comment string    */
+  #define FLEN_ERRMSG    81  /* max length of a CFITSIO error message     */
+  #define FLEN_STATUS    31  /* max length of a CFITSIO status text string */
+
+  Note that FLEN_KEYWORD is longer than the nominal 8-character keyword
+  name length because the HIERARCH convention supports longer keyword names.
+
+Access modes when opening a FITS file:
+
+  #define READONLY  0
+  #define READWRITE 1
+
+BITPIX data type code values for FITS images:
+
+  #define BYTE_IMG      8  /*  8-bit unsigned integers */
+  #define SHORT_IMG    16  /* 16-bit   signed integers */
+  #define LONG_IMG     32  /* 32-bit   signed integers */
+  #define LONGLONG_IMG 64  /* 64-bit   signed integers */
+  #define FLOAT_IMG   -32  /* 32-bit single precision floating point */
+  #define DOUBLE_IMG  -64  /* 64-bit double precision floating point */
+
+  The following 4 data type codes are also supported by CFITSIO:
+  #define SBYTE_IMG  10      /*  8-bit signed integers, equivalent to */
+                             /*  BITPIX = 8, BSCALE = 1, BZERO = -128 */
+  #define USHORT_IMG  20     /* 16-bit unsigned integers, equivalent to */
+                             /*  BITPIX = 16, BSCALE = 1, BZERO = 32768 */
+  #define ULONG_IMG   40     /* 32-bit unsigned integers, equivalent to */
+                             /*  BITPIX = 32, BSCALE = 1, BZERO = 2147483648 */
+  #define ULONGLONG_IMG  80  /* 64-bit unsigned integers, equivalent to */
+                             /*  BITPIX = 64, BSCALE = 1, BZERO = 9223372036854775808*/
+
+Codes for the data type of binary table columns and/or for the
+data type of variables when reading or writing keywords or data:
+
+                              DATATYPE               TFORM CODE
+  #define TBIT          1  /*                            'X' */
+  #define TBYTE        11  /* 8-bit unsigned byte,       'B' */
+  #define TLOGICAL     14  /* logicals (int for keywords     */
+                           /*  and char for table cols   'L' */
+  #define TSTRING      16  /* ASCII string,              'A' */
+  #define TSHORT       21  /* signed short,              'I' */
+  #define TLONG        41  /* signed long,                   */
+  #define TLONGLONG    81  /* 64-bit long signed integer 'K' */
+  #define TFLOAT       42  /* single precision float,    'E' */
+  #define TDOUBLE      82  /* double precision float,    'D' */
+  #define TCOMPLEX     83  /* complex (pair of floats)   'C' */
+  #define TDBLCOMPLEX 163  /* double complex (2 doubles) 'M' */
+
+  The following data type codes are also supported by CFITSIO:
+  #define TINT         31  /* int                            */
+  #define TSBYTE       12  /* 8-bit signed byte,         'S' */
+  #define TUINT        30  /* unsigned int               'V' */
+  #define TUSHORT      20  /* unsigned short             'U' */
+  #define TULONG       40  /* unsigned long                  */
+  #define TULONGLONG   80  /* unsigned long long         'W' */
+
+  The following data type code is only for use with fits\_get\_coltype
+  #define TINT32BIT    41  /* signed 32-bit int,         'J' */
+
+
+HDU type code values (value returned when moving to new HDU):
+
+  #define IMAGE_HDU  0  /* Primary Array or IMAGE HDU */
+  #define ASCII_TBL  1  /* ASCII  table HDU */
+  #define BINARY_TBL 2  /* Binary table HDU */
+  #define ANY_HDU   -1  /* matches any type of HDU */
+
+Column name and string matching case-sensitivity:
+
+  #define CASESEN   1   /* do case-sensitive string match */
+  #define CASEINSEN 0   /* do case-insensitive string match */
+
+Logical states (if TRUE and FALSE are not already defined):
+
+  #define TRUE 1
+  #define FALSE 0
+
+Values to represent undefined floating point numbers:
+
+  #define FLOATNULLVALUE  -9.11912E-36F
+  #define DOUBLENULLVALUE -9.1191291391491E-36
+
+Image compression algorithm definitions
+
+  #define RICE_1       11
+  #define GZIP_1       21
+  #define GZIP_2       22
+  #define PLIO_1       31
+  #define HCOMPRESS_1  41
+  #define NOCOMPRESS  -1
+
+  #define NO_DITHER -1
+  #define SUBTRACTIVE_DITHER_1 1
+  #define SUBTRACTIVE_DITHER_2 2
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html522"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html518"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html512"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html520"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html523"
+  HREF="node21.html">4.2 Current Header Data</A>
+<B>Up:</B> <A NAME="tex2html519"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html513"
+  HREF="node19.html">4. Programming Guidelines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

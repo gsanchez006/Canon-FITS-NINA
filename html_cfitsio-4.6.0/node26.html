@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.7 Data Scaling</TITLE>
+<META NAME="description" CONTENT="4.7 Data Scaling">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node27.html">
+<LINK REL="previous" HREF="node25.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node27.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html594"
+  HREF="node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html590"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html584"
+  HREF="node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html592"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html595"
+  HREF="node27.html">4.8 Support for IEEE</A>
+<B>Up:</B> <A NAME="tex2html591"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html585"
+  HREF="node25.html">4.6 Implicit Data Type</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00570000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">7</SPAN> Data Scaling</A>
+</H1>
+
+<P>
+When reading numerical data values in the primary array or a
+table column, the values will be scaled automatically by the BSCALE and
+BZERO (or TSCALn and TZEROn) header values if they are
+present in the header.  The scaled data that is returned to the reading
+program will have
+
+<P>
+<PRE>
+        output value = (FITS value) * BSCALE + BZERO
+</PRE>
+(a corresponding formula using TSCALn and TZEROn is used when reading
+from table columns).  In the case of integer output values the floating
+point scaled value is truncated to an integer (not rounded to the
+nearest integer).  The fits_set_bscale and fits_set_tscale routines
+(described in the `Advanced' chapter) may be used to override the
+scaling parameters defined in the header (e.g., to turn off the scaling
+so that the program can read the raw unscaled values from the FITS
+file).
+
+<P>
+When writing numerical data to the primary array or to a table column
+the data values will generally be automatically inversely scaled by the
+value of the BSCALE and BZERO (or TSCALn and TZEROn) keyword values if
+they they exist in the header.  These keywords must have been written
+to the header before any data is written for them to have any immediate
+effect.  One may also use the fits_set_bscale and fits_set_tscale
+routines to define or override the scaling keywords in the header
+(e.g., to turn off the scaling so that the program can write the raw
+unscaled values into the FITS file). If scaling is performed, the
+inverse scaled output value that is written into the FITS file will
+have
+
+<P>
+<PRE>
+         FITS value = ((input value) - BZERO) / BSCALE
+</PRE>
+(a corresponding formula using TSCALn and TZEROn is used when
+writing to table columns).  Rounding to the nearest integer, rather
+than truncation, is performed when writing integer data types to the
+FITS file.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html594"
+  HREF="node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html590"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html584"
+  HREF="node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html592"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html595"
+  HREF="node27.html">4.8 Support for IEEE</A>
+<B>Up:</B> <A NAME="tex2html591"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html585"
+  HREF="node25.html">4.6 Implicit Data Type</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

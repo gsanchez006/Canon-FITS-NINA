@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.5 Dealing with Character Strings </TITLE>
+<META NAME="description" CONTENT="4.5 Dealing with Character Strings ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node25.html">
+<LINK REL="previous" HREF="node23.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node25.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html570"
+  HREF="node25.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html566"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html560"
+  HREF="node23.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html568"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html571"
+  HREF="node25.html">4.6 Implicit Data Type</A>
+<B>Up:</B> <A NAME="tex2html567"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html561"
+  HREF="node23.html">4.4 Support for Unsigned</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00550000000000000000"></A><A NAME="character-strings"></A>
+<BR>
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">5</SPAN> Dealing with Character Strings 
+</H1>
+
+<P>
+The character string values in a FITS header or in an ASCII column in a
+FITS table extension are generally padded out with non-significant
+space characters (ASCII 32) to fill up the header record or the column
+width.  When reading a FITS string value, the CFITSIO routines will
+strip off these non-significant trailing spaces and will return a
+null-terminated string value containing only the significant
+characters.  Leading spaces in a FITS string are considered
+significant.  If the string contains all blanks, then CFITSIO will
+return a single blank character, i.e, the first blank is considered to
+be significant, since it distinguishes the string from a null or
+undefined string, but the remaining trailing spaces are not
+significant.
+
+<P>
+Similarly, when writing string values to a FITS file the
+CFITSIO routines expect to get a null-terminated string as input;
+CFITSIO will pad the string with blanks if necessary when writing it
+to the FITS file.
+
+<P>
+The FITS standard does not require trailing spaces to be treated in
+this way, but it does allow a more seamless transition from the
+FORTRAN FITS world where trailing spaces are often treated as
+insignificant.  Users who wish the greatest fidelity when transferring
+strings can use the <code>_byt</code> variants of column readers and writers
+(functions fits_{read,write}_col_byt).  These routines will
+transfer the raw fixed-length vectors of character bytes of the
+column, including any trailing blanks of course. The <code>_byt</code>
+variants make no attempt to null-terminate any elements.  A NULL
+string would be indicated by its first character being a NUL byte.
+
+<P>
+When calling CFITSIO routines that return a character string it is
+vital that the size of the char array be large enough to hold the
+entire string of characters, otherwise CFITSIO will overwrite whatever
+memory locations follow the char array, possibly causing the program to
+execute incorrectly.  This type of error can be difficult to debug, so
+programmers should always ensure that the char arrays are allocated
+enough space to hold the longest possible string, <B>including</B> the
+terminating NULL character.  The fitsio.h file contains the following
+defined constants which programmers are strongly encouraged to use
+whenever they are allocating space for char arrays:
+
+<P>
+<PRE>
+#define FLEN_FILENAME 1025 /* max length of a filename */
+#define FLEN_KEYWORD   72  /* max length of a keyword  */
+#define FLEN_CARD      81  /* length of a FITS header card */
+#define FLEN_VALUE     71  /* max length of a keyword value string */
+#define FLEN_COMMENT   73  /* max length of a keyword comment string */
+#define FLEN_ERRMSG    81  /* max length of a CFITSIO error message */
+#define FLEN_STATUS    31  /* max length of a CFITSIO status text string */
+</PRE>
+For example, when declaring a char array to hold the value string
+of FITS keyword, use the following statement:
+
+<P>
+<PRE>
+    char value[FLEN_VALUE];
+</PRE>
+Note that FLEN_KEYWORD is longer than needed for the nominal 8-character
+keyword name because the HIERARCH convention supports longer keyword names.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html570"
+  HREF="node25.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html566"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html560"
+  HREF="node23.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html568"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html571"
+  HREF="node25.html">4.6 Implicit Data Type</A>
+<B>Up:</B> <A NAME="tex2html567"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html561"
+  HREF="node23.html">4.4 Support for Unsigned</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

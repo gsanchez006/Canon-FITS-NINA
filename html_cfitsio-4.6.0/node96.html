@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.7 HDU Location Specification</TITLE>
+<META NAME="description" CONTENT="10.7 HDU Location Specification">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node97.html">
+<LINK REL="previous" HREF="node95.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node97.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1508"
+  HREF="node97.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1504"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1498"
+  HREF="node95.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1506"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1509"
+  HREF="node97.html">10.8 Image Section</A>
+<B>Up:</B> <A NAME="tex2html1505"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1499"
+  HREF="node95.html">10.6 Image Tile-Compression Specification</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001170000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">7</SPAN> HDU Location Specification</A>
+</H1>
+
+<P>
+The optional HDU location specifier defines which HDU (Header-Data
+Unit, also known as an `extension') within the FITS file to initially
+open.  It must immediately follow the base file name (or the output
+file name if present).  If it is not specified then the first HDU (the
+primary array) is opened.  The HDU location specifier is required if
+the colFilter, rowFilter, or binSpec specifiers are present, because
+the primary array is not a valid HDU for these operations. The HDU may
+be specified either by absolute position number, starting with 0 for
+the primary array, or by reference to the HDU name, and optionally, the
+version number and the HDU type of the desired extension.  The location
+of an image within a single cell of a binary table may also be
+specified, as described below.
+
+<P>
+The absolute position of the extension is specified either by enclosed
+the number in square brackets (e.g., `[1]' = the first extension
+following the primary array) or by preceded the number with a plus sign
+(`+1').  To specify the HDU by name, give the name of the desired HDU
+(the value of the EXTNAME or HDUNAME keyword) and optionally the
+extension version number (value of the EXTVER keyword) and the
+extension type (value of the XTENSION keyword: IMAGE, ASCII or TABLE,
+or BINTABLE), separated by commas and all enclosed in square brackets.
+If the value of EXTVER and XTENSION are not specified, then the first
+extension with the correct value of EXTNAME is opened. The extension
+name and type are not case sensitive, and the extension type may be
+abbreviated to a single letter (e.g., I = IMAGE extension or primary
+array, A or T = ASCII table extension, and B = binary table BINTABLE
+extension).   If the HDU location specifier is equal to `[PRIMARY]' or
+`[P]', then the primary array (the first HDU) will be opened.
+
+<P>
+An optional pound sign character ("#") may be appended to the extension
+name or number to signify that any other extensions in the file should
+be ignored during any subsequent file filtering operations.  For example,
+when doing row filtering operations on a table extension, CFITSIO normally
+creates a copy of the filtered table in memory, along with a verbatim
+copy of all the other extensions in the input FITS file.  If the pound
+sign is appended to the table extension name, then only that extension,
+and none of the other extensions in the file, will by copied to memory,
+as in the following example:
+
+<P>
+<PRE>
+   myfile.fit[events#][TIME &gt; 10000]
+</PRE>
+
+<P>
+FITS images are most commonly stored in the primary array or an image
+extension, but images can also be stored as a vector in a single cell
+of a binary table (i.e. each row of the vector column contains a
+different image).  Such an image can be opened with CFITSIO by
+specifying the desired column  name and the row number after the binary
+table HDU specifier as shown in the following examples. The column name
+is separated from the HDU specifier by a semicolon and the row number
+is enclosed in parentheses.  In this case CFITSIO copies the image from
+the table cell into a temporary primary array before it is opened.  The
+application program then just sees the image in the primary array,
+without any extensions.  The particular row to be opened may be
+specified either by giving an absolute integer row number (starting
+with 1 for the first row), or by specifying a boolean expression that
+evaluates to TRUE for the desired row.  The first row that satisfies
+the expression will be used.  The row selection expression has the same
+syntax as described in the Row Filter Specifier section, below.
+
+<P>
+Examples:
+
+<P>
+<PRE>
+   myfile.fits[3] - open the 3rd HDU following the primary array
+   myfile.fits+3  - same as above, but using the FTOOLS-style notation
+   myfile.fits[EVENTS] - open the extension that has EXTNAME = 'EVENTS'
+   myfile.fits[EVENTS, 2]  - same as above, but also requires EXTVER = 2
+   myfile.fits[events,2,b] - same, but also requires XTENSION = 'BINTABLE'
+   myfile.fits[3; images(17)] - opens the image in row 17 of the 'images'
+                                column in the 3rd extension of the file.
+   myfile.fits[3; images(exposure &gt; 100)] - as above, but opens the image
+                   in the first row that has an 'exposure' column value
+                   greater than 100.
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1508"
+  HREF="node97.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1504"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1498"
+  HREF="node95.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1506"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1509"
+  HREF="node97.html">10.8 Image Section</A>
+<B>Up:</B> <A NAME="tex2html1505"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1499"
+  HREF="node95.html">10.6 Image Tile-Compression Specification</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

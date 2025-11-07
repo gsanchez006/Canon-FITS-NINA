@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5. Basic CFITSIO Interface Routines </TITLE>
+<META NAME="description" CONTENT="5. Basic CFITSIO Interface Routines ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node53.html">
+<LINK REL="previous" HREF="node19.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node34.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html676"
+  HREF="node34.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html672"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html666"
+  HREF="node32.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html674"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html677"
+  HREF="node34.html">5.1 CFITSIO Error Status</A>
+<B>Up:</B> <A NAME="tex2html673"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html667"
+  HREF="node32.html">4.13 CFITSIO Size Limitations</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00600000000000000000">
+<SPAN CLASS="arabic">5</SPAN>. Basic CFITSIO Interface Routines </A>
+</H1>
+
+<P>
+This chapter describes the basic routines in the CFITSIO user interface
+that provide all the functions normally needed to read and write most
+FITS files.  It is recommended that these routines be used for most
+applications and that the more advanced routines described in the
+next chapter only be used in special circumstances when necessary.
+
+<P>
+The following conventions are used in this chapter in the description
+of each function:
+
+<P>
+1. Most functions have 2 names: a long descriptive name and a short
+concise name.  Both names are listed on the first line of the following
+descriptions, separated by a slash (/) character.  Programmers may use
+either name in their programs but the long names are recommended to
+help document the code and make it easier to read.
+
+<P>
+2. A right arrow symbol (<code>&gt;</code>) is used in the function descriptions to
+separate the input parameters from the output parameters in the
+definition of each routine.  This symbol is not actually part of the C
+calling sequence.
+
+<P>
+3. The function parameters are defined in more detail in the
+alphabetical listing in Appendix B.
+
+<P>
+4.  The first argument in almost all the functions is a pointer to a
+structure of type `fitsfile'.  Memory for this structure is allocated
+by CFITSIO when the FITS file is first opened or created and is freed
+when the FITS file is closed.
+
+<P>
+5.  The last argument in almost all the functions is the error status
+parameter.  It must be equal to 0 on input, otherwise the function will
+immediately exit without doing anything.  A non-zero output value
+indicates that an error occurred in the function.  In most cases the
+status value is also returned as the value of the function itself.
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html678"
+  HREF="node34.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">1</SPAN> CFITSIO Error Status Routines</A>
+<LI><A NAME="tex2html679"
+  HREF="node35.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">2</SPAN> FITS File Access Routines</A>
+<LI><A NAME="tex2html680"
+  HREF="node36.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">3</SPAN> HDU Access Routines</A>
+<LI><A NAME="tex2html681"
+  HREF="node37.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">4</SPAN> Header Keyword Read/Write Routines</A>
+<UL>
+<LI><A NAME="tex2html682"
+  HREF="node38.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">1</SPAN> Keyword Reading Routines</A>
+<LI><A NAME="tex2html683"
+  HREF="node39.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">2</SPAN> Keyword Writing Routines</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html684"
+  HREF="node40.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">5</SPAN> Primary Array or IMAGE Extension I/O Routines</A>
+<LI><A NAME="tex2html685"
+  HREF="node41.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">6</SPAN> Image Compression</A>
+<LI><A NAME="tex2html686"
+  HREF="node42.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN> ASCII and Binary Table Routines</A>
+<UL>
+<LI><A NAME="tex2html687"
+  HREF="node43.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">1</SPAN> Create New Table</A>
+<LI><A NAME="tex2html688"
+  HREF="node44.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">2</SPAN> Column Information Routines</A>
+<LI><A NAME="tex2html689"
+  HREF="node45.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">3</SPAN> Routines to Edit Rows or Columns</A>
+<LI><A NAME="tex2html690"
+  HREF="node46.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">4</SPAN> Read and Write Column Data Routines</A>
+<LI><A NAME="tex2html691"
+  HREF="node47.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">5</SPAN> Row Selection and Calculator Routines</A>
+<LI><A NAME="tex2html692"
+  HREF="node48.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">6</SPAN> Column Binning or Histogramming Routines</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html693"
+  HREF="node49.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">8</SPAN> Utility Routines</A>
+<UL>
+<LI><A NAME="tex2html694"
+  HREF="node50.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">1</SPAN> File Checksum Routines</A>
+<LI><A NAME="tex2html695"
+  HREF="node51.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">2</SPAN> Date and Time Utility Routines</A>
+<LI><A NAME="tex2html696"
+  HREF="node52.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">3</SPAN> General Utility Routines</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html676"
+  HREF="node34.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html672"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html666"
+  HREF="node32.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html674"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html677"
+  HREF="node34.html">5.1 CFITSIO Error Status</A>
+<B>Up:</B> <A NAME="tex2html673"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html667"
+  HREF="node32.html">4.13 CFITSIO Size Limitations</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

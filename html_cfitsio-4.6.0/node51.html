@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.8.2 Date and Time Utility Routines</TITLE>
+<META NAME="description" CONTENT="5.8.2 Date and Time Utility Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node52.html">
+<LINK REL="previous" HREF="node50.html">
+<LINK REL="up" HREF="node49.html">
+<LINK REL="next" HREF="node52.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html916"
+  HREF="node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html912"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html906"
+  HREF="node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html914"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html917"
+  HREF="node52.html">5.8.3 General Utility Routines</A>
+<B>Up:</B> <A NAME="tex2html913"
+  HREF="node49.html">5.8 Utility Routines</A>
+<B> Previous:</B> <A NAME="tex2html907"
+  HREF="node50.html">5.8.1 File Checksum Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00682000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">2</SPAN> Date and Time Utility Routines</A>
+</H2>
+
+<P>
+The following routines help to construct or parse the FITS date/time
+strings.   Starting in the year 2000, the FITS DATE keyword values (and
+the values of other `DATE-' keywords) must have the form 'YYYY-MM-DD'
+(date only) or 'YYYY-MM-DDThh:mm:ss.ddd...' (date and time) where the
+number of decimal places in the seconds value is optional.  These times
+are in UTC.  The older 'dd/mm/yy' date format may not be used for dates
+after 01 January 2000.  See Appendix B for the definition of the
+parameters used in these routines.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Get the current system date.  C already provides standard
+    library routines for getting the current date and time,
+    but this routine is provided for compatibility with
+    the Fortran FITSIO library.  The returned year has 4 digits
+    (1999, 2000, etc.) <A NAME="ffgsdt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_system_date/ffgsdt
+      ( &gt; int *day, int *month, int *year, int *status )
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Get the current system date and time string ('YYYY-MM-DDThh:mm:ss').
+The time will be in UTC/GMT if available, as indicated by a returned timeref
+value = 0.  If the returned value of timeref = 1 then this indicates that
+it was not possible to convert the local time to UTC, and thus the local
+time was returned.
+</DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_system_time/ffgstm
+      (&gt; char *datestr, int  *timeref, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Construct a date string from the input date values.  If the year
+is between 1900 and 1998, inclusive, then the returned date string will
+have the old FITS format ('dd/mm/yy'), otherwise the date string will
+have the new FITS format ('YYYY-MM-DD').  Use fits_time2str instead
+ to always return a date string using the new FITS format. <A NAME="ffdt2s"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_date2str/ffdt2s
+      (int year, int month, int day, &gt; char *datestr, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Construct a new-format date + time string ('YYYY-MM-DDThh:mm:ss.ddd...').
+  If the year, month, and day values all = 0 then only the time is encoded
+  with format 'hh:mm:ss.ddd...'.  The decimals parameter specifies how many
+  decimal places of fractional seconds to include in the string.  If `decimals'
+ is negative, then only the date will be return ('YYYY-MM-DD').
+</DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_time2str/fftm2s
+      (int year, int month, int day, int hour, int minute, double second,
+      int decimals, &gt; char *datestr, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Return the date as read from the input string, where the string may be
+in either the old ('dd/mm/yy')  or new ('YYYY-MM-DDThh:mm:ss' or
+'YYYY-MM-DD') FITS format.  Null pointers may be supplied for any
+  unwanted output date parameters.
+</DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_str2date/ffs2dt
+      (char *datestr, &gt; int *year, int *month, int *day, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Return the date and time as read from the input string, where the
+string may be in either the old  or new FITS format.  The returned hours,
+minutes, and seconds values will be set to zero if the input string
+does not include the time ('dd/mm/yy' or 'YYYY-MM-DD') .  Similarly,
+the returned year, month, and date values will be set to zero if the
+date is not included in the input string ('hh:mm:ss.ddd...').  Null
+pointers may be supplied for any unwanted output date and time
+parameters.
+</DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_str2time/ffs2tm
+      (char *datestr, &gt; int *year, int *month, int *day, int *hour,
+      int *minute, double *second, int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html916"
+  HREF="node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html912"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html906"
+  HREF="node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html914"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html917"
+  HREF="node52.html">5.8.3 General Utility Routines</A>
+<B>Up:</B> <A NAME="tex2html913"
+  HREF="node49.html">5.8 Utility Routines</A>
+<B> Previous:</B> <A NAME="tex2html907"
+  HREF="node50.html">5.8.1 File Checksum Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

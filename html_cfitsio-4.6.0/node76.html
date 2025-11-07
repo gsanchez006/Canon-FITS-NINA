@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.4 Define Data Scaling and Undefined Pixel Parameters</TITLE>
+<META NAME="description" CONTENT="9.4 Define Data Scaling and Undefined Pixel Parameters">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node77.html">
+<LINK REL="previous" HREF="node68.html">
+<LINK REL="up" HREF="node63.html">
+<LINK REL="next" HREF="node77.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1239"
+  HREF="node77.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1235"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1229"
+  HREF="node75.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1237"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1240"
+  HREF="node77.html">9.5 Specialized FITS Primary</A>
+<B>Up:</B> <A NAME="tex2html1236"
+  HREF="node63.html">9. Specialized CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html1230"
+  HREF="node75.html">9.3.7 Update Keyword Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001040000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">4</SPAN> Define Data Scaling and Undefined Pixel Parameters</A>
+</H1>
+
+<P>
+These routines set or modify the internal parameters used by CFITSIO
+to either scale the data or to represent undefined pixels.  Generally
+CFITSIO will scale the data according to the values of the BSCALE and
+BZERO (or TSCALn and TZEROn) keywords, however these routines may be
+used to override the keyword values.  This may be useful when one wants
+to read or write the raw unscaled values in the FITS file.  Similarly,
+CFITSIO generally uses the value of the BLANK or TNULLn keyword to
+signify an undefined pixel, but these routines may be used to override
+this value.  These routines do not create or modify the corresponding
+header keyword values.  See Appendix B for the definition of the
+parameters used in these routines.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Reset the scaling factors in the primary array or image extension; does
+    not change the BSCALE and BZERO keyword values and only affects the
+    automatic scaling performed when the data elements are written/read
+    to/from the FITS file.   When reading from a FITS file the returned
+    data value = (the value given in the FITS array) * BSCALE + BZERO.
+    The inverse formula is used when writing data values to the FITS
+   file. <A NAME="ffpscl"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_set_bscale / ffpscl
+      (fitsfile *fptr, double scale, double zero, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Reset the scaling parameters for a table column; does not change
+    the TSCALn or TZEROn keyword values and only affects the automatic
+    scaling performed when the data elements are written/read to/from
+    the FITS file.  When reading from a FITS file the returned data
+    value = (the value given in the FITS array) * TSCAL + TZERO.  The
+    inverse formula is used when writing data values to the FITS file.
+   <A NAME="fftscl"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_set_tscale / fftscl
+      (fitsfile *fptr, int colnum, double scale, double zero,
+       &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Define the integer value to be used to signify undefined pixels in the
+    primary array or image extension.  This is only used if BITPIX = 8, 16,
+    or 32.  This does not create or change the value of the BLANK keyword in
+   the header. <A NAME="ffpnul"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_set_imgnull / ffpnul
+      (fitsfile *fptr, LONGLONG nulval, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Define the string to be used to signify undefined pixels in
+    a column in an ASCII table.  This does not create or change the value
+   of the TNULLn keyword. <A NAME="ffsnul"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_set_atblnull / ffsnul
+      (fitsfile *fptr, int colnum, char *nulstr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Define the value to be used to signify undefined pixels in
+    an integer column in a binary table (where TFORMn = 'B', 'I', or 'J').
+    This does not create or  change the value of the TNULLn keyword.
+   <A NAME="fftnul"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_set_btblnull / fftnul
+      (fitsfile *fptr, int colnum, LONGLONG nulval, &gt; int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1239"
+  HREF="node77.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1235"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1229"
+  HREF="node75.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1237"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1240"
+  HREF="node77.html">9.5 Specialized FITS Primary</A>
+<B>Up:</B> <A NAME="tex2html1236"
+  HREF="node63.html">9. Specialized CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html1230"
+  HREF="node75.html">9.3.7 Update Keyword Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

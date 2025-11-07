@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>13.1 How CFITSIO Manages Data I/O</TITLE>
+<META NAME="description" CONTENT="13.1 How CFITSIO Manages Data I/O">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node125.html">
+<LINK REL="previous" HREF="node123.html">
+<LINK REL="up" HREF="node123.html">
+<LINK REL="next" HREF="node125.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1857"
+  HREF="node125.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1853"
+  HREF="node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1847"
+  HREF="node123.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1855"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1858"
+  HREF="node125.html">13.2 Optimization Strategies</A>
+<B>Up:</B> <A NAME="tex2html1854"
+  HREF="node123.html">13. Optimizing Programs</A>
+<B> Previous:</B> <A NAME="tex2html1848"
+  HREF="node123.html">13. Optimizing Programs</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001410000000000000000">
+<SPAN CLASS="arabic">13</SPAN>.<SPAN CLASS="arabic">1</SPAN> How CFITSIO Manages Data I/O</A>
+</H1>
+
+<P>
+Many CFITSIO operations involve transferring only a small number of
+bytes to or from the FITS file (e.g, reading a keyword, or writing a
+row in a table); it would be very inefficient to physically read or
+write such small blocks of data directly in the FITS file on disk,
+therefore CFITSIO maintains a set of internal Input-Output (IO)
+buffers in RAM memory that each contain one FITS block (2880 bytes) of
+data.  Whenever CFITSIO needs to access data in the FITS file, it first
+transfers the FITS block containing those bytes into one of the IO
+buffers in memory.  The next time CFITSIO needs to access bytes in the
+same block it can then go to the fast IO buffer rather than using a
+much slower system disk access routine.  The number of available IO
+buffers is determined by the NIOBUF parameter (in fitsio2.h) and is
+currently set to 40 by default.
+
+<P>
+Whenever CFITSIO reads or writes data it first checks to see if that
+block of the FITS file is already loaded into one of the IO buffers.
+If not, and if there is an empty IO buffer available, then it will load
+that block into the IO buffer (when reading a FITS file) or will
+initialize a new block (when writing to a FITS file).  If all the IO
+buffers are already full, it must decide which one to reuse (generally
+the one that has been accessed least recently), and flush the contents
+back to disk if it has been modified before loading the new block.
+
+<P>
+The one major exception to the above process occurs whenever a large
+contiguous set of bytes are accessed, as might occur when reading or
+writing a FITS image.  In this case CFITSIO bypasses the internal IO
+buffers and simply reads or writes the desired bytes directly in the
+disk file with a single call to a low-level file read or write
+routine.  The minimum threshold for the number of bytes to read or
+write this way is set by the MINDIRECT parameter and is currently set
+to 3 FITS blocks = 8640 bytes.  This is the most efficient way to read
+or write large chunks of data.  Note that this fast direct IO process is not
+applicable when accessing columns of data in a FITS table because the
+bytes are generally not contiguous since they are interleaved by the
+other columns of data in the table.  This explains why the speed for
+accessing FITS tables is generally slower than accessing
+FITS images.
+
+<P>
+Given this background information, the general strategy for efficiently
+accessing FITS files should be apparent:  when dealing with FITS
+images, read or write large chunks of data at a time so that the direct
+IO mechanism will be invoked;  when accessing FITS headers or FITS
+tables, on the other hand, once a particular FITS block has been
+loading into one of the IO buffers, try to access all the needed
+information in that block before it gets flushed out of the IO buffer.
+It is important to avoid the situation where the same FITS block is
+being read then flushed from a IO buffer multiple times.
+
+<P>
+The following section gives more specific suggestions for optimizing
+the use of CFITSIO.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1857"
+  HREF="node125.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1853"
+  HREF="node123.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1847"
+  HREF="node123.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1855"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1858"
+  HREF="node125.html">13.2 Optimization Strategies</A>
+<B>Up:</B> <A NAME="tex2html1854"
+  HREF="node123.html">13. Optimizing Programs</A>
+<B> Previous:</B> <A NAME="tex2html1848"
+  HREF="node123.html">13. Optimizing Programs</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

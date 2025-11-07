@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>2.2 Testing the Library</TITLE>
+<META NAME="description" CONTENT="2.2 Testing the Library">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node14.html">
+<LINK REL="previous" HREF="node8.html">
+<LINK REL="up" HREF="node7.html">
+<LINK REL="next" HREF="node14.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html427"
+  HREF="node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html423"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html417"
+  HREF="node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html425"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html428"
+  HREF="node14.html">2.3 Linking Programs with</A>
+<B>Up:</B> <A NAME="tex2html424"
+  HREF="node7.html">2. Creating the CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html418"
+  HREF="node12.html">2.1.4 Macintosh PCs</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00320000000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">2</SPAN> Testing the Library</A>
+</H1>
+
+<P>
+The CFITSIO library should be tested by building and running
+the testprog.c program that is included with the release.
+On Unix systems, type:
+
+<P>
+<PRE>
+    % make testprog
+    % testprog &gt; testprog.lis
+    % diff testprog.lis testprog.out
+    % cmp testprog.fit testprog.std
+</PRE>
+ On VMS systems,
+(assuming cc is the name of the C compiler command), type:
+
+<P>
+<PRE>
+    $ cc testprog.c
+    $ link testprog, cfitsio/lib, alpha$library:vaxcrtl/lib
+    $ run testprog
+</PRE>
+The test program should produce a FITS file called `testprog.fit'
+that is identical to the `testprog.std' FITS file included with this
+release.  The diagnostic messages (which were piped to the file
+testprog.lis in the Unix example) should be identical to the listing
+contained in the file testprog.out.  The 'diff' and 'cmp' commands
+shown above should not report any differences in the files.  (There
+may be some minor format differences, such as the presence or
+absence of leading zeros, or 3 digit exponents in numbers,
+which can be ignored).
+
+<P>
+The Fortran wrappers in CFITSIO may be tested with the testf77
+program on Unix systems with:
+
+<P>
+<PRE>
+    % gfortran -o testf77 testf77.f -L. -lcfitsio -lz -lcurl
+    % testf77 &gt; testf77.lis
+    % diff testf77.lis testf77.out
+    % cmp testf77.fit testf77.std
+</PRE>
+On machines running SUN O/S, Fortran programs must be compiled with the
+'-f' option to force double precision variables to be aligned on 8-byte
+boundarys to make the fortran-declared variables compatible with C.  A
+similar compiler option may be required on other platforms.  Failing to
+use this option may cause the program to crash on FITSIO routines that
+read or write double precision variables.
+
+<P>
+Also note that on some systems, the output listing of the testf77
+program may differ slightly from the testf77.std template, if leading
+zeros are not printed by default before the decimal point when using F
+format.
+
+<P>
+A few other utility programs are included with CFITSIO; the first four
+of this programs can be compiled an linked by typing `make
+program_name' where `program_name' is the actual name of the program:
+
+<P>
+<PRE>
+    speed - measures the maximum throughput (in MB per second)
+              for writing and reading FITS files with CFITSIO.
+
+    listhead - lists all the header keywords in any FITS file
+
+    fitscopy - copies any FITS file (especially useful in conjunction
+                 with the CFITSIO's extended input filename syntax).
+
+    cookbook - a sample program that performs common read and
+                 write operations on a FITS file.
+
+    iter_a, iter_b, iter_c - examples of the CFITSIO iterator routine
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html427"
+  HREF="node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html423"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html417"
+  HREF="node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html425"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html428"
+  HREF="node14.html">2.3 Linking Programs with</A>
+<B>Up:</B> <A NAME="tex2html424"
+  HREF="node7.html">2. Creating the CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html418"
+  HREF="node12.html">2.1.4 Macintosh PCs</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

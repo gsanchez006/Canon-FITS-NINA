@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>11.6 Examples</TITLE>
+<META NAME="description" CONTENT="11.6 Examples">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node114.html">
+<LINK REL="up" HREF="node109.html">
+<LINK REL="next" HREF="node116.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1743"
+  HREF="node116.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1739"
+  HREF="node109.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1735"
+  HREF="node114.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1741"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1744"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B>Up:</B> <A NAME="tex2html1740"
+  HREF="node109.html">11. Template Files</A>
+<B> Previous:</B> <A NAME="tex2html1736"
+  HREF="node114.html">11.5 Errors</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001260000000000000000">
+<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">6</SPAN> Examples</A>
+</H1>
+
+<P>
+1. This template file will create a 200 x 300 pixel image, with 4-byte
+integer pixel values, in the primary HDU:
+
+<P>
+<PRE>
+  SIMPLE = T
+  BITPIX = 32
+  NAXIS = 2     / number of dimensions
+  NAXIS1 = 100  / length of first axis
+  NAXIS2 = 200  / length of second axis
+  OBJECT = NGC 253 / name of observed object
+</PRE>
+The allowed values of BITPIX are 8, 16, 32, -32, or -64,
+representing, respectively, 8-bit integer, 16-bit integer, 32-bit
+integer, 32-bit floating point, or 64 bit floating point pixels.
+
+<P>
+2.  To create a FITS  table, the template first needs to include
+XTENSION = TABLE or BINTABLE to define whether it is an ASCII or binary
+table, and NAXIS2 to define the number of rows in the table.  Two
+template lines are then needed to define the name (TTYPEn) and FITS data
+format (TFORMn) of the columns, as in this example:
+
+<P>
+<PRE>
+  xtension = bintable
+  naxis2 = 40
+  ttype# = Name
+  tform# = 10a
+  ttype# = Npoints
+  tform# = j
+  ttype# = Rate
+  tunit# = counts/s
+  tform# = e
+</PRE>
+The above example defines a null primary array followed by a 40-row
+binary table extension with 3 columns called 'Name', 'Npoints', and
+'Rate', with data formats of '10A' (ASCII character string), '1J'
+(integer) and '1E' (floating point), respectively.  Note that the other
+required FITS keywords (BITPIX, NAXIS, NAXIS1, PCOUNT, GCOUNT, TFIELDS,
+and END) do not need to be explicitly defined in the template because
+their values can be inferred from the other keywords in the template.
+This example also illustrates that the templates are generally
+case-insensitive (the keyword names and TFORMn values are converted to
+upper-case in the FITS file) and that string keyword values generally
+do not need to be enclosed in quotes.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1743"
+  HREF="node116.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1739"
+  HREF="node109.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1735"
+  HREF="node114.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1741"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1744"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B>Up:</B> <A NAME="tex2html1740"
+  HREF="node109.html">11. Template Files</A>
+<B> Previous:</B> <A NAME="tex2html1736"
+  HREF="node114.html">11.5 Errors</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.3 HDU Access Routines</TITLE>
+<META NAME="description" CONTENT="5.3 HDU Access Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node37.html">
+<LINK REL="previous" HREF="node35.html">
+<LINK REL="up" HREF="node33.html">
+<LINK REL="next" HREF="node37.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html731"
+  HREF="node37.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html727"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html721"
+  HREF="node35.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html729"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html732"
+  HREF="node37.html">5.4 Header Keyword Read/Write</A>
+<B>Up:</B> <A NAME="tex2html728"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html722"
+  HREF="node35.html">5.2 FITS File Access</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00630000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">3</SPAN> HDU Access Routines</A>
+</H1>
+
+<P>
+The following functions perform operations on Header-Data Units (HDUs)
+as a whole.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Move to a different HDU in the file.  The first routine moves to a
+    specified absolute HDU number (starting with 1 for the primary
+    array) in the FITS file, and the second routine moves a relative
+    number HDUs forward or backward from the current HDU.  A null
+    pointer may be given for the hdutype parameter if it's value is
+    not needed.  The third routine moves to the (first) HDU which has
+    the specified extension type and EXTNAME and EXTVER keyword values
+    (or HDUNAME and HDUVER keywords).  The extname parameter may
+    contain wildcards, as accepted by fits_compare_str().  The
+    hdutype parameter may have a value of IMAGE_HDU, ASCII_TBL,
+    BINARY_TBL, or ANY_HDU where ANY_HDU means that only the
+    extname and extver values will be used to locate the correct
+    extension.  If the input value of extver is 0 then the EXTVER
+    keyword is ignored and the first HDU with a matching EXTNAME (or
+    HDUNAME) keyword will be found.  If no matching HDU is found in
+    the file then the current HDU will remain unchanged and a status =
+    BAD_HDU_NUM will be returned.
+  <A NAME="ffmahd"></A> <A NAME="ffmrhd"></A> <A NAME="ffmnhd"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_movabs_hdu / ffmahd
+      (fitsfile *fptr, int hdunum, &gt; int *hdutype, int *status)
+
+  int fits_movrel_hdu / ffmrhd
+      (fitsfile *fptr, int nmove, &gt; int *hdutype, int *status)
+
+  int fits_movnam_hdu / ffmnhd
+      (fitsfile *fptr, int hdutype, char *extname, int extver, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Return the total number of HDUs in the FITS file.  This returns the
+number of completely defined HDUs in the file.  If a new HDU has just been added to
+the FITS file, then that last HDU will only be counted if it has been closed,
+or if data has been written to the HDU.
+   The current HDU remains unchanged by this routine. <A NAME="ffthdu"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_num_hdus / ffthdu
+      (fitsfile *fptr, &gt; int *hdunum, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Return the number of the current HDU (CHDU) in the FITS file (where
+    the primary array = 1).  This function returns the HDU number
+   rather than a status value.  <A NAME="ffghdn"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_hdu_num / ffghdn
+      (fitsfile *fptr, &gt; int *hdunum)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Return the type of the current HDU in the FITS file.  The possible
+   values for hdutype are: IMAGE_HDU, ASCII_TBL, or BINARY_TBL.  <A NAME="ffghdt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_hdu_type / ffghdt
+      (fitsfile *fptr, &gt; int *hdutype, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Copy all or part of the HDUs in the FITS file associated with infptr
+    and append them to the end of the FITS file associated with
+    outfptr.  If 'previous' is true (not 0), then any HDUs preceding
+    the current HDU in the input file will be copied to the output
+    file.  Similarly, 'current' and 'following' determine whether the
+    current HDU, and/or any following HDUs in the input file will be
+    copied to the output file. Thus, if all 3 parameters are true, then the
+    entire input file will be copied.  On exit, the current HDU in
+    the input file will be unchanged, and the last HDU in the output
+   file will be the current HDU.  <A NAME="ffcpfl"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_file / ffcpfl
+      (fitsfile *infptr, fitsfile *outfptr, int previous, int current,
+          int following, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Copy the current HDU from the FITS file associated with infptr and append it
+    to the end of the FITS file associated with outfptr.  Space may be
+   reserved for MOREKEYS additional keywords in the output header. <A NAME="ffcopy"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_hdu / ffcopy
+      (fitsfile *infptr, fitsfile *outfptr, int morekeys, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>7 </STRONG></DT>
+<DD>Write the current HDU in the input FITS file to the
+   output FILE stream (e.g., to stdout). <A NAME="ffwrhdu"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_hdu / ffwrhdu
+      (fitsfile *infptr, FILE *stream, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>8 </STRONG></DT>
+<DD>Copy the header (and not the data) from the CHDU associated with infptr
+    to the CHDU associated with outfptr.  If the current output HDU
+    is not completely empty, then the CHDU will be closed and a new
+    HDU will be appended to the output file.   An empty output data unit
+   will be created with all values initially = 0). <A NAME="ffcphd"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_header / ffcphd
+      (fitsfile *infptr, fitsfile *outfptr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>9 </STRONG></DT>
+<DD>Delete the CHDU in the FITS file.  Any following HDUs will be shifted
+    forward in the file, to fill in the gap created by the deleted
+    HDU.  In the case of deleting the primary array (the first HDU in
+    the file) then the current primary array will be replace by a null
+    primary array containing the minimum set of required keywords and
+    no data.  If there are more extensions in the file following the
+    one that is deleted, then the the CHDU will be redefined to point
+    to the following extension.  If there are no following extensions
+    then the CHDU will be redefined to point to the previous HDU.  The
+    output hdutype parameter returns the type of the new CHDU.  A null
+    pointer may be given for
+   hdutype if the returned value is not needed. <A NAME="ffdhdu"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_delete_hdu / ffdhdu
+      (fitsfile *fptr, &gt; int *hdutype, int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html731"
+  HREF="node37.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html727"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html721"
+  HREF="node35.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html729"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html732"
+  HREF="node37.html">5.4 Header Keyword Read/Write</A>
+<B>Up:</B> <A NAME="tex2html728"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html722"
+  HREF="node35.html">5.2 FITS File Access</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.4.1 Keyword Reading Routines</TITLE>
+<META NAME="description" CONTENT="5.4.1 Keyword Reading Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node39.html">
+<LINK REL="previous" HREF="node37.html">
+<LINK REL="up" HREF="node37.html">
+<LINK REL="next" HREF="node39.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html757"
+  HREF="node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html753"
+  HREF="node37.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html747"
+  HREF="node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html755"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html758"
+  HREF="node39.html">5.4.2 Keyword Writing Routines</A>
+<B>Up:</B> <A NAME="tex2html754"
+  HREF="node37.html">5.4 Header Keyword Read/Write</A>
+<B> Previous:</B> <A NAME="tex2html748"
+  HREF="node37.html">5.4 Header Keyword Read/Write</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00641000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">1</SPAN> Keyword Reading Routines</A>
+</H2>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Return the number of existing keywords (not counting the
+    END keyword) and the amount of space currently available for more
+    keywords.  It returns morekeys = -1 if the header has not yet been
+    closed.  Note that CFITSIO will dynamically add space if required
+    when writing new keywords to a header so in practice there is no
+    limit to the number of keywords that can be added to a header.  A
+    null pointer may be entered for the morekeys parameter if it's
+   value is not needed. <A NAME="ffghsp"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_hdrspace / ffghsp
+      (fitsfile *fptr, &gt; int *keysexist, int *morekeys, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Return the specified keyword.  In the first routine,
+    the datatype parameter specifies the desired returned data type of the
+    keyword value and can have one of the following symbolic constant
+    values:  TSTRING, TLOGICAL (== int), TBYTE, TSHORT, TUSHORT, TINT,
+    TUINT, TLONG, TULONG, TLONGLONG, TFLOAT, TDOUBLE, TCOMPLEX, and TDBLCOMPLEX.
+    Within the context of this routine, TSTRING corresponds to a
+    'char*' data type, i.e., a pointer to a character array.  Data type
+    conversion will be performed for numeric values if the keyword
+    value does not have the same data type.  If the value of the keyword
+    is undefined (i.e., the value field is blank) then an error status
+    = VALUE_UNDEFINED will be returned.
+
+<P>
+The second routine returns the keyword value as a character string
+    (a literal copy of what is in the value field) regardless of the
+    intrinsic data type of the keyword.  The third routine returns
+    the entire 80-character header record of the keyword, with any
+    trailing blank characters stripped off. The fourth routine returns
+    the (next) header record that contains the literal string of characters
+    specified by the 'string' argument.
+
+<P>
+If a NULL comment pointer is supplied then the comment string
+   will not be returned. <A NAME="ffgky"></A> <A NAME="ffgkey"></A> <A NAME="ffgcrd"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_read_key / ffgky
+      (fitsfile *fptr, int datatype, char *keyname, &gt; DTYPE *value,
+       char *comment, int *status)
+
+  int fits_read_keyword / ffgkey
+      (fitsfile *fptr, char *keyname, &gt; char *value, char *comment,
+       int *status)
+
+  int fits_read_card / ffgcrd
+      (fitsfile *fptr, char *keyname, &gt; char *card, int *status)
+
+  int fits_read_str / ffgstr
+      (fitsfile *fptr, char *string, &gt; char *card, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Read a string-valued keyword and return the string length, the value string, 
+    and/or the commment length and comment field.  These routines support the reading
+    of long string keyword values of arbitrary length which use the CONTINUE convention.
+    The first two routines, ffgkcsl and ffgskyc are the newer versions of the second two.  
+    They provide all the functionality of the older routines, 
+    but have the added capability of returning the length of comment strings (if any),
+    and reading multi-line comment strings of arbitrary length.  They are recommended
+    for use in the future.  ffgksl and ffgsky are maintained for backwards-compatibility.
+
+<P>
+The first routine, ffgkcsl, simply returns the lengths of the character string value and
+    comment string (if any) of the specified keyword.  These lengths are particularly helpful
+    for allocating dynamic memory when retrieving the strings in the ffgskyc function.
+    To create an array large enough to hold the full string, one should allocate a size equal to
+    the returned length + 1 (for the trailing NULL).
+
+<P>
+The second routine, ffgskyc, is for retrieving the value string and optional comment 
+    string, both of which may be of arbitrary length spreading over multiple lines with the
+    CONTINUE keyword convention.  It will return up to maxchar characters of the keyword value
+    string, starting with the firstchar character.  Similarly, maxcomchar determines the 
+    maximum number of characters to return for the comment string.  (The valuelen and comlen
+    arguments return the total length of their respective strings regardless of what is actually
+    returned as determined from the firstchar and max(com)char arguments.) If NULL is passed for 
+    either the value or comm string pointer, its max(com)char setting is irrelevant since
+    the corresponding string will not be returned.
+
+<P>
+The ffgksl routine is the earlier version of ffgkcsl. It only returns the value string length and
+    not the comment string length.  ffgsky, the earlier version of ffgskyc, does return 
+    both the value string and comment string.  However it will only return up to the
+    first FLEN_COMMENT-1 characters of the comment.  It can read comments across
+    multiple lines, but not of arbitrary length.   <A NAME="ffgkcsl"></A> <A NAME="ffgskyc"></A> <A NAME="ffgksl"></A> <A NAME="ffgsky"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_key_com_strlen / ffgkcsl
+      (fitsfile *fptr, const char *keyname, int *length, int *comlength,
+      int *status);
+      
+  int fits_read_string_key_com / ffgskyc
+      (fitsfile *fptr, const char *keyname, int firstchar, int maxchar,
+      int maxcomchar, char *value, int *valuelen, char *comm,
+      int *comlen, int *status);
+      
+  int fits_get_key_strlen / ffgksl
+      (fitsfile *fptr, const char *keyname, int *length, int *status);
+
+  int fits_read_string_key / ffgsky
+       (fitsfile *fptr, const char *keyname, int firstchar, int maxchar,
+       char *value, int *valuelen, char *comm, int *status);
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Return the nth header record in the CHU.  The first keyword
+   in the header is at keynum = 1;  if keynum = 0 then these routines
+   simply reset the internal CFITSIO pointer to the beginning of the header
+   so that subsequent keyword operations will start at the top of the
+   header (e.g., prior to searching for keywords using wild cards in
+   the keyword name).   The first routine returns the entire
+   80-character header record (with trailing blanks truncated),
+   while the second routine parses the record and returns the name,
+   value, and comment fields as separate (blank truncated)
+   character strings.  If a NULL comment pointer is given on input,
+   then the comment string will not be
+  returned. <A NAME="ffgrec"></A> <A NAME="ffgkyn"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_read_record / ffgrec
+      (fitsfile *fptr, int keynum, &gt; char *card, int *status)
+
+  int fits_read_keyn / ffgkyn
+      (fitsfile *fptr, int keynum, &gt; char *keyname, char *value,
+       char *comment, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Return the next keyword whose name matches one of the strings in
+    'inclist' but does not match any of the strings in 'exclist'.
+    The strings in inclist and exclist may contain wild card characters
+    (*, ?, and #) as described at the beginning of this section.
+    This routine searches from the current header position to the
+    end of the header, only, and does not continue the search from
+    the top of the header back to the original position.  The current
+    header position may be reset with the ffgrec routine.  Note
+    that nexc may be set = 0 if there are no keywords to be excluded.
+    This routine returns status = KEY_NO_EXIST if a matching
+   keyword is not found. <A NAME="ffgnxk"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_find_nextkey / ffgnxk
+      (fitsfile *fptr, char **inclist, int ninc, char **exclist,
+       int nexc, &gt; char *card, int  *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Return the physical units string from an existing keyword.  This
+    routine uses a local convention, shown in the following example,
+    in which the keyword units are enclosed in square brackets in the
+    beginning of the keyword comment field.  A null string is returned
+   if no units are defined for the keyword.  <A NAME="ffgunt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+     VELOCITY=                 12.3 / [km/s] orbital speed
+
+  int fits_read_key_unit / ffgunt
+      (fitsfile *fptr, char *keyname, &gt; char *unit, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>7 </STRONG></DT>
+<DD>Concatenate the header keywords in the CHDU into a single long
+    string of characters.  This provides a convenient way of passing
+    all or part of the header information in a FITS HDU to other subroutines.
+    Each 80-character fixed-length keyword record is appended to the
+    output character string, in order, with no intervening separator or
+    terminating characters. The last header record is terminated with
+    a NULL character.  These routine allocates memory for the returned
+    character array, so the calling program must free the memory when
+    finished.  The cleanest way to do this is to
+    call the fits_free_memory routine.
+
+<P>
+There are 2 related routines: fits_hdr2str simply concatenates all
+    the existing keywords in the header; fits_convert_hdr2str is similar,
+    except that if the CHDU is a tile compressed image (stored in a binary
+    table) then it will first convert that header back to that of the corresponding
+    normal FITS image before concatenating the keywords.
+
+<P>
+Selected keywords may be excluded from the returned character string.
+    If the second parameter (nocomments) is TRUE (nonzero) then any
+    COMMENT, HISTORY, or blank keywords in the header will not be copied
+    to the output string.
+
+<P>
+The 'exclist' parameter may be used to supply a list of keywords
+    that are to be excluded from the output character string. Wild card
+    characters (*, ?, and #) may be used in the excluded keyword names.
+    If no additional keywords are to be excluded, then set nexc = 0 and
+   specify NULL for the the **exclist  parameter.  <A NAME="ffhdr2str"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_hdr2str / ffhdr2str
+      (fitsfile *fptr, int nocomments, char **exclist, int nexc,
+      &gt; char **header, int *nkeys, int *status)
+
+  int fits_convert_hdr2str / ffcnvthdr2str
+      (fitsfile *fptr, int nocomments, char **exclist, int nexc,
+      &gt; char **header, int *nkeys, int *status)
+
+  int fits_free_memory / fffree
+      (char *header, &gt; int *status);
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html757"
+  HREF="node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html753"
+  HREF="node37.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html747"
+  HREF="node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html755"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html758"
+  HREF="node39.html">5.4.2 Keyword Writing Routines</A>
+<B>Up:</B> <A NAME="tex2html754"
+  HREF="node37.html">5.4 Header Keyword Read/Write</A>
+<B> Previous:</B> <A NAME="tex2html748"
+  HREF="node37.html">5.4 Header Keyword Read/Write</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

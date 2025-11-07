@@ -1,3 +1,0 @@
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E rm -f CMakeFiles\fitsverify.dir/objects.a
-C:\msys64\ucrt64\bin\ar.exe cr CMakeFiles\fitsverify.dir/objects.a @CMakeFiles\fitsverify.dir\objects1.rsp
-C:\msys64\ucrt64\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\fitsverify.dir/objects.a -Wl,--no-whole-archive -o fitsverify.exe -Wl,--out-implib,libfitsverify.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\fitsverify.dir\linklibs.rsp

@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.7.5 Row Selection and Calculator Routines</TITLE>
+<META NAME="description" CONTENT="5.7.5 Row Selection and Calculator Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node48.html">
+<LINK REL="previous" HREF="node46.html">
+<LINK REL="up" HREF="node42.html">
+<LINK REL="next" HREF="node48.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html869"
+  HREF="node48.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html865"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html859"
+  HREF="node46.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html867"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html870"
+  HREF="node48.html">5.7.6 Column Binning or</A>
+<B>Up:</B> <A NAME="tex2html866"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html860"
+  HREF="node46.html">5.7.4 Read and Write</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00675000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">5</SPAN> Row Selection and Calculator Routines</A>
+</H2>
+
+<P>
+These routines all parse and evaluate an input string containing a user
+defined arithmetic expression.  The first 3 routines select rows in a
+FITS table, based on whether the expression evaluates to true (not
+equal to zero) or false (zero).  The other routines evaluate the
+expression and calculate a value for each row of the table.  The
+allowed expression syntax is described in the row filter section in the
+`Extended File Name Syntax' chapter of this document.  The expression
+may also be written to a text file, and the name of the file, prepended
+with a '@' character may be supplied for the 'expr' parameter (e.g.
+'@filename.txt'). The  expression  in  the  file can be arbitrarily
+complex and extend over multiple lines of the file.  Lines  that begin
+with 2 slash characters ('//') will  be ignored and may be used to add
+comments to the file.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Evaluate a boolean expression over the indicated rows, returning an
+ array of flags indicating which rows evaluated to TRUE/FALSE.
+ Upon return,
+ *n_good_rows contains the number of rows that evaluate to TRUE. <A NAME="fffrow"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_find_rows / fffrow
+      (fitsfile *fptr,  char *expr, long firstrow, long nrows,
+      &gt; long *n_good_rows, char *row_status,  int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Find the first row which satisfies the input boolean expression <A NAME="ffffrw"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_find_first_row / ffffrw
+      (fitsfile *fptr,  char *expr, &gt; long *rownum, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Evaluate an expression on all rows of a table.  If the input and output
+files are not the same, copy the TRUE rows to the output file; if the output
+table is not empty, then this routine will append the new
+selected rows after the existing rows.   If the
+files are the same, delete the FALSE rows (preserve the TRUE rows). <A NAME="ffsrow"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_select_rows / ffsrow
+      (fitsfile *infptr, fitsfile *outfptr,  char *expr,  &gt; int *status )
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Calculate an expression for the indicated rows of a table, returning
+the results, cast as datatype (TSHORT, TDOUBLE, etc), in array.  If
+nulval==NULL, UNDEFs will be zeroed out.  For vector results, the number
+of elements returned may be less than nelements if nelements is not an
+even multiple of the result dimension.  Call fits_test_expr to obtain
+the dimensions of the results.  <A NAME="ffcrow"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_calc_rows / ffcrow
+      (fitsfile *fptr,  int datatype, char *expr, long firstrow,
+       long nelements, void *nulval, &gt; void *array,  int *anynul, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Evaluate an expression and write the result either to a column (if
+the expression is a function of other columns in the table) or to a
+keyword (if the expression evaluates to a constant and is not a
+function of other columns in the table).  In the former case, the
+parName parameter is the name of the column (which may or may not already
+exist) into which to write the results, and parInfo contains an
+optional TFORM keyword value if a new column is being created.  If a
+TFORM value is not specified then a default format will be used,
+depending on the expression.  If the expression evaluates to a constant,
+then the result will be written to the keyword name given by the
+parName parameter, and the parInfo parameter may be used to supply an
+optional comment for the keyword.  If the keyword does not already
+exist, then the name of the keyword must be preceded with a '#' character,
+ otherwise the result will be written to a column with that name. <A NAME="ffcalc"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_calculator / ffcalc
+      (fitsfile *infptr, char *expr, fitsfile *outfptr, char *parName,
+       char *parInfo, &gt;  int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>This calculator routine is similar to the previous routine, except
+that the expression is only evaluated over the specified
+row ranges.  nranges specifies the number of row ranges, and firstrow
+and lastrow give the starting and ending row number of each range. <A NAME="ffcalcrng"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_calculator_rng / ffcalc_rng
+      (fitsfile *infptr, char *expr, fitsfile *outfptr, char *parName,
+       char *parInfo, int nranges, long *firstrow, long *lastrow
+       &gt;  int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>7 </STRONG></DT>
+<DD>Evaluate the given expression and return dimension and type information
+on the result.  The returned dimensions correspond to a single row entry
+of the requested expression, and are equivalent to the result of fits_read_tdim().
+Note that strings are considered to be one element regardless of string length.
+If maxdim == 0, then naxes is optional. <A NAME="fftexp"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_test_expr / fftexp
+      (fitsfile *fptr, char *expr, int maxdim &gt; int *datatype, long *nelem, int *naxis,
+       long *naxes, int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html869"
+  HREF="node48.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html865"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html859"
+  HREF="node46.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html867"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html870"
+  HREF="node48.html">5.7.6 Column Binning or</A>
+<B>Up:</B> <A NAME="tex2html866"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html860"
+  HREF="node46.html">5.7.4 Read and Write</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

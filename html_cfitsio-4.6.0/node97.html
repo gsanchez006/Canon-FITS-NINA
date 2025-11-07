@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.8 Image Section</TITLE>
+<META NAME="description" CONTENT="10.8 Image Section">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node98.html">
+<LINK REL="previous" HREF="node96.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node98.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1520"
+  HREF="node98.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1516"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1510"
+  HREF="node96.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1518"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1521"
+  HREF="node98.html">10.9 Image Transform Filters</A>
+<B>Up:</B> <A NAME="tex2html1517"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1511"
+  HREF="node96.html">10.7 HDU Location Specification</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001180000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">8</SPAN> Image Section</A>
+</H1>
+
+<P>
+A virtual file containing a rectangular subsection of an image can be
+extracted and opened by specifying the range of pixels (start:end)
+along each axis to be extracted from the original image.  One can also
+specify an optional pixel increment (start:end:step) for each axis of
+the input image.  A pixel step = 1 will be assumed if it is not
+specified.  If the start pixel is larger then the end pixel, then the
+image will be flipped (producing a mirror image) along that dimension.
+An asterisk, '*', may be used to specify the entire range of an axis,
+and '-*' will flip the entire axis. The input image can be in the
+primary array, in an image extension, or contained in a vector cell of
+a binary table. In the later 2 cases the extension name or number must
+be specified before the image section specifier.
+
+<P>
+Examples:
+
+<P>
+<PRE>
+  myfile.fits[1:512:2, 2:512:2] -  open a 256x256 pixel image
+              consisting of the odd numbered columns (1st axis) and
+              the even numbered rows (2nd axis) of the image in the
+              primary array of the file.
+
+  myfile.fits[*, 512:256] - open an image consisting of all the columns
+              in the input image, but only rows 256 through 512.
+              The image will be flipped along the 2nd axis since
+              the starting pixel is greater than the ending pixel.
+
+  myfile.fits[*:2, 512:256:2] - same as above but keeping only
+              every other row and column in the input image.
+
+  myfile.fits[-*, *] - copy the entire image, flipping it along
+              the first axis.
+
+  myfile.fits[3][1:256,1:256] - opens a subsection of the image that
+              is in the 3rd extension of the file.
+
+  myfile.fits[4; images(12)][1:10,1:10] - open an image consisting
+	      of the first 10 pixels in both dimensions. The original
+	      image resides in the 12th row of the 'images' vector
+	      column in the table in the 4th extension of the file.
+</PRE>
+
+<P>
+When CFITSIO opens an image section it first creates a temporary file
+containing the image section plus a copy of any other HDUs in the
+file. (If a `#' character is appended to the name or number of the
+image HDU, as in  "myfile.fits[1#][1:200,1:200]", then the other
+HDUs in the input file will not be copied into memory).
+This temporary file is then opened by the application program,
+so it is not possible to write to or modify the input file when
+specifying an image section.  Note that CFITSIO automatically updates
+the world coordinate system keywords in the header of the image
+section, if they exist, so that the coordinate associated with each
+pixel in the image section will be computed correctly.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1520"
+  HREF="node98.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1516"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1510"
+  HREF="node96.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1518"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1521"
+  HREF="node98.html">10.9 Image Transform Filters</A>
+<B>Up:</B> <A NAME="tex2html1517"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1511"
+  HREF="node96.html">10.7 HDU Location Specification</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

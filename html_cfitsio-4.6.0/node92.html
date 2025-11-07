@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.3 Base Filename</TITLE>
+<META NAME="description" CONTENT="10.3 Base Filename">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node93.html">
+<LINK REL="previous" HREF="node85.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node93.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1460"
+  HREF="node93.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1456"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1450"
+  HREF="node91.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1458"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1461"
+  HREF="node93.html">10.4 Output File Name</A>
+<B>Up:</B> <A NAME="tex2html1457"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1451"
+  HREF="node91.html">10.2.6 Notes about the</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001130000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">3</SPAN> Base Filename</A>
+</H1>
+
+<P>
+The base filename is the name of the file optionally including the
+director/subdirectory path, and in the case of `ftp', `http', and `root'
+filetypes, the machine identifier.  Examples:
+
+<P>
+<PRE>
+    myfile.fits
+    !data.fits
+    /data/myfile.fits
+    fits.gsfc.nasa.gov/ftp/sampledata/myfile.fits.gz
+</PRE>
+
+<P>
+When creating a new output file on magnetic disk (of type file://) if
+the base filename begins with an exclamation point (!) then any
+existing file with that same basename will be deleted prior to creating
+the new FITS file.  Otherwise if the file to be created already exists,
+then CFITSIO will return an error and will not overwrite the existing
+file.  Note  that the exclamation point,  '!', is a special UNIX
+character, so if it is used  on the command line rather than entered at
+a task prompt, it must be  preceded by a backslash to force the UNIX
+shell to pass it verbatim to the application program.
+
+<P>
+If the output disk file name ends with the suffix '.gz', then CFITSIO
+will compress the file using the gzip compression algorithm before
+writing it to disk.  This can reduce the amount of disk space used by
+the file.  Note that this feature requires that the uncompressed file
+be constructed in memory before it is compressed and written to disk,
+so it can fail if there is insufficient available memory.
+
+<P>
+An input FITS file may be compressed with the gzip or Unix compress
+algorithms, in which case CFITSIO will uncompress the file on the fly
+into a temporary file (in memory or on disk).  Compressed files may
+only be opened with read-only permission.  When specifying the name of
+a compressed FITS file it is not necessary to append the file suffix
+(e.g., `.gz' or `.Z').  If CFITSIO cannot find the input file name
+without the suffix, then it will automatically search for a compressed
+file with the same root name.  In the case of reading ftp and http type
+files, CFITSIO generally looks for a compressed version of the file
+first, before trying to open the uncompressed file.  By default,
+CFITSIO copies (and uncompressed if necessary) the ftp or http FITS
+file into memory on the local machine before opening it.  This will
+fail if the local machine does not have enough memory to hold the whole
+FITS file, so in this case, the output filename specifier (see the next
+section) can be used to further control how CFITSIO reads ftp and http
+files.
+
+<P>
+If the input file is an IRAF image file (*.imh file) then CFITSIO will
+automatically convert it on the fly into a virtual FITS image before it
+is opened by the application program.  IRAF images can only be opened
+with READONLY file access.
+
+<P>
+Similarly, if the input file is a raw binary data array, then CFITSIO
+will convert it on the fly into a virtual FITS image with the basic set
+of required header keywords before it is opened by the application
+program (with READONLY access).  In this case the data type and
+dimensions of the image must be specified in square brackets following
+the filename (e.g. rawfile.dat[ib512,512]). The first character (case
+insensitive) defines the data type of the array:
+
+<P>
+<PRE>
+     b         8-bit unsigned byte
+     i        16-bit signed integer
+     u        16-bit unsigned integer
+     j        32-bit signed integer
+     r or f   32-bit floating point
+     d        64-bit floating point
+</PRE>
+An optional second character specifies the byte order of the array
+values: b or B indicates big endian (as in FITS files and the native
+format of SUN UNIX workstations and Mac PCs) and l or L indicates
+little endian (native format of DEC OSF workstations and IBM PCs).  If
+this character is omitted then the array is assumed to have the native
+byte order of the local machine.  These data type characters are then
+followed by a series of one or more integer values separated by commas
+which define the size of each dimension of the raw array.  Arrays with
+up to 5 dimensions are currently supported.  Finally, a byte offset to
+the position of the first pixel in the data file may be specified by
+separating it with a ':' from the last dimension value.  If omitted, it
+is assumed that the offset = 0.  This parameter may be used to skip
+over any header information in the file that precedes the binary data.
+Further examples:
+
+<P>
+<PRE>
+  raw.dat[b10000]           1-dimensional 10000 pixel byte array
+  raw.dat[rb400,400,12]     3-dimensional floating point big-endian array
+  img.fits[ib512,512:2880]  reads the 512 x 512 short integer array in
+                            a FITS file, skipping over the 2880 byte header
+</PRE>
+
+<P>
+One special case of input file is where the filename = `-' (a dash or
+minus sign) or 'stdin' or 'stdout', which signifies that the input file
+is to be read from the stdin stream, or written to the stdout stream if
+a new output file is being created.  In the case of reading from stdin,
+CFITSIO first copies the whole stream into a temporary FITS file (in
+memory or on disk), and subsequent reading of the FITS file occurs in
+this copy.  When writing to stdout, CFITSIO first constructs the whole
+file in memory (since random access is required), then flushes it out
+to the stdout stream when the file is closed.  In addition, if the
+output filename = '-.gz' or 'stdout.gz' then it will be gzip compressed
+before being written to stdout.
+
+<P>
+This ability to read and write on the stdin and stdout steams allows
+FITS files to be piped between tasks in memory rather than having to
+create temporary intermediate FITS files on disk.  For example if task1
+creates an output FITS file, and task2 reads an input FITS file, the
+FITS file may be piped between the 2 tasks by specifying
+
+<P>
+<PRE>
+   task1 - | task2 -
+</PRE>
+where the vertical bar is the Unix piping symbol.  This assumes that the 2
+tasks read the name of the FITS file off of the command line.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1460"
+  HREF="node93.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1456"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1450"
+  HREF="node91.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1458"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1461"
+  HREF="node93.html">10.4 Output File Name</A>
+<B>Up:</B> <A NAME="tex2html1457"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1451"
+  HREF="node91.html">10.2.6 Notes about the</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

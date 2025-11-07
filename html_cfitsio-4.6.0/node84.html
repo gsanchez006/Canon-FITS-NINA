@@ -1,0 +1,326 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.1 Overview</TITLE>
+<META NAME="description" CONTENT="10.1 Overview">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node85.html">
+<LINK REL="previous" HREF="node83.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node85.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1360"
+  HREF="node85.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1356"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1350"
+  HREF="node83.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1358"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1361"
+  HREF="node85.html">10.2 Filetype</A>
+<B>Up:</B> <A NAME="tex2html1357"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1351"
+  HREF="node83.html">10. Extended File Name</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001110000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">1</SPAN> Overview</A>
+</H1>
+
+<P>
+CFITSIO supports an extended syntax when specifying the name of the
+data file to be opened or created  that includes the following
+features:
+
+<P>
+
+<UL>
+<LI>CFITSIO can read IRAF format images which have header file names that
+end with the '.imh' extension, as well as reading and writing FITS
+files,   This feature is implemented in CFITSIO by first converting the
+IRAF image into a temporary FITS format file in memory, then opening
+the FITS file.  Any of the usual CFITSIO routines then may be used to
+read the image header or data.  Similarly, raw binary data arrays can
+be read by converting them on the fly into virtual FITS images.
+
+<P>
+</LI>
+<LI>FITS files on the Internet can be read (and sometimes written) using the FTP,
+HTTP, HTTPS, FTPS, or ROOT protocols.
+
+<P>
+</LI>
+<LI>FITS files can be piped between tasks on the stdin and stdout streams.
+
+<P>
+</LI>
+<LI>FITS files can be read and written in shared memory.  This can
+potentially achieve better data I/O performance compared to reading and
+writing the same FITS files on magnetic disk.
+
+<P>
+</LI>
+<LI>Compressed FITS files in gzip or Unix COMPRESS format can be directly read.
+
+<P>
+</LI>
+<LI>Output FITS files can be written directly in compressed gzip format,
+thus saving disk space.
+
+<P>
+</LI>
+<LI>FITS table columns can be created, modified, or deleted 'on-the-fly' as
+the table is opened by CFITSIO.  This creates a virtual FITS file containing
+the modifications that is then opened by the application program.
+
+<P>
+</LI>
+<LI>Table rows may be selected, or filtered out, on the fly when the table
+is opened by CFITSIO, based on an user-specified expression.
+Only rows for which the expression evaluates to 'TRUE' are retained
+in the copy of the table that is opened by the application program.
+
+<P>
+</LI>
+<LI>Histogram images may be created on the fly by binning the values in
+table columns, resulting in a virtual N-dimensional FITS image.  The
+application program then only sees the FITS image (in the primary
+array) instead of the original FITS table.
+</LI>
+</UL>
+
+<P>
+The latter 3 table filtering features in particular add very powerful
+data processing capabilities directly into CFITSIO, and hence into
+every task that uses CFITSIO to read or write FITS files.  For example,
+these features transform a very simple program that just copies an
+input FITS file to a new output file (like the `fitscopy' program that
+is distributed with CFITSIO) into a multipurpose FITS file processing
+tool.  By appending fairly simple qualifiers onto the name of the input
+FITS file, the user can perform quite complex table editing operations
+(e.g., create new columns, or filter out rows in a table) or create
+FITS images by binning or histogramming the values in table columns.
+In addition, these functions have been coded using new state-of-the art
+algorithms that are, in some cases, 10 - 100 times faster than previous
+widely used implementations.
+
+<P>
+Before describing the complete syntax for the extended FITS file names
+in the next section, here are a few examples of FITS file names that
+give a quick overview of the allowed syntax:
+
+<P>
+
+<UL>
+<LI><TT>myfile.fits</TT>: the simplest case of a FITS file on disk in the current
+directory.
+
+<P>
+</LI>
+<LI><TT>myfile.imh</TT>: opens an IRAF format image file and converts it on the
+fly into a temporary FITS format image in memory which can then be read with
+any other CFITSIO routine.
+
+<P>
+</LI>
+<LI><TT>rawfile.dat[i512,512]</TT>: opens a raw binary data array (a 512 x 512
+short integer array in this case) and converts it on the fly into a
+temporary FITS format image in memory which can then be read with any
+other CFITSIO routine.
+
+<P>
+</LI>
+<LI><TT>myfile.fits.gz</TT>: if this is the name of a new output file, the '.gz'
+suffix will cause it to be compressed in gzip format when it is written to
+disk.
+
+<P>
+</LI>
+<LI><TT>myfile.fits.gz[events, 2]</TT>:  opens and uncompresses the gzipped file
+myfile.fits then moves to the extension with the keywords EXTNAME
+= 'EVENTS' and EXTVER = 2.
+
+<P>
+</LI>
+<LI><TT>-</TT>:  a dash (minus sign) signifies that the input file is to be read
+from the stdin file stream, or that the output file is to be written to
+the stdout stream.  See also the stream:// driver which provides a
+more efficient, but more restricted method of reading or writing to
+the stdin or stdout streams.
+
+<P>
+</LI>
+<LI><TT>ftp://legacy.gsfc.nasa.gov/test/vela.fits</TT>:  FITS files in any ftp
+archive site on the Internet may be directly opened with read-only
+access.
+
+<P>
+</LI>
+<LI><TT>http://legacy.gsfc.nasa.gov/software/test.fits</TT>: any valid URL to a
+FITS file on the Web may be opened with read-only access.
+
+<P>
+</LI>
+<LI><TT>root://legacy.gsfc.nasa.gov/test/vela.fits</TT>: similar to ftp access
+except that it provides write as well as read access to the files
+across the network. This uses the root protocol developed at CERN.
+
+<P>
+</LI>
+<LI><TT>shmem://h2[events]</TT>: opens the FITS file in a shared memory segment and
+moves to the EVENTS extension.
+
+<P>
+</LI>
+<LI><TT>mem://</TT>:  creates a scratch output file in core computer memory.  The
+resulting 'file' will disappear when the program exits, so this
+is mainly useful for testing purposes when one does not want a
+permanent copy of the output file.
+
+<P>
+</LI>
+<LI><TT>myfile.fits[3; Images(10)]</TT>: opens a copy of the image contained in the
+10th row of the 'Images' column in the binary table in the 3th extension
+of the FITS file.  The virtual file that is opened by the application just
+contains this single image in the primary array.
+
+<P>
+</LI>
+<LI><TT>myfile.fits[1:512:2, 1:512:2]</TT>: opens a section of the input image
+ranging from the 1st to the 512th pixel in  X and Y, and selects every
+second pixel in both dimensions, resulting in a 256 x 256 pixel input image
+in this case.
+
+<P>
+</LI>
+<LI><TT>myfile.fits[EVENTS][col Rad = sqrt(X**2 + Y**2)]</TT>:  creates and opens
+a virtual file on the fly that is identical to
+myfile.fits except that it will contain a new column in the EVENTS
+extension called 'Rad' whose value is computed using the indicated
+expression which is a function of the values in the X and Y columns.
+
+<P>
+</LI>
+<LI><TT>myfile.fits[EVENTS][PHA &gt; 5]</TT>:  creates and opens a virtual FITS
+files that is identical to 'myfile.fits' except that the EVENTS table
+will only contain the rows that have values of the PHA column greater
+than 5.  In general, any arbitrary boolean expression using a C or
+Fortran-like syntax, which may combine AND and OR operators,
+may be used to select rows from a table.
+
+<P>
+</LI>
+<LI><TT>myfile.fits[EVENTS][bin (X,Y)=1,2048,4]</TT>:  creates a temporary FITS
+primary array image which is computed on the fly by binning (i.e,
+computing the 2-dimensional histogram) of the values in the X and Y
+columns of the EVENTS extension.  In this case the X and Y coordinates
+range from 1 to 2048 and the image pixel size is 4 units in both
+dimensions, so the resulting image is 512 x 512 pixels in size.
+
+<P>
+</LI>
+<LI>The final example combines many of these feature into one complex
+expression (it is broken into several lines for clarity):
+
+<P>
+<PRE>
+   ftp://legacy.gsfc.nasa.gov/data/sample.fits.gz[EVENTS]
+   [col phacorr = pha * 1.1 - 0.3][phacorr &gt;= 5.0 &amp;&amp; phacorr &lt;= 14.0]
+   [bin (X,Y)=32]
+</PRE>
+In this case, CFITSIO (1) copies and uncompresses the FITS file from
+the ftp site on the legacy machine, (2) moves to the 'EVENTS'
+extension, (3) calculates a new column called 'phacorr', (4) selects
+the rows in the table that have phacorr in the range 5 to 14, and
+finally (5) bins the remaining rows on the X and Y column coordinates,
+using a pixel size = 32 to create a 2D image.  All this processing is
+completely transparent to the application program, which simply sees
+the final 2-D image in the primary array of the opened file.
+</LI>
+</UL>
+
+<P>
+The full extended CFITSIO FITS file name can contain several different
+components depending on the context.  These components are described in
+the following sections:
+
+<P>
+<PRE>
+When creating a new file:
+   filetype://BaseFilename(templateName)[compress]
+
+When opening an existing primary array or image HDU:
+   filetype://BaseFilename(outName)[HDUlocation][ImageSection][pixFilter]
+
+When opening an existing table HDU:
+   filetype://BaseFilename(outName)[HDUlocation][colFilter][rowFilter][binSpec]
+</PRE>
+The filetype, BaseFilename, outName, HDUlocation, ImageSection, and pixFilter
+components, if present, must be given in that order, but the colFilter,
+rowFilter, and binSpec specifiers may follow in any order.  Regardless
+of the order, however, the colFilter specifier, if present, will be
+processed first by CFITSIO, followed by the rowFilter specifier, and
+finally by the binSpec specifier.  
+
+<P>
+Multiple colFilter or rowFilter specifications may appear as separated
+bracketed expressions, in any order.  Multiple colFilter or rowFilter
+expressions are treated internally as a single effective expression,
+with order of operations determined from left to right.  CFITSIO does
+not support the @filename.txt complex syntax option if multiple
+expressions are also used.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1360"
+  HREF="node85.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1356"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1350"
+  HREF="node83.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1358"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1361"
+  HREF="node85.html">10.2 Filetype</A>
+<B>Up:</B> <A NAME="tex2html1357"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1351"
+  HREF="node83.html">10. Extended File Name</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

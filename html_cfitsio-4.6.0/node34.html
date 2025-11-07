@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.1 CFITSIO Error Status Routines</TITLE>
+<META NAME="description" CONTENT="5.1 CFITSIO Error Status Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node35.html">
+<LINK REL="previous" HREF="node33.html">
+<LINK REL="up" HREF="node33.html">
+<LINK REL="next" HREF="node35.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html707"
+  HREF="node35.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html703"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html697"
+  HREF="node33.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html705"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html708"
+  HREF="node35.html">5.2 FITS File Access</A>
+<B>Up:</B> <A NAME="tex2html704"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html698"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00610000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">1</SPAN> CFITSIO Error Status Routines</A>
+</H1>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Return a descriptive text string (30 char max.) corresponding to
+   a CFITSIO error status code.<A NAME="ffgerr"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  void fits_get_errstatus / ffgerr (int status, &gt; char *err_text)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Return the top (oldest) 80-character error message from the
+    internal CFITSIO stack of error messages and shift any remaining
+    messages on the stack up one level.  Call this routine
+    repeatedly to get each message in sequence.  The function returns
+   a value = 0 and a null error message when the error stack is empty.
+<A NAME="ffgmsg"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_read_errmsg / ffgmsg (char *err_msg)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Print out the error message corresponding to the input status
+    value and all the error messages on the CFITSIO stack to the specified
+    file stream  (normally to stdout or stderr).  If the input
+    status value = 0 then this routine does nothing.
+<A NAME="ffrprt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  void fits_report_error / ffrprt (FILE *stream, status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>The fits_write_errmark routine puts an invisible marker on the
+   CFITSIO error stack.  The fits_clear_errmark routine can then be
+   used to delete any more recent error messages on the stack, back to
+   the position of the marker.  This preserves any older error messages
+   on the stack.  The fits_clear_errmsg routine simply clears all the
+   messages (and marks) from the stack.  These routines are called
+   without any arguments.
+<A NAME="ffpmrk"></A>  <A NAME="ffcmsg"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  void fits_write_errmark / ffpmrk (void)
+  void fits_clear_errmark / ffcmrk (void)
+  void fits_clear_errmsg / ffcmsg (void)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html707"
+  HREF="node35.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html703"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html697"
+  HREF="node33.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html705"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html708"
+  HREF="node35.html">5.2 FITS File Access</A>
+<B>Up:</B> <A NAME="tex2html704"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html698"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

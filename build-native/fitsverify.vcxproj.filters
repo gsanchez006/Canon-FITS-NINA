@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\utilities\ftverify.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\utilities\fvrf_data.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\utilities\fvrf_file.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\utilities\fvrf_head.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\utilities\fvrf_key.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\utilities\fvrf_misc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{5049A4AD-E2AE-31FF-AA2E-176D23192EFF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

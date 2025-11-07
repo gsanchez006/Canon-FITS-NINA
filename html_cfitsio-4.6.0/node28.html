@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.9 Error Status Values and the Error Message Stack</TITLE>
+<META NAME="description" CONTENT="4.9 Error Status Values and the Error Message Stack">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node29.html">
+<LINK REL="previous" HREF="node27.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node29.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html618"
+  HREF="node29.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html614"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html608"
+  HREF="node27.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html616"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html619"
+  HREF="node29.html">4.10 Variable-Length Arrays in</A>
+<B>Up:</B> <A NAME="tex2html615"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html609"
+  HREF="node27.html">4.8 Support for IEEE</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00590000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">9</SPAN> Error Status Values and the Error Message Stack</A>
+</H1>
+
+<P>
+Nearly all the CFITSIO routines return an error status value
+in 2 ways: as the value of the last parameter in the function call,
+and as the returned value of the function itself.  This provides
+some flexibility in the way programmers can test if an error
+occurred, as illustrated in the following 2 code fragments:
+
+<P>
+<PRE>
+    if ( fits_write_record(fptr, card, &amp;status) )
+         printf(" Error occurred while writing keyword.");
+
+or,
+
+    fits_write_record(fptr, card, &amp;status);
+    if ( status )
+         printf(" Error occurred while writing keyword.");
+</PRE>
+A listing of all the CFITSIO status code values is given at the end of
+this document.  Programmers are encouraged to use the symbolic
+mnemonics (defined in fitsio.h) rather than the actual integer status
+values to improve the readability of their code.
+
+<P>
+The CFITSIO library uses an `inherited status' convention for the
+status parameter which means that if a routine is called with a
+positive input value of the status parameter as input, then the routine
+will exit immediately without changing the value of the status
+parameter.  Thus, if one passes the status value returned from each
+CFITSIO routine as input to the next CFITSIO routine, then whenever an
+error is detected all further CFITSIO processing will cease.  This
+convention can simplify the error checking in application programs
+because it is not necessary to check the value of the status parameter
+after every single CFITSIO routine call.  If a program contains a
+sequence of several CFITSIO calls, one can just check the status value
+after the last call.  Since the returned status values are generally
+distinctive, it should be possible to determine which routine
+originally returned the error status.
+
+<P>
+CFITSIO also maintains an internal stack of error messages
+(80-character maximum length)  which in many cases provide a more
+detailed explanation of the cause of the error than is provided by the
+error status number alone.  It is recommended that the error message
+stack be printed out whenever a program detects a CFITSIO error.  The
+function fits_report_error will print out the entire error message
+stack, or alternatively one may call fits_read_errmsg to get the
+error messages one at a time.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html618"
+  HREF="node29.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html614"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html608"
+  HREF="node27.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html616"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html619"
+  HREF="node29.html">4.10 Variable-Length Arrays in</A>
+<B>Up:</B> <A NAME="tex2html615"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html609"
+  HREF="node27.html">4.8 Support for IEEE</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

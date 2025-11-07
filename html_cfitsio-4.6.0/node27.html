@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.8 Support for IEEE Special Values</TITLE>
+<META NAME="description" CONTENT="4.8 Support for IEEE Special Values">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node28.html">
+<LINK REL="previous" HREF="node26.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node28.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html606"
+  HREF="node28.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html602"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html596"
+  HREF="node26.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html604"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html607"
+  HREF="node28.html">4.9 Error Status Values</A>
+<B>Up:</B> <A NAME="tex2html603"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html597"
+  HREF="node26.html">4.7 Data Scaling</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00580000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">8</SPAN> Support for IEEE Special Values</A>
+</H1>
+
+<P>
+The ANSI/IEEE-754 floating-point number standard defines certain
+special values that are used to represent such quantities as
+Not-a-Number (NaN), denormalized, underflow, overflow, and infinity.
+(See the Appendix in the FITS standard or the FITS User's
+Guide for a list of these values).  The CFITSIO routines that read
+floating point data in FITS files recognize these IEEE special values
+and by default interpret the overflow and infinity values as being
+equivalent to a NaN, and convert the underflow and denormalized values
+into zeros.  In some cases programmers may want access to the raw IEEE
+values, without any modification by CFITSIO.  This can be done by
+calling the fits_read_img or fits_read_col routines while
+specifying 0.0 as the value of the NULLVAL parameter.  This will force
+CFITSIO to simply pass the IEEE values through to the application
+program without any modification.  This is not fully supported on
+VAX/VMS machines, however, where there is no easy way to bypass the
+default interpretation of the IEEE special values.  This is also not
+supported when reading floating-point images that have been compressed
+with the FITS tiled image compression convention that is discussed in
+section 5.6;  the pixels values in tile compressed images are
+represented by scaled integers, and a reserved integer value
+(not a NaN) is used to represent undefined pixels.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html606"
+  HREF="node28.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html602"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html596"
+  HREF="node26.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html604"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html607"
+  HREF="node28.html">4.9 Error Status Values</A>
+<B>Up:</B> <A NAME="tex2html603"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html597"
+  HREF="node26.html">4.7 Data Scaling</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

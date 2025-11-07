@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.5 Template File Name when Creating a New File</TITLE>
+<META NAME="description" CONTENT="10.5 Template File Name when Creating a New File">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node95.html">
+<LINK REL="previous" HREF="node93.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node95.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1484"
+  HREF="node95.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1480"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1474"
+  HREF="node93.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1482"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1485"
+  HREF="node95.html">10.6 Image Tile-Compression Specification</A>
+<B>Up:</B> <A NAME="tex2html1481"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1475"
+  HREF="node93.html">10.4 Output File Name</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001150000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">5</SPAN> Template File Name when Creating a New File</A>
+</H1>
+
+<P>
+When a new FITS file is created with a call to fits_create_file, the
+name of a template file may be supplied in parentheses immediately
+following the name of the new file to be created.  This template is
+used to define the structure of one or more HDUs in the new file.  The
+template file may be another FITS file, in which case the newly created
+file will have exactly the same keywords in each HDU as in the template
+FITS file, but all the data units will be filled with zeros.  The
+template file may also be an ASCII text file, where each line (in
+general) describes one FITS keyword record.  The format of the ASCII
+template file is described in the following Template Files chapter.
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

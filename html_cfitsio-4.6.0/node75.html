@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.3.7 Update Keyword Routines</TITLE>
+<META NAME="description" CONTENT="9.3.7 Update Keyword Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node74.html">
+<LINK REL="up" HREF="node68.html">
+<LINK REL="next" HREF="node76.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1227"
+  HREF="node76.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1223"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1219"
+  HREF="node74.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1225"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1228"
+  HREF="node76.html">9.4 Define Data Scaling</A>
+<B>Up:</B> <A NAME="tex2html1224"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1220"
+  HREF="node74.html">9.3.6 Modify Keyword Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001037000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">7</SPAN> Update Keyword Routines</A>
+</H2>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>These update routines modify the value, and optionally the comment field,
+    of the keyword if it already exists, otherwise the new keyword is
+    appended to the header.  A separate routine is provided for each
+    keyword data type.  The `longstr' version has the same functionality
+    as the `str' version except that it also supports the local long
+    string keyword convention for strings longer than 68 characters.  A
+    null pointer may be entered for the comment parameter which will
+    leave the comment field unchanged or blank.  The flt, dbl, cmp, and
+    dblcmp versions of this routine have the added feature that if the
+    'decimals' parameter is negative, then the 'G' display format
+    rather then the 'E' format will be used when constructing the
+    keyword value, taking the absolute value of 'decimals' for the
+    precision.  This will suppress trailing zeros, and will use a fixed
+    format rather than an exponential format,
+   depending on the magnitude of the value. <A NAME="ffukyx"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_update_key_[str, longstr] / ffu[kys, kls]
+      (fitsfile *fptr, char *keyname, char *value, char *comment,
+       &gt; int *status)
+
+  int fits_update_key_[log, lng] / ffuky[lj]
+      (fitsfile *fptr, char *keyname, DTYPE numval, char *comment,
+       &gt; int *status)
+
+  int fits_update_key_[flt, dbl, fixflt, fixdbl] / ffuky[edfg]
+      (fitsfile *fptr, char *keyname, DTYPE numval, int decimals,
+       char *comment, &gt; int *status)
+
+  int fits_update_key_[cmp, dblcmp, fixcmp, fixdblcmp] / ffuk[yc,ym,fc,fm]
+      (fitsfile *fptr, char *keyname, DTYPE *numval, int decimals,
+       char *comment, &gt; int *status)
+</PRE>
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

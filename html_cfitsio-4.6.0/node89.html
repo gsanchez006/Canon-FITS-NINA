@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.2.4 Notes about the gsiftp filetype</TITLE>
+<META NAME="description" CONTENT="10.2.4 Notes about the gsiftp filetype">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node90.html">
+<LINK REL="previous" HREF="node88.html">
+<LINK REL="up" HREF="node85.html">
+<LINK REL="next" HREF="node90.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1426"
+  HREF="node90.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1422"
+  HREF="node85.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1416"
+  HREF="node88.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1424"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1427"
+  HREF="node90.html">10.2.5 Notes about the</A>
+<B>Up:</B> <A NAME="tex2html1423"
+  HREF="node85.html">10.2 Filetype</A>
+<B> Previous:</B> <A NAME="tex2html1417"
+  HREF="node88.html">10.2.3 Notes about the</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001124000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">4</SPAN> Notes about the gsiftp filetype</A>
+</H2>
+
+<P>
+DEPENDENCIES: Globus toolkit (2.4.3 or higher) (GT) should be installed.
+There are two different ways to install GT:
+
+<P>
+1) goto the globus toolkit web page www.globus.org and follow the
+   download and compilation instructions;
+
+<P>
+2) goto the Virtual Data Toolkit web page http://vdt.cs.wisc.edu/
+   and follow the instructions (STRONGLY SUGGESTED);
+
+<P>
+Once a globus client has been installed in your system with a specific flavour
+it is possible to compile and install the CFITSIO libraries.
+Specific configuration flags must be used:
+
+<P>
+1)  -with-gsiftp[[=PATH]] Enable Globus Toolkit gsiftp protocol support
+    PATH=GLOBUS_LOCATION i.e. the location of your globus installation
+
+<P>
+2)  -with-gsiftp-flavour[[=PATH] defines the specific Globus flavour
+        ex. gcc32
+
+<P>
+Both the flags must be used and it is mandatory to set  both the PATH and the
+flavour.
+
+<P>
+USAGE: To access files on a gridftp server it is necessary to use a gsiftp prefix:
+
+<P>
+example: gsiftp://remote_server_fqhn/directory/filename
+
+<P>
+The gridftp driver uses a local buffer on a temporary file the file is located
+in the /tmp directory. If you have special permissions on /tmp or you do not have a /tmp
+directory, it is possible to force another location setting the GSIFTP_TMPFILE environment
+variable (ex. export GSIFTP_TMPFILE=/your/location/yourtmpfile).
+
+<P>
+Grid FTP supports multi channel transfer. By default a single channel transmission is
+available. However, it is possible to modify this behavior setting the GSIFTP_STREAMS
+environment variable (ex. export GSIFTP_STREAMS=8).
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1426"
+  HREF="node90.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1422"
+  HREF="node85.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1416"
+  HREF="node88.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1424"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1427"
+  HREF="node90.html">10.2.5 Notes about the</A>
+<B>Up:</B> <A NAME="tex2html1423"
+  HREF="node85.html">10.2 Filetype</A>
+<B> Previous:</B> <A NAME="tex2html1417"
+  HREF="node88.html">10.2.3 Notes about the</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

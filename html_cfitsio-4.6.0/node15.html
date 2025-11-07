@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>2.4 Using CFITSIO in Multi-threaded Environments</TITLE>
+<META NAME="description" CONTENT="2.4 Using CFITSIO in Multi-threaded Environments">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node16.html">
+<LINK REL="previous" HREF="node14.html">
+<LINK REL="up" HREF="node7.html">
+<LINK REL="next" HREF="node16.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html451"
+  HREF="node16.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html447"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html441"
+  HREF="node14.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html449"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html452"
+  HREF="node16.html">2.5 Getting Started with</A>
+<B>Up:</B> <A NAME="tex2html448"
+  HREF="node7.html">2. Creating the CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html442"
+  HREF="node14.html">2.3 Linking Programs with</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00340000000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">4</SPAN> Using CFITSIO in Multi-threaded Environments</A>
+</H1>
+
+<P>
+CFITSIO can be used either with the
+POSIX pthreads interface or the OpenMP interface for multi-threaded
+parallel programs.  When used in a multi-threaded environment,
+the CFITSIO library *must* be built using
+the -D_REENTRANT compiler directive.  This can be done using the following
+build commands:
+
+<P>
+<PRE>
+  &gt;./configure --enable-reentrant
+  &gt; make
+</PRE>
+A function called fits_is_reentrant is available to test
+whether or not CFITSIO was compiled with the -D_REENTRANT
+directive.  When this feature is enabled, multiple threads can
+call any of the CFITSIO routines
+to simultaneously read or write separate
+FITS files.  Multiple threads can also read data from
+the same FITS file simultaneously, as long as the file
+was opened independently by each thread.  This relies on
+the operating system to correctly deal with reading the
+same file by multiple processes.  Different threads should
+not share the same 'fitsfile' pointer to read an opened
+FITS file, unless locks are placed around the calls to
+the CFITSIO reading routines.
+Different threads should never try to write to the same
+FITS file.
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

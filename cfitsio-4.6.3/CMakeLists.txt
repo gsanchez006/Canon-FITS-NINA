@@ -66,7 +66,7 @@ OPTION(USE_BZIP2 "Enable bzip2 support" OFF)
 
 #==============================================================================
 
-FIND_PACKAGE(ZLIB REQUIRED)
+FIND_PACKAGE(ZLIB)
 
 IF(BUILD_SHARED_LIBS)
   SET (LIB_TYPE SHARED)

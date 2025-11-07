@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.8.1 File Checksum Routines</TITLE>
+<META NAME="description" CONTENT="5.8.1 File Checksum Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node51.html">
+<LINK REL="previous" HREF="node49.html">
+<LINK REL="up" HREF="node49.html">
+<LINK REL="next" HREF="node51.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html904"
+  HREF="node51.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html900"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html894"
+  HREF="node49.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html902"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html905"
+  HREF="node51.html">5.8.2 Date and Time</A>
+<B>Up:</B> <A NAME="tex2html901"
+  HREF="node49.html">5.8 Utility Routines</A>
+<B> Previous:</B> <A NAME="tex2html895"
+  HREF="node49.html">5.8 Utility Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00681000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">1</SPAN> File Checksum Routines</A>
+</H2>
+
+<P>
+The following routines either compute or validate the checksums for the
+CHDU.  The DATASUM keyword is used to store the numerical value of the
+32-bit, 1's complement checksum for the data unit alone.  If there is
+no data unit then the value is set to zero. The numerical value is
+stored as an ASCII string of digits, enclosed in quotes, because the
+value may be too large to represent as a 32-bit signed integer.  The
+CHECKSUM keyword is used to store the ASCII encoded COMPLEMENT of the
+checksum for the entire HDU.  Storing the complement, rather than the
+actual checksum, forces the checksum for the whole HDU to equal zero.
+If the file has been modified since the checksums were computed, then
+the HDU checksum will usually not equal zero.  These checksum keyword
+conventions are based on a paper by Rob Seaman published in the
+proceedings of the ADASS IV conference in Baltimore in November 1994
+and a later revision in June 1995.  See Appendix B for the definition
+of the parameters used in these routines.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Compute and write the DATASUM and CHECKSUM keyword values for the CHDU
+    into the current header.  If the keywords already exist, their values
+    will be updated only if necessary (i.e., if the file
+    has been modified since the original keyword
+   values were computed). <A NAME="ffpcks"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_chksum / ffpcks
+      (fitsfile *fptr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Update the CHECKSUM keyword value in the CHDU, assuming that the
+    DATASUM keyword exists and already has the correct value.  This routine
+    calculates the new checksum for the current header unit, adds it to the
+    data unit checksum, encodes the value into an ASCII string, and writes
+   the string to the CHECKSUM keyword. <A NAME="ffupck"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_update_chksum / ffupck
+      (fitsfile *fptr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Verify the CHDU by computing the checksums and comparing
+    them with the keywords.  The data unit is verified correctly
+    if the computed checksum equals the value of the DATASUM
+    keyword.  The checksum for the entire HDU (header plus data unit) is
+    correct if it equals zero.  The output DATAOK and HDUOK parameters
+    in this routine are integers which will have a value = 1
+    if the data or HDU is verified correctly, a value = 0
+    if the DATASUM or CHECKSUM keyword is not present, or value = -1
+   if the computed checksum is not correct. <A NAME="ffvcks"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_verify_chksum / ffvcks
+      (fitsfile *fptr, &gt; int *dataok, int *hduok, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Compute and return the checksum values for the CHDU
+    without creating or modifying the
+    CHECKSUM and DATASUM keywords.  This routine is used internally by
+   ffvcks, but may be useful in other situations as well. <A NAME="ffgcks"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_chksum/ /ffgcks
+      (fitsfile *fptr, &gt; unsigned long *datasum, unsigned long *hdusum,
+       int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Encode a checksum value
+    into a 16-character string.  If complm is non-zero (true) then the 32-bit
+   sum value will be complemented before encoding. <A NAME="ffesum"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_encode_chksum / ffesum
+      (unsigned long sum, int complm, &gt; char *ascii);
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Decode a 16-character checksum string into a unsigned long value.
+    If is non-zero (true). then the 32-bit sum value will be complemented
+    after decoding.  The checksum value is also returned as the
+   value of the function. <A NAME="ffdsum"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  unsigned long fits_decode_chksum / ffdsum
+           (char *ascii, int complm, &gt; unsigned long *sum);
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html904"
+  HREF="node51.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html900"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html894"
+  HREF="node49.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html902"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html905"
+  HREF="node51.html">5.8.2 Date and Time</A>
+<B>Up:</B> <A NAME="tex2html901"
+  HREF="node49.html">5.8 Utility Routines</A>
+<B> Previous:</B> <A NAME="tex2html895"
+  HREF="node49.html">5.8 Utility Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

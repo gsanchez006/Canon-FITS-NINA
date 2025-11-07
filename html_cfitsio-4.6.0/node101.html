@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.11.1 General Syntax</TITLE>
+<META NAME="description" CONTENT="10.11.1 General Syntax">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node102.html">
+<LINK REL="previous" HREF="node100.html">
+<LINK REL="up" HREF="node100.html">
+<LINK REL="next" HREF="node102.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1575"
+  HREF="node102.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1571"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1565"
+  HREF="node100.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1573"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1576"
+  HREF="node102.html">10.11.2 Bit Masks</A>
+<B>Up:</B> <A NAME="tex2html1572"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1566"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION0011111000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">1</SPAN> General Syntax</A>
+</H2>
+
+<P>
+The row filtering  expression can be an arbitrarily  complex series
+    of operations performed  on constants,  keyword values,  and column
+    data taken from the specified FITS TABLE extension.  The expression
+    must evaluate to a boolean  value for each row  of the table, where
+    a value of FALSE means that the row will be excluded.
+
+<P>
+For complex or commonly  used filters, one can place the expression
+    into a text file and import it into the row filter using the syntax
+    '[@filename.txt]'.  The expression can be  arbitrarily complex and
+    extend over multiple lines of the file.  Any lines in the external
+    text file that begin with 2 slash characters ('//') will be ignored
+    and may be used to add comments into the file.
+
+<P>
+Keyword and   column data  are referenced by   name.  Any  string of
+    characters not surrounded by    quotes (ie, a constant  string)   or
+    followed by   an open parentheses (ie,   a  function name)   will be
+    initially interpreted   as a column  name and  its contents for the
+    current row inserted into the expression.  If no such column exists,
+    a keyword of that  name will be searched for  and its value used, if
+    found.  To force the  name to be  interpreted as a keyword (in case
+    there is both a column and keyword with the  same name), precede the
+    keyword name with a single pound sign, '#', as in '#NAXIS2'.  Due to
+    the generalities of FITS column and  keyword names, if the column or
+    keyword name  contains a space or a  character which might appear as
+    an arithmetic  term then enclose  the  name in '$'  characters as in
+    $MAX PHA$ or #$MAX-PHA$.  Names are case insensitive.
+
+<P>
+To access a table entry in a row other  than the current one, follow
+    the  column's name  with  a row  offset  within  curly  braces.  For
+    example, 'PHA{-3}' will evaluate to the value  of column PHA, 3 rows
+    above  the  row currently  being processed.   One  cannot specify an
+    absolute row number, only a relative offset.  Rows that fall outside
+    the table will be treated as undefined, or NULLs.
+
+<P>
+When using row filtering to open a file &ldquo;on the fly,&rdquo; it is permitted
+    to use multiple row filtering expressions.  For example, the expression
+<PRE>
+  filename.fits[#ROW &gt; 5][X.gt.7]
+</PRE>
+would be treated as equivalent to joining the expressions with logical &ldquo;and&rdquo;
+like this,
+<PRE>
+  filename.fits[(#ROW &gt; 5)&amp;&amp;(X.gt.7)]
+</PRE>
+Please note that if multiple row filtering expressions are used, it is
+not permitted to also use the <code>[@filename.txt]</code> syntax in any
+of the individual expressions.
+
+<P>
+Boolean   operators can be  used in  the expression  in either their
+    Fortran or C forms.  The following boolean operators are available:
+
+<P>
+<PRE>
+    "equal"         .eq. .EQ. ==  "not equal"          .ne.  .NE.  !=
+    "less than"     .lt. .LT. &lt;   "less than/equal"    .le.  .LE.  &lt;= =&lt;
+    "greater than"  .gt. .GT. &gt;   "greater than/equal" .ge.  .GE.  &gt;= =&gt;
+    "or"            .or. .OR. ||  "and"                .and. .AND. &amp;&amp;
+    "negation"     .not. .NOT. !  "approx. equal(1e-7)"  ~
+</PRE>
+
+<P>
+Note that the exclamation point, '!', is a special UNIX character, so
+if it is used on the command line rather than entered at a task
+prompt, it must be preceded by a backslash to force the UNIX shell to
+ignore it.
+
+<P>
+The expression may  also include arithmetic operators and functions.
+Trigonometric  functions use  radians,  not degrees.  The  following
+arithmetic  operators and  functions  can be  used in the expression
+(function names are case insensitive).  A null value will be returned
+in case of illegal operations such as divide by zero, sqrt(negative)
+log(negative), log10(negative), arccos(.gt. 1), arcsin(.gt. 1).
+
+<P>
+<PRE>
+    "addition"           +          "subtraction"          -
+    "multiplication"     *          "division"             /
+    "negation"           -          "exponentiation"       **   ^
+    "absolute value"     abs(x)     "cosine"               cos(x)
+    "sine"               sin(x)     "tangent"              tan(x)
+    "arc cosine"         arccos(x)  "arc sine"             arcsin(x)
+    "arc tangent"        arctan(x)  "arc tangent"          arctan2(y,x)
+    "hyperbolic cos"     cosh(x)    "hyperbolic sin"       sinh(x)
+    "hyperbolic tan"     tanh(x)    "round to nearest int" round(x)
+    "round down to int"  floor(x)   "round up to int"      ceil(x)
+    "exponential"        exp(x)     "square root"          sqrt(x)
+    "natural log"        log(x)     "common log"           log10(x)
+    "error function"     erf(x)     "complement of erf"    erfc(x)
+    "gamma function"     gamma(x)
+    "modulus"            x % y      
+    "bitwise AND"        x &amp; y      "bitwise OR"           x | y
+    "bitwise XOR"        x ^^ y     (bitwise operators are 32-bit int only)
+    "random # [0.0,1.0)" random()
+    "random Gaussian"    randomn()  "random Poisson"       randomp(x)
+    "minimum"            min(x,y)   "maximum"              max(x,y)
+    "cumulative sum"     accum(x)   "sequential difference" seqdiff(x)
+    "if-then-else"       b?x:y
+    "angular separation" angsep(ra1,dec1,ra2,de2) (all in degrees)
+    "substring"          strmid(s,p,n) "string search"     strstr(s,r)
+    "in-range"           (x=a:b)
+</PRE>
+The bitwise operators for AND, OR and XOR operate upon 32-bit integer 
+expressions only.
+
+<P>
+Three different random number functions are provided: random(), with
+no arguments, produces a uniform random deviate between 0 and 1;
+randomn(), also with no arguments, produces a normal (Gaussian) random
+deviate with zero mean and unit standard deviation; randomp(x)
+produces a Poisson random deviate whose expected number of counts is
+X.  X may be any positive real number of expected counts, including
+fractional values, but the return value is an integer.
+
+<P>
+When the random functions are used in a vector expression, by default
+the same random value will be used when evaluating each element of the
+vector.  If different random numbers are desired, then the name of a
+vector column should be supplied as the single argument to the random
+function (e.g., "flux + 0.1 * random(flux)", where "flux" is the name
+of a vector column).  This will create a vector of random numbers that
+will be used in sequence when evaluating each element of the vector
+expression.
+
+<P>
+An alternate syntax for the min and max functions  has only a single
+argument which  should be  a  vector value (see  below).  The result
+will be the minimum/maximum element contained within the vector.
+
+<P>
+The accum(x) function forms the cumulative sum of x, element by
+element.  Vector columns are supported simply by performing the
+summation process through all the values.  Null values are treated as
+0.  The seqdiff(x) function forms the sequential difference of x,
+element by element.  The first value of seqdiff is the first value of
+x.  A single null value in x causes a pair of nulls in the output.
+The seqdiff and accum functions are functional inverses, i.e.,
+seqdiff(accum(x)) == x as long as no null values are present.
+
+<P>
+In the if-then-else expression, "b?x:y", b is an explicit boolean
+value or expression.  There is no automatic type conversion from
+numeric to boolean values, so one needs to use "iVal!=0" instead of
+merely "iVal" as the boolean argument. x and y can be any scalar data
+type (including string).
+
+<P>
+The angsep function computes the angular separation in degrees between
+2 celestial positions, where the first 2 parameters give the RA-like
+and Dec-like coordinates (in decimal degrees) of the first position,
+and the 3rd and 4th parameters give the coordinates of the second
+position.
+
+<P>
+The substring function strmid(S,P,N) extracts a substring from S,
+starting at string position P, with a substring length N.  The first
+character position in S is labeled as 1. If P is 0, or refers to a
+position beyond the end of S, then the extracted substring will be
+NULL.  S, P, and N may be functions of other columns.
+
+<P>
+The string search function strstr(S,R) searches for the first
+occurrence of the substring R in S.  The result is an integer,
+indicating the character position of the first match (where 1 is the
+first character position of S).  If no match is found, then strstr()
+returns a NULL value.
+
+<P>
+The in-range operator, (X=A:B), tests whether X is in the range
+delimited by A to B.  Specifically, the in-range operator evaluates
+to true if <code>(X &gt;= A &amp;&amp; X &lt;= B)</code>.
+
+<P>
+The following type casting operators are available, where the
+enclosing parentheses are required and taken from the C language
+usage. Also, the integer to real casts values to double precision:
+
+<P>
+<PRE>
+                "real to integer"    (int) x     (INT) x
+                "integer to real"    (float) i   (FLOAT) i
+</PRE>
+
+<P>
+In addition, several constants are built in  for  use  in  numerical
+    expressions:
+
+<P>
+<PRE>
+        #pi              3.1415...      #e             2.7182...
+        #deg             #pi/180        #row           current row number
+        #null         undefined value   #snull         undefined string
+</PRE>
+
+<P>
+A  string constant must  be enclosed  in quotes  as in  'Crab'.  The
+    "null" constants  are useful for conditionally  setting table values
+    to a NULL, or undefined, value (eg., "col1==-99 ? #NULL : col1").
+
+<P>
+Integer constants may be specified using the following notation,
+<PRE>
+           13245   decimal integer
+           0x12f3  hexidecimal integer
+           0o1373  octal integer
+           0b01001 binary integer
+</PRE>
+    Note that integer constants are only allowed to be 32-bit, i.e.
+    between -2(31) and +2(31).  Integer constants may be used in any
+    arithmetic expression where an integer would be appropriate.  Thus,
+    they are distinct from bitmasks (which may be of arbitrary length,
+    allow the "wildcard" bit, and may only be used in logical
+    expressions; see below).
+
+<P>
+There is also a function for testing if  two  values  are  close  to
+    each  other,  i.e.,  if  they are "near" each other to within a user
+    specified tolerance. The  arguments,  value_1  and  value_2  can  be
+    integer  or  real  and  represent  the two values who's proximity is
+    being tested to be within the specified tolerance, also  an  integer
+    or real:
+
+<P>
+<PRE>
+                    near(value_1, value_2, tolerance)
+</PRE>
+    When  a  NULL, or undefined, value is encountered in the FITS table,
+    the expression will evaluate to NULL unless the undefined  value  is
+    not   actually   required  for  evaluation,  e.g. "TRUE  .or.  NULL"
+    evaluates to TRUE. The  following  two  functions  allow  some  NULL
+    detection  and  handling:
+
+<P>
+<PRE>
+         "a null value?"              ISNULL(x)
+         "define a value for null"    DEFNULL(x,y)
+         "declare certain value null" SETNULL(x,y)
+</PRE>
+    ISNULL(x)
+    returns a boolean value of TRUE if the  argument  x  is  NULL. DEFNULL(x,y)
+    "defines"  a  value  to  be  substituted  for NULL values; it
+    returns the value of x if x is not NULL, otherwise  it  returns  the
+    value of y.  SETNULL(x,y) allows NULL values to be inserted into
+    a variable; if x==y, a NULL value is returned; otherwise y is returned
+    (x and y must be numerical, and x must be a scalar).
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1575"
+  HREF="node102.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1571"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1565"
+  HREF="node100.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1573"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1576"
+  HREF="node102.html">10.11.2 Bit Masks</A>
+<B>Up:</B> <A NAME="tex2html1572"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1566"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

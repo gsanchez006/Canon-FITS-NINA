@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.6.1 General Column Routines</TITLE>
+<META NAME="description" CONTENT="9.6.1 General Column Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node80.html">
+<LINK REL="previous" HREF="node78.html">
+<LINK REL="up" HREF="node78.html">
+<LINK REL="next" HREF="node80.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1277"
+  HREF="node80.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1273"
+  HREF="node78.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1267"
+  HREF="node78.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1275"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1278"
+  HREF="node80.html">9.6.2 Low-Level Table Access</A>
+<B>Up:</B> <A NAME="tex2html1274"
+  HREF="node78.html">9.6 Specialized FITS ASCII</A>
+<B> Previous:</B> <A NAME="tex2html1268"
+  HREF="node78.html">9.6 Specialized FITS ASCII</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001061000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">1</SPAN> General Column Routines</A>
+</H2>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Get information about an existing ASCII or binary table column.   A null
+    pointer may be given for any of the output parameters that are not
+    needed.  DATATYPE is a character string which returns the data type
+    of the column as defined by the TFORMn keyword (e.g., 'I', 'J','E',
+    'D', etc.).  In the case of an ASCII character column, typecode
+    will have a value of the form 'An' where 'n' is an integer
+    expressing the width of the field in characters.  For example, if
+    TFORM = '160A8' then ffgbcl will return typechar='A8' and
+    repeat=20.   All the returned parameters are scalar quantities.
+   <A NAME="ffgacl"></A> <A NAME="ffgbcl"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_acolparms / ffgacl
+    (fitsfile *fptr, int colnum, &gt; char *ttype, long *tbcol,
+     char *tunit, char *tform, double *scale, double *zero,
+     char *nulstr, char *tdisp, int *status)
+
+  int fits_get_bcolparms / ffgbcl
+      (fitsfile *fptr, int colnum, &gt; char *ttype, char *tunit,
+       char *typechar, long *repeat, double *scale, double *zero,
+       long *nulval, char *tdisp, int  *status)
+
+  int fits_get_bcolparmsll / ffgbclll
+      (fitsfile *fptr, int colnum, &gt; char *ttype, char *tunit,
+       char *typechar, LONGLONG *repeat, double *scale, double *zero,
+       LONGLONG *nulval, char *tdisp, int  *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Return optimal number of rows to read or write at one time for
+    maximum I/O efficiency.  Refer to the
+    &ldquo;Optimizing Code&rdquo; section in Chapter 5 for more discussion on how
+   to use this routine. <A NAME="ffgrsz"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_rowsize / ffgrsz
+      (fitsfile *fptr, long *nrows, *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Define the zero indexed byte offset of the 'heap' measured from
+    the start of the binary table data.  By default the heap is assumed
+    to start immediately following the regular table data, i.e., at
+    location NAXIS1 x NAXIS2.  This routine is only relevant for
+    binary tables which contain variable length array columns (with
+    TFORMn = 'Pt').  This routine also automatically writes
+    the value of theap to a keyword in the extension header.  This
+    routine must be called after the required keywords have been
+    written (with ffphbn)
+   but before any data is written to the table. <A NAME="ffpthp"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_theap / ffpthp
+      (fitsfile *fptr, long theap, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Test the contents of the binary table variable array heap, returning
+    the size of the heap, the number of unused bytes that are not currently
+    pointed to by any of the descriptors, and the number of bytes which are
+    pointed to by multiple descriptors.  It also returns valid = FALSE if
+    any of the descriptors point to invalid addresses  out of range of the
+    heap. <A NAME="fftheap"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_test_heap / fftheap
+      (fitsfile *fptr, &gt; LONGLONG *heapsize, LONGLONG *unused, LONGLONG *overlap,
+       int *validheap, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Re-pack the vectors in the binary table variable array heap to recover
+    any unused space.  Normally, when a vector in a variable length
+    array column is rewritten the previously written array remains in
+    the heap as wasted unused space.  This routine will repack the
+    arrays that are still in use, thus eliminating any bytes in the
+    heap that are no longer in use.  Note that if several vectors point
+    to the same bytes in the heap, then this routine will make
+    duplicate copies of the bytes for each vector, which will actually
+   expand the size of the heap. <A NAME="ffcmph"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_compress_heap / ffcmph
+      (fitsfile *fptr, &gt; int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1277"
+  HREF="node80.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1273"
+  HREF="node78.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1267"
+  HREF="node78.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1275"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1278"
+  HREF="node80.html">9.6.2 Low-Level Table Access</A>
+<B>Up:</B> <A NAME="tex2html1274"
+  HREF="node78.html">9.6 Specialized FITS ASCII</A>
+<B> Previous:</B> <A NAME="tex2html1268"
+  HREF="node78.html">9.6 Specialized FITS ASCII</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

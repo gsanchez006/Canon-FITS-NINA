@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>12.4 Keyword Units Strings</TITLE>
+<META NAME="description" CONTENT="12.4 Keyword Units Strings">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node121.html">
+<LINK REL="previous" HREF="node119.html">
+<LINK REL="up" HREF="node116.html">
+<LINK REL="next" HREF="node121.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1809"
+  HREF="node121.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1805"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1799"
+  HREF="node119.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1807"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1810"
+  HREF="node121.html">12.5 HIERARCH Convention for</A>
+<B>Up:</B> <A NAME="tex2html1806"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1800"
+  HREF="node119.html">12.3 Arrays of Fixed-Length</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001340000000000000000">
+<SPAN CLASS="arabic">12</SPAN>.<SPAN CLASS="arabic">4</SPAN> Keyword Units Strings</A>
+</H1>
+
+<P>
+One limitation of the current FITS Standard is that it does not define
+a specific convention for recording the physical units of a keyword
+value.  The TUNITn keyword can be used to specify the physical units of
+the values in a table column, but there is no analogous convention for
+keyword values.  The comment field of the keyword is often used for
+this purpose, but the units are usually not specified in a well defined
+format that FITS readers can easily recognize and extract.
+
+<P>
+To solve this problem, CFITSIO uses a local convention in which the
+keyword units are enclosed in square brackets as the first token in the
+keyword comment field; more specifically, the opening square bracket
+immediately follows the slash '/' comment field delimiter and a single
+space character.  The following examples illustrate keywords that use
+this convention:
+
+<P>
+<PRE>
+EXPOSURE=               1800.0 / [s] elapsed exposure time
+V_HELIO =                16.23 / [km s**(-1)] heliocentric velocity
+LAMBDA  =                5400. / [angstrom] central wavelength
+FLUX    = 4.9033487787637465E-30 / [J/cm**2/s] average flux
+</PRE>
+
+<P>
+In general, the units named in the IAU(1988) Style Guide are
+recommended, with the main exception that the preferred unit for angle
+is 'deg' for degrees.
+
+<P>
+The fits_read_key_unit and fits_write_key_unit routines in
+CFITSIO read and write, respectively, the keyword unit strings in an
+existing keyword.
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

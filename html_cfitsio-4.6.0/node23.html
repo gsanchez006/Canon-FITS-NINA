@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.4 Support for Unsigned Integers and Signed Bytes</TITLE>
+<META NAME="description" CONTENT="4.4 Support for Unsigned Integers and Signed Bytes">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node24.html">
+<LINK REL="previous" HREF="node22.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node24.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html558"
+  HREF="node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html554"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html548"
+  HREF="node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html556"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html559"
+  HREF="node24.html">4.5 Dealing with Character</A>
+<B>Up:</B> <A NAME="tex2html555"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html549"
+  HREF="node22.html">4.3 Function Names and</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00540000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">4</SPAN> Support for Unsigned Integers and Signed Bytes</A>
+</H1>
+
+<P>
+Although FITS does not directly support unsigned integers as one of its
+fundamental data types, FITS can still be used to efficiently store
+unsigned integer data values in images and binary tables.  The
+convention used in FITS files is to store the unsigned integers as
+signed integers with an associated offset (specified by the BZERO or
+TZEROn keyword).  For example, to store unsigned 16-bit integer values
+in a FITS image the image would be defined as a signed 16-bit integer
+(with BITPIX keyword = SHORT_IMG = 16) with the keywords BSCALE = 1.0
+and BZERO = 32768.  Thus the unsigned values of 0, 32768, and 65535,
+for example, are physically stored in the FITS image as -32768, 0, and
+32767, respectively;  CFITSIO automatically adds the BZERO offset to
+these values when they are read.  Similarly, in the case of unsigned
+32-bit integers the BITPIX keyword would be equal to LONG_IMG = 32 and
+BZERO would be equal to 2147483648 (i.e. 2 raised to the 31st power).
+
+<P>
+The CFITSIO interface routines will efficiently and transparently apply
+the appropriate offset in these cases so in general application
+programs do not need to be concerned with how the unsigned values are
+actually stored in the FITS file.  As a convenience for users, CFITSIO
+has several predefined constants for the value of BITPIX  (USHORT_IMG,
+ULONG_IMG, ULONGLONG_IMG) and for the TFORMn value in the case of binary tables (`U',
+`V', and `W') which programmers can use when creating FITS files containing
+unsigned integer values.  The following code fragment illustrates how
+to write a FITS 1-D primary array of unsigned 16-bit integers:
+
+<P>
+<PRE>
+      unsigned short uarray[100];
+      int naxis, status;
+      long naxes[10], group, firstelem, nelements;
+       ...
+      status = 0;
+      naxis = 1;
+      naxes[0] = 100;
+      fits_create_img(fptr, USHORT_IMG, naxis, naxes, &amp;status);
+
+      firstelem = 1;
+      nelements = 100;
+      fits_write_img(fptr, TUSHORT, firstelem, nelements,
+                          uarray, &amp;status);
+       ...
+</PRE>
+In the above example, the 2nd parameter in fits_create_img tells
+CFITSIO to write the header keywords appropriate for an array of 16-bit
+unsigned integers (i.e., BITPIX = 16 and BZERO = 32768).  Then the
+fits_write_img routine writes the array of unsigned short integers
+(uarray) into the primary array of the FITS file.  Similarly, a 32-bit
+unsigned integer image may be created by setting the second parameter
+in fits_create_img equal to `ULONG_IMG' and by calling the
+fits_write_img routine with the second parameter = TULONG to write
+the array of unsigned long image pixel values.
+
+<P>
+An analogous set of routines are available for reading or writing unsigned
+integer values and signed byte values in a FITS binary table extension.
+When specifying the TFORMn keyword value which defines the format of a
+column, CFITSIO recognizes 4 additional data type codes besides those
+already defined in the FITS standard: `U' meaning a 16-bit unsigned
+integer column, `V' for a 32-bit unsigned integer column, `W' for a 64-bit
+unsigned integer column, and 'S'
+for a signed byte column.  These non-standard data type codes are not
+actually written into the FITS file but instead are just used internally
+within CFITSIO.  The following code fragment illustrates how to use
+these features:
+
+<P>
+<PRE>
+      unsigned short uarray[100];
+      unsigned int  varray[100];
+
+      int colnum, tfields, status;
+      long nrows, firstrow, firstelem, nelements, pcount;
+
+      char extname[] = "Test_table";           /* extension name */
+
+      /* define the name, data type, and physical units for 4 columns */
+      char *ttype[] = { "Col_1", "Col_2", "Col_3", "Col_4" };
+      char *tform[] = { "1U",      "1V",    "1W",    "1S"};  /* special CFITSIO codes */
+      char *tunit[] = { " ",        " ",    " ",    " " };
+       ...
+
+           /* write the header keywords */
+      status  = 0;
+      nrows   = 1;
+      tfields = 3
+      pcount  = 0;
+      fits_create_tbl(fptr, BINARY_TBL, nrows, tfields, ttype, tform,
+                tunit, extname, &amp;status);
+
+           /* write the unsigned shorts to the 1st column */
+      colnum    = 1;
+      firstrow  = 1;
+      firstelem = 1;
+      nelements = 100;
+      fits_write_col(fptr, TUSHORT, colnum, firstrow, firstelem,
+              nelements, uarray, &amp;status);
+
+           /* now write the unsigned longs to the 2nd column */
+      colnum    = 2;
+      fits_write_col(fptr, TUINT, colnum, firstrow, firstelem,
+              nelements, varray, &amp;status);
+       ...
+</PRE>
+Note that the non-standard TFORM values for the 3 columns, `U', `V', and `W'
+tell CFITSIO to write the keywords appropriate for unsigned 16-bit, unsigned 32-bit and
+unsigned 64-bit integers, respectively (i.e., TFORMn = '1I' and TZEROn
+= 32768 for unsigned 16-bit integers, TFORMn = '1J' and TZEROn =
+2147483648 for unsigned 32-bit integers, and TFORMn = '1K' and TZEROn =
+9223372036854775808 for unsigned 64-bit integers).  The 'S' TFORMn value tells
+CFITSIO to write the keywords appropriate for a signed 8-bit byte column
+with TFORMn = '1B' and TZEROn = -128.  The calls to fits_write_col
+then write the arrays of unsigned integer values to the columns.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html558"
+  HREF="node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html554"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html548"
+  HREF="node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html556"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html559"
+  HREF="node24.html">4.5 Dealing with Character</A>
+<B>Up:</B> <A NAME="tex2html555"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html549"
+  HREF="node22.html">4.3 Function Names and</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

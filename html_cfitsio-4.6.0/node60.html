@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>8. Hierarchical Grouping Routines </TITLE>
+<META NAME="description" CONTENT="8. Hierarchical Grouping Routines ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node63.html">
+<LINK REL="previous" HREF="node58.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node61.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1023"
+  HREF="node61.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1019"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1013"
+  HREF="node59.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1021"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1024"
+  HREF="node61.html">8.1 Grouping Table Routines</A>
+<B>Up:</B> <A NAME="tex2html1020"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html1014"
+  HREF="node59.html">7.1 Self-contained WCS Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00900000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.   Hierarchical Grouping Routines </A>
+</H1>
+
+<P>
+These functions allow for the creation and manipulation of FITS HDU
+Groups, as defined in "A Hierarchical Grouping Convention for FITS" by
+Jennings, Pence, Folk and Schlesinger:
+
+<P>
+https://fits.gsfc.nasa.gov/registry/grouping/grouping.pdf
+
+<P>
+A group is a
+collection of HDUs whose association is defined by a <I>grouping
+table</I>.  HDUs which are part of a group are referred to as <I>member
+HDUs</I> or simply as <I>members</I>. Grouping table member HDUs may
+themselves be grouping tables, thus allowing for the construction of
+open-ended hierarchies of HDUs.
+
+<P>
+Grouping tables contain one row for each member HDU. The grouping table
+columns provide identification information that allows applications to
+reference or "point to" the member HDUs. Member HDUs are expected, but
+not required, to contain a set of GRPIDn/GRPLCn keywords in their
+headers for each grouping table that they are referenced by. In this
+sense, the GRPIDn/GRPLCn keywords "link" the member HDU back to its
+Grouping table. Note that a member HDU need not reside in the same FITS
+file as its grouping table, and that a given HDU may be referenced by
+up to 999 grouping tables simultaneously.
+
+<P>
+Grouping tables are implemented as FITS binary tables with up to six
+pre-defined column TTYPEn values: 'MEMBER_XTENSION', 'MEMBER_NAME',
+'MEMBER_VERSION', 'MEMBER_POSITION', 'MEMBER_URI_TYPE' and 'MEMBER_LOCATION'.
+The first three columns allow member HDUs to be identified by reference to
+their XTENSION, EXTNAME and EXTVER keyword values. The fourth column allows
+member HDUs to be identified by HDU position within their FITS file.
+The last two columns identify the FITS file in which the member HDU resides,
+if different from the grouping table FITS file.
+
+<P>
+Additional user defined "auxiliary" columns may also be included with any
+grouping table. When a grouping table is copied or modified the presence of
+auxiliary columns is always taken into account by the grouping support
+functions; however, the grouping support functions cannot directly
+make use of this data.
+
+<P>
+If a grouping table column is defined but the corresponding member HDU
+information is unavailable then a null value of the appropriate data type
+is inserted in the column field. Integer columns (MEMBER_POSITION,
+MEMBER_VERSION) are defined with a TNULLn value of zero (0). Character field
+columns (MEMBER_XTENSION, MEMBER_NAME, MEMBER_URI_TYPE, MEMBER_LOCATION)
+utilize an ASCII null character to denote a null field value.
+
+<P>
+The grouping support functions belong to two basic categories: those that
+work with grouping table HDUs (ffgt**) and those that work with member HDUs
+(ffgm**). Two functions, fits_copy_group() and fits_remove_group(), have the
+option to recursively copy/delete entire groups. Care should be taken when
+employing these functions in recursive mode as poorly defined groups could
+cause unpredictable results. The problem of a grouping table directly or
+indirectly referencing itself (thus creating an infinite loop) is protected
+against; in fact, neither function will attempt to copy or delete an HDU
+twice.
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1025"
+  HREF="node61.html"><SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">1</SPAN> Grouping Table Routines</A>
+<LI><A NAME="tex2html1026"
+  HREF="node62.html"><SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">2</SPAN> Group Member Routines</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1023"
+  HREF="node61.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1019"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1013"
+  HREF="node59.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1021"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1024"
+  HREF="node61.html">8.1 Grouping Table Routines</A>
+<B>Up:</B> <A NAME="tex2html1020"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html1014"
+  HREF="node59.html">7.1 Self-contained WCS Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

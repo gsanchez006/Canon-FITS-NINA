@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.7.1 Create New Table</TITLE>
+<META NAME="description" CONTENT="5.7.1 Create New Table">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node44.html">
+<LINK REL="previous" HREF="node42.html">
+<LINK REL="up" HREF="node42.html">
+<LINK REL="next" HREF="node44.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html821"
+  HREF="node44.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html817"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html811"
+  HREF="node42.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html819"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html822"
+  HREF="node44.html">5.7.2 Column Information Routines</A>
+<B>Up:</B> <A NAME="tex2html818"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html812"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00671000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">1</SPAN> Create New Table</A>
+</H2>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Create a new ASCII or bintable table extension. If
+   the FITS file is currently empty then a dummy primary array will be
+   created before appending the table extension to it.  The tbltype
+   parameter defines the type of table and can have values of
+   ASCII_TBL or BINARY_TBL.  The naxis2 parameter gives the initial
+   number of rows to be created in the table, and should normally be
+   set = 0.  CFITSIO will automatically increase the size of the table
+   as additional rows are written.  A non-zero number of rows may be
+   specified to reserve space for that many rows, even if a fewer
+   number of rows will be written.  The tunit and extname parameters
+   are optional and a null pointer may be given if they are not
+   defined.  The FITS Standard recommends that only letters, digits,
+   and the underscore character be used in column names (the ttype
+   parameter) with no embedded spaces.  Trailing blank characters are
+   not significant.   <A NAME="ffcrtb"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_create_tbl / ffcrtb
+      (fitsfile *fptr, int tbltype, LONGLONG naxis2, int tfields, char *ttype[],
+       char *tform[], char *tunit[], char *extname, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Copy the structure of an open table to a new table, optionally
+    copying zero or more rows from the input table.  This is useful in
+    cases where a task will filter rows from the input before transferring
+    to the output, so a &ldquo;pristine&rdquo; output table with zero rows is
+    desired to start.  The input file must be open and point to a binary table
+    extension.  The output file must be open for writing; a new
+    extension is created with the same table structure as the input.
+    Optionally, a range of nrows may be copied starting from firstrow,
+    similar to fits_copy_rows(). The value nrows may be 0.  Note that
+    the first row in a table is at row = 1.
+   <A NAME="ffcpht"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_hdutab / ffcpht
+      (fitsfile *infptr, fitsfile *outfptr, LONGLONG firstrow,
+       LONGLONG nrows, &gt; int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html821"
+  HREF="node44.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html817"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html811"
+  HREF="node42.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html819"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html822"
+  HREF="node44.html">5.7.2 Column Information Routines</A>
+<B>Up:</B> <A NAME="tex2html818"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html812"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

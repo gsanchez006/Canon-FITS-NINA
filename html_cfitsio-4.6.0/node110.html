@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>11.1 Detailed Template Line Format</TITLE>
+<META NAME="description" CONTENT="11.1 Detailed Template Line Format">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node111.html">
+<LINK REL="previous" HREF="node109.html">
+<LINK REL="up" HREF="node109.html">
+<LINK REL="next" HREF="node111.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1685"
+  HREF="node111.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1681"
+  HREF="node109.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1675"
+  HREF="node109.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1683"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1686"
+  HREF="node111.html">11.2 Auto-indexing of Keywords</A>
+<B>Up:</B> <A NAME="tex2html1682"
+  HREF="node109.html">11. Template Files</A>
+<B> Previous:</B> <A NAME="tex2html1676"
+  HREF="node109.html">11. Template Files</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001210000000000000000">
+<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">1</SPAN> Detailed Template Line Format</A>
+</H1>
+
+<P>
+The format of each ASCII template line closely follows the format of a
+FITS keyword record:
+
+<P>
+<PRE>
+  KEYWORD = KEYVALUE / COMMENT
+</PRE>
+except that free format may be used (e.g., the equals sign may appear
+at any position in the line) and TAB characters are allowed and are
+treated the same as space characters.  The KEYVALUE and COMMENT fields
+are optional.  The equals sign character is also optional, but it is
+recommended that it be included for clarity.  Any template line that
+begins with the pound '#' character is ignored by the template parser
+and may be use to insert comments into the template file itself.
+
+<P>
+The KEYWORD name field is limited to 8 characters in length and only
+the letters A-Z, digits 0-9, and the hyphen and underscore characters
+may be used, without any embedded spaces. Lowercase letters in the
+template keyword name will be converted to uppercase.  Leading spaces
+in the template line preceding the keyword name are generally ignored,
+except if the first 8 characters of a template line are all blank, then
+the entire line is treated as a FITS comment keyword (with a blank
+keyword name) and is copied verbatim into the FITS header.
+
+<P>
+The KEYVALUE field may have any allowed  FITS  data type: character
+string, logical, integer, real, complex integer, or complex real.  Integer
+values must be within the allowed range of a 'signed long' variable;
+some C compilers only suppport 4-byte long integers with a range
+from -2147483648 to +2147483647, whereas other C compilers support 8-byte
+integers with a range of plus or minus 2**63.
+
+<P>
+The character string values need not be enclosed in single quote characters
+unless they are necessary to distinguish the string from a different
+data type (e.g.  2.0 is a real but '2.0' is a string).  The keyword has
+an undefined (null) value if the template record only contains blanks
+following the "=" or between the "=" and the "/" comment field
+delimiter.
+
+<P>
+String keyword values longer than 68 characters (the maximum length
+that will fit in a single FITS keyword record) are permitted using the
+CFITSIO long string convention. They can either be specified as a
+single long line in the template, or by using multiple lines where the
+continuing lines contain the 'CONTINUE' keyword, as in this example:
+
+<P>
+<PRE>
+  LONGKEY = 'This is a long string value that is contin&amp;'
+  CONTINUE  'ued over 2 records' / comment field goes here
+</PRE>
+The format of template lines with CONTINUE keyword is very strict:  3
+spaces must follow CONTINUE and the rest of the line is copied verbatim
+to the FITS file.
+
+<P>
+The start of the optional COMMENT field must be preceded by "/", which
+is used to separate it from the keyword value field. Exceptions are if
+the KEYWORD name field contains COMMENT, HISTORY, CONTINUE, or if the
+first 8 characters of the template line are blanks.
+
+<P>
+More than one Header-Data Unit (HDU) may be defined in the template
+file.  The start of an HDU definition is denoted with a SIMPLE or
+XTENSION template line:
+
+<P>
+1) SIMPLE begins a Primary HDU definition. SIMPLE may only appear as
+the  first keyword in the template file. If the template file begins
+with XTENSION instead of SIMPLE, then a default empty Primary HDU is
+created, and the template is then assumed to define the keywords
+starting with the first extension following the Primary HDU.
+
+<P>
+2) XTENSION marks the beginning of a new extension HDU definition.  The
+previous HDU will be closed at this point and processing of the next
+extension begins.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1685"
+  HREF="node111.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1681"
+  HREF="node109.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1675"
+  HREF="node109.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1683"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1686"
+  HREF="node111.html">11.2 Auto-indexing of Keywords</A>
+<B>Up:</B> <A NAME="tex2html1682"
+  HREF="node109.html">11. Template Files</A>
+<B> Previous:</B> <A NAME="tex2html1676"
+  HREF="node109.html">11. Template Files</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

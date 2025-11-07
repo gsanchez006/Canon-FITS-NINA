@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>7. World Coordinate System Routines </TITLE>
+<META NAME="description" CONTENT="7. World Coordinate System Routines ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node60.html">
+<LINK REL="previous" HREF="node53.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node59.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1000"
+  HREF="node59.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html996"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html990"
+  HREF="node57.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html998"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1001"
+  HREF="node59.html">7.1 Self-contained WCS Routines</A>
+<B>Up:</B> <A NAME="tex2html997"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html991"
+  HREF="node57.html">6.4 Complete List of</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00800000000000000000">
+<SPAN CLASS="arabic">7</SPAN>.  World Coordinate System Routines </A>
+</H1>
+
+<P>
+The FITS community has adopted a set of keyword conventions that define
+the transformations needed to convert between pixel locations in an
+image and the corresponding celestial coordinates on the sky, or more
+generally, that define world coordinates that are to be associated with
+any pixel location in an n-dimensional FITS array. CFITSIO is distributed
+with a a few self-contained World Coordinate System (WCS) routines,
+however, these routines DO NOT support all the latest WCS conventions,
+so it is STRONGLY RECOMMENDED that software developers use a more robust
+external WCS library.  Several recommended libraries are:
+
+<P>
+<PRE>
+  WCSLIB -  supported by Mark Calabretta
+  WCSTools - supported by Doug Mink
+  AST library - developed by the U.K. Starlink project
+</PRE>
+
+<P>
+More information about the WCS keyword conventions and links to all of
+these WCS libraries can be found on the FITS Support Office web site at
+http://fits.gsfc.nasa.gov under the WCS link.
+
+<P>
+The functions provided in these external WCS libraries will need
+access to the  WCS keywords contained in the FITS file headers.
+One convenient way to pass this information to the external library is
+to use the fits_hdr2str routine in CFITSIO (defined below) to copy the
+header keywords into one long string, and then pass this string to an
+interface routine in the external library that will extract
+the necessary WCS information (e.g., the 'wcspih' routine in the WCSLIB
+library and the 'astFitsChan' and 'astPutCards' functions in the AST
+library).
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Concatenate the header keywords in the CHDU into a single long
+    string of characters. Each 80-character fixed-length keyword
+    record is appended to the output character string, in order, with
+    no intervening separator or terminating characters. The last header
+    record is terminated with a NULL character.  This routine allocates
+    memory for the returned character array, so the calling program must
+    free the memory when finished.
+
+<P>
+There are 2 related routines: fits_hdr2str simply concatenates all
+    the existing keywords in the header; fits_convert_hdr2str is similar,
+    except that if the CHDU is a tile compressed image (stored in a binary
+    table) then it will first convert that header back to that of a
+    normal FITS image before concatenating the keywords.
+
+<P>
+Selected keywords may be excluded from the returned character string.
+    If the second parameter (nocomments) is TRUE (nonzero) then any
+    COMMENT, HISTORY, or blank keywords in the header will not be copied
+    to the output string.
+
+<P>
+The 'exclist' parameter may be used to supply a list of keywords
+    that are to be excluded from the output character string. Wild card
+    characters (*, ?, and #) may be used in the excluded keyword names.
+    If no additional keywords are to be excluded, then set nexc = 0 and
+   specify NULL for the the **exclist  parameter.  <A NAME="hdr2str"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_hdr2str
+      (fitsfile *fptr, int nocomments, char **exclist, int nexc,
+      &gt; char **header, int *nkeys, int *status)
+
+  int fits_convert_hdr2str / ffcnvthdr2str
+      (fitsfile *fptr, int nocomments, char **exclist, int nexc,
+      &gt; char **header, int *nkeys, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>The following CFITSIO routine is specifically designed for use
+in conjunction with the WCSLIB library.  It is not expected that
+applications programmers will call this routine directly, but it
+is documented here for completeness.  This routine extracts arrays
+from a binary table that contain WCS information using the -TAB table
+lookup convention.  See the documentation provided with the WCSLIB
+ library for more information.  <A NAME="wcstab"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_read_wcstab
+       (fitsfile *fptr, int nwtb, wtbarr *wtb, int *status);
+</PRE>
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1002"
+  HREF="node59.html"><SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">1</SPAN>  Self-contained WCS Routines</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1000"
+  HREF="node59.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html996"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html990"
+  HREF="node57.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html998"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1001"
+  HREF="node59.html">7.1 Self-contained WCS Routines</A>
+<B>Up:</B> <A NAME="tex2html997"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html991"
+  HREF="node57.html">6.4 Complete List of</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

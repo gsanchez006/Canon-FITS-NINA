@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.11.6 Spatial Region Filtering</TITLE>
+<META NAME="description" CONTENT="10.11.6 Spatial Region Filtering">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node107.html">
+<LINK REL="previous" HREF="node105.html">
+<LINK REL="up" HREF="node100.html">
+<LINK REL="next" HREF="node107.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1635"
+  HREF="node107.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1631"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1625"
+  HREF="node105.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1633"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1636"
+  HREF="node107.html">10.11.7 Example Row Filters</A>
+<B>Up:</B> <A NAME="tex2html1632"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1626"
+  HREF="node105.html">10.11.5 Good Time Interval</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION0011116000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">6</SPAN> Spatial Region Filtering</A>
+</H2>
+
+<P>
+Another common  filtering method selects rows based on whether the
+    spatial position associated with each row is located within a given
+    2-dimensional region.  The syntax for this high-level filter is
+
+<P>
+<PRE>
+       regfilter( "regfilename" [ , Xexpr, Yexpr [ , "wcs cols" ] ] )
+</PRE>
+    where each "[]" demarks optional parameters. The region file name
+    is required and must be  enclosed in quotes.  The remaining
+    parameters are optional.  There are 2 supported formats for the
+    region file: ASCII file or FITS binary table.  The region file
+    contains a list of one or more geometric shapes (circle,
+    ellipse, box, etc.) which defines a region on the celestial sphere
+    or an area within a particular 2D image.  The region file is
+    typically generated using an image display program such as fv/POW
+    (distribute by the HEASARC), or ds9 (distributed by the Smithsonian
+    Astrophysical Observatory).  Users should refer to the documentation
+    provided with these programs for more details on the syntax used in
+    the region files.  The FITS region file format is defined in a document
+    available from the FITS Support Office at
+    http://fits.gsfc.nasa.gov/ registry/ region.html
+
+<P>
+In its simplest form, (e.g., regfilter("region.reg") ) the
+    coordinates in the default 'X' and 'Y' columns will be used to
+    determine if each row is inside or outside the area specified in
+    the region file.  Alternate position column names, or expressions,
+    may be entered if needed, as in
+
+<P>
+<PRE>
+        regfilter("region.reg", XPOS, YPOS)
+</PRE>
+    Region filtering can be applied most unambiguously if the positions
+    in the region file and in the table to be filtered are both give in
+    terms of absolute celestial coordinate units.  In this case the
+    locations and sizes of the geometric shapes in the region file are
+    specified in angular units on the sky (e.g., positions given in
+    R.A. and Dec.  and sizes in arcseconds or arcminutes).  Similarly,
+    each row of the filtered table will have a celestial coordinate
+    associated with it.  This association is usually implemented using
+    a set of so-called 'World Coordinate System' (or WCS) FITS keywords
+    that define the coordinate transformation that must be applied to
+    the values in the 'X' and 'Y' columns to calculate the coordinate.
+
+<P>
+Alternatively, one can perform spatial filtering using unitless
+    'pixel' coordinates for the regions and row positions.  In this
+    case the user must be careful to ensure that the positions in the 2
+    files are self-consistent.  A typical problem is that the region
+    file may be generated using a binned image, but the unbinned
+    coordinates are given in the event table.  The ROSAT events files,
+    for example, have X and Y pixel coordinates that range from 1 -
+    15360.  These coordinates are typically binned by a factor of 32 to
+    produce a 480x480 pixel image.  If one then uses a region file
+    generated from this image (in image pixel units) to filter the
+    ROSAT events file, then the X and Y column values must be converted
+    to corresponding pixel units as in:
+
+<P>
+<PRE>
+        regfilter("rosat.reg", X/32.+.5, Y/32.+.5)
+</PRE>
+    Note that this binning conversion is not necessary if the region
+    file is specified using celestial coordinate units instead of pixel
+    units because CFITSIO is then able to directly compare the
+    celestial coordinate of each row in the table with the celestial
+    coordinates in the region file without having to know anything
+    about how the image may have been binned.
+
+<P>
+The last "wcs cols" parameter should rarely be needed. If supplied,
+    this  string contains the names of the 2 columns (space or comma
+    separated) which have the associated WCS keywords. If not supplied,
+    the filter  will scan the X  and Y expressions for column names.
+    If only one is found in each  expression, those columns will be
+    used, otherwise an error will be returned.
+
+<P>
+These region shapes are supported (names are case insensitive):
+
+<P>
+<PRE>
+       Point         ( X1, Y1 )               &lt;- One pixel square region
+       Line          ( X1, Y1, X2, Y2 )       &lt;- One pixel wide region
+       Polygon       ( X1, Y1, X2, Y2, ... )  &lt;- Rest are interiors with
+       Rectangle     ( X1, Y1, X2, Y2, A )       | boundaries considered
+       Box           ( Xc, Yc, Wdth, Hght, A )   V within the region
+       Diamond       ( Xc, Yc, Wdth, Hght, A )
+       Circle        ( Xc, Yc, R )
+       Annulus       ( Xc, Yc, Rin, Rout )
+       Ellipse       ( Xc, Yc, Rx, Ry, A )
+       Elliptannulus ( Xc, Yc, Rinx, Riny, Routx, Routy, Ain, Aout )
+       Sector        ( Xc, Yc, Amin, Amax )
+</PRE>
+    where (Xc,Yc) is  the coordinate of  the shape's center; (X#,Y#) are
+    the coordinates  of the shape's edges;  Rxxx are the shapes' various
+    Radii or semimajor/minor  axes; and Axxx  are the angles of rotation
+    (or bounding angles for Sector) in degrees.  For rotated shapes, the
+    rotation angle  can  be left  off, indicating  no rotation.   Common
+    alternate  names for the regions  can also be  used: rotbox = box;
+    rotrectangle = rectangle;  (rot)rhombus = (rot)diamond;  and pie
+    = sector.  When a  shape's name is  preceded by a minus sign, '-',
+    the defined region  is instead the area  *outside* its boundary (ie,
+    the region is inverted).  All the shapes within a single region
+    file are OR'd together to create the region, and the order is
+    significant. The overall way of looking at region files is that if
+    the first region is an excluded region then a dummy included region
+    of the whole detector is inserted in the front. Then each region
+    specification as it is processed overrides any selections inside of
+    that region specified by previous regions. Another way of thinking
+    about this is that if a previous excluded region is completely
+    inside of a subsequent included region the excluded region is
+    ignored.
+
+<P>
+The positional coordinates may be given either in pixel units,
+    decimal degrees or hh:mm:ss.s, dd:mm:ss.s units.  The shape sizes
+    may be given in pixels, degrees, arcminutes, or arcseconds.  Look
+    at examples of region file produced by fv/POW or ds9 for further
+    details of the region file format.
+
+<P>
+There are three low-level  functions that are primarily for use with
+    regfilter function, but they  can  be  called  directly.  They
+    return  a  boolean true   or  false  depending   on  whether a   two
+    dimensional point is in the region or not.  The positional coordinates
+    must be given in pixel units:
+
+<P>
+<PRE>
+    "point in a circular region"
+          circle(xcntr,ycntr,radius,Xcolumn,Ycolumn)
+
+    "point in an elliptical region"
+         ellipse(xcntr,ycntr,xhlf_wdth,yhlf_wdth,rotation,Xcolumn,Ycolumn)
+
+    "point in a rectangular region"
+             box(xcntr,ycntr,xfll_wdth,yfll_wdth,rotation,Xcolumn,Ycolumn)
+
+    where
+       (xcntr,ycntr) are the (x,y) position of the center of the region
+       (xhlf_wdth,yhlf_wdth) are the (x,y) half widths of the region
+       (xfll_wdth,yfll_wdth) are the (x,y) full widths of the region
+       (radius) is half the diameter of the circle
+       (rotation) is the angle(degrees) that the region is rotated with
+             respect to (xcntr,ycntr)
+       (Xcoord,Ycoord) are the (x,y) coordinates to test, usually column
+             names
+       NOTE: each parameter can itself be an expression, not merely a
+             column name or constant.
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1635"
+  HREF="node107.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1631"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1625"
+  HREF="node105.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1633"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1636"
+  HREF="node107.html">10.11.7 Example Row Filters</A>
+<B>Up:</B> <A NAME="tex2html1632"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1626"
+  HREF="node105.html">10.11.5 Good Time Interval</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

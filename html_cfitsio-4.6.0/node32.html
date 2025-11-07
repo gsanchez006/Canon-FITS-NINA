@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.13 CFITSIO Size Limitations</TITLE>
+<META NAME="description" CONTENT="4.13 CFITSIO Size Limitations">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node31.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node33.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html664"
+  HREF="node33.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html660"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html656"
+  HREF="node31.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html662"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html665"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B>Up:</B> <A NAME="tex2html661"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html657"
+  HREF="node31.html">4.12 When the Final</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION005130000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">13</SPAN> CFITSIO Size Limitations</A>
+</H1>
+
+<P>
+CFITSIO places very few restrictions on the size of FITS files that it
+reads or writes.  There are a few limits, however, that may affect
+some extreme cases:
+
+<P>
+1.  The maximum number of FITS files that may be simultaneously opened by
+CFITSIO is set by NMAXFILES, as defined in fitsio2.h.  The current default
+value is 1000, but this may be increased if necessary. Note that CFITSIO
+allocates NIOBUF * 2880 bytes of I/O buffer space for each file that is
+opened.  The default value of NIOBUF is 40 (defined in fitsio.h), so this
+amounts to  more than 115K of memory  for each opened file (or 115 MB for
+1000 opened files).  Note that the underlying  operating system, may have a
+lower limit on the number of files that can be opened simultaneously.
+
+<P>
+2.  It used to be common for computer systems to only support disk files up
+to 2**31 bytes = 2.1 GB in size, but most systems now support larger files.
+CFITSIO can optionally read and write these so-called 'large files' that
+are greater than 2.1 GB on
+platforms where they are supported, but this
+usually requires that special compiler option flags be specified to turn
+on this  option.  On linux and solaris systems the compiler flags are
+'-D_LARGEFILE_SOURCE' and  `-D_FILE_OFFSET_BITS=64'. These flags
+may also work on other platforms but this has not been tested.  Starting
+with version 3.0 of CFITSIO, the default Makefile that is distributed
+with CFITSIO will include these 2 compiler flags when building on Solaris
+and Linux PC systems.   Users on other platforms will need to add these
+compiler flags manually if they want to support large files.  In most
+cases it appears that it is not necessary to include these compiler
+flags when compiling application code that call the CFITSIO library
+routines.
+
+<P>
+When CFITSIO is built with large file support (e.g., on Solaris and
+Linux PC system by default) then it can read and write FITS data files
+on disk that have any of these conditions:
+
+<P>
+
+<UL>
+<LI>FITS files larger than 2.1 GB in size
+</LI>
+<LI>FITS images containing greater than 2.1 G pixels
+</LI>
+<LI>FITS images that have one dimension with more than 2.1 G pixels
+(as given by one of the NAXISn keyword)
+</LI>
+<LI>FITS tables containing more than 2.1E09 rows (given by the NAXIS2 keyword),
+or with rows that are more than 2.1 GB wide (given by the NAXIS1 keyword)
+</LI>
+<LI>FITS binary tables with a variable-length array heap that is larger
+than 2.1 GB (given by the PCOUNT keyword)
+</LI>
+</UL>
+
+<P>
+The current maximum FITS file size supported by  CFITSIO
+is about 6 terabytes (containing
+2**31 FITS blocks, each 2880 bytes in size). Currently, support for large
+files in CFITSIO has been tested on the Linux, Solaris, and IBM AIX
+operating systems.
+
+<P>
+Note that when writing application programs that are intended to support
+large files it is important to use 64-bit integer variables
+to store quantities such as the dimensions of images, or the number of
+rows in a table.  These programs must also call the special versions
+of some of the CFITSIO routines that have been adapted to
+support 64-bit integers.  The names of these routines end in
+'ll' ('el' 'el') to distinguish them from the 32-bit integer
+version (e.g.,  fits_get_num_rowsll).
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html664"
+  HREF="node33.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html660"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html656"
+  HREF="node31.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html662"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html665"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B>Up:</B> <A NAME="tex2html661"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html657"
+  HREF="node31.html">4.12 When the Final</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

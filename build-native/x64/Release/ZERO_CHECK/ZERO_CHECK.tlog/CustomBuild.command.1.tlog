@@ -1,0 +1,10 @@
+^C:\USERS\GUS\DOCUMENTS\VS CODE PROJECTS\NINA CANON\BUILD-NATIVE\CMAKEFILES\4D51CD5D39727A2DEC77317C85DDCB48\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/Gus/Documents/VS Code Projects/NINA Canon/cfitsio-4.6.3" "-BC:/Users/Gus/Documents/VS Code Projects/NINA Canon/build-native" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/Gus/Documents/VS Code Projects/NINA Canon/build-native/CFITSIO.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

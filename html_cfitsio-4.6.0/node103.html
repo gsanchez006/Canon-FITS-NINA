@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.11.3 Vector Columns</TITLE>
+<META NAME="description" CONTENT="10.11.3 Vector Columns">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node104.html">
+<LINK REL="previous" HREF="node102.html">
+<LINK REL="up" HREF="node100.html">
+<LINK REL="next" HREF="node104.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1599"
+  HREF="node104.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1595"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1589"
+  HREF="node102.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1597"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1600"
+  HREF="node104.html">10.11.4 Row Access</A>
+<B>Up:</B> <A NAME="tex2html1596"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1590"
+  HREF="node102.html">10.11.2 Bit Masks</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION0011113000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">3</SPAN> Vector Columns</A>
+</H2>
+
+<P>
+Vector columns can also be used  in  building  the  expression.   No
+    special  syntax  is required if one wants to operate on all elements
+    of the vector.  Simply use the column name as for a  scalar  column.
+    Vector  columns  can  be  freely  intermixed  with scalar columns or
+    constants in virtually all expressions.  The result will be  of  the
+    same dimension as the vector.  Two vectors in an expression, though,
+    need to  have  the  same  number  of  elements  and  have  the  same
+    dimensions.
+
+<P>
+Arithmetic and logical operations are all performed on an element by
+    element basis.  Comparing two vector columns,  eg  "COL1  ==  COL2",
+    thus  results  in  another vector of boolean values indicating which
+    elements of the two vectors are equal.
+
+<P>
+Several functions are available that operate on a vector.  All but
+    the last two return a scalar result:
+
+<P>
+<PRE>
+    "minimum"      MIN(V)          "maximum"               MAX(V)
+    "average"      AVERAGE(V)      "median"                MEDIAN(V)
+    "summation"    SUM(V)          "standard deviation"    STDDEV(V)
+    "# of values"  NELEM(V)        "# of non-null values"  NVALID(V)
+    "# axes"       NAXIS(V)        "axis dimension"        NAXES(V,n)
+    "axis pos'n"   AXISELEM(V,n)   "vector element pos'n"  ELEMENTNUM(V)
+                                   "promote to array"      ARRAY(X,d)
+</PRE>
+    where V represents the name of a vector column or a manually
+    constructed vector using curly brackets as described below.  The
+    first 6 of these functions ignore any null values in the vector when
+    computing the result.  The STDDEV() function computes the sample
+    standard deviation, i.e. it is proportional to 1/SQRT(N-1) instead
+    of 1/SQRT(N), where N is NVALID(V).
+
+<P>
+The SUM function literally sums all  the elements in x,  returning a
+    scalar value.   If V  is  a  boolean  vector, SUM returns the number
+    of TRUE elements. The NELEM function  returns the number of elements
+    in vector V whereas NVALID return the number of non-null elements in
+    the  vector.   (NELEM  also  operates  on  bit  and string  columns,
+    returning their column widths.)  As an example, to  test whether all
+    elements of two vectors satisfy a  given logical comparison, one can
+    use the expression
+
+<P>
+<PRE>
+              SUM( COL1 &gt; COL2 ) == NELEM( COL1 )
+</PRE>
+
+<P>
+which will return TRUE if all elements  of  COL1  are  greater  than
+    their corresponding elements in COL2.
+
+<P>
+The NAXIS(V) function returns the number of axes of the vector,
+    for example a 2D array would be NAXIS(V) == 2.  The NAXES(V,n)
+    function returns the dimension of axis n, for example a 4x2 array
+    would have NAXES(V,1) == 4.  The ELEMENTNUM(V) and AXISELEM(V,n)
+    functions return vectors of the same size as the input vector V.
+    ELEMENTNUM(V) returns the vector element position for each element
+    in the vector, starting from 1 in each row.  The AXISELEM(V,n)
+    function is similar but returns the element position of axis n
+    only.
+
+<P>
+The ARRAY(X,d) function promotes scalar value X to a vector (or
+    array) table element.  X may be any scalar-valued item, including
+    a column, an expression, or a constant value.  The resulting
+    vector or array will have the same scalar value replicated into
+    each element position.  This may be a useful way to construct
+    large arrays without using the cumbersome {vector} notation. The
+    dimensions of the new array are given by the second argument, d.
+    d can either be a single constant integer value, or a vector of up
+    to five dimensions of the form {Nx,Ny,...}.  Thus, ARRAY(TIME,4)
+    would promote TIME to be a 4-vector, and ARRAY(0, {2,3,1}) would
+    construct an array of all 0's with dimensions 2&times3&times1.
+
+<P>
+A second form of ARRAY(X,d) can be used where X is a vector or
+    array, and the dimensions d merely change the dimensions of X
+    without changing the total number of vector elements.  This is a
+    way to re-dimension an existing array.  For example,
+    ARRAY({1,2,3,4},2,2) would transform the 4-vector into a 2&times2 array.
+
+<P>
+To  specify  a  single  element  of  a  vector, give the column name
+    followed by  a  comma-separated  list  of  coordinates  enclosed  in
+    square  brackets.  For example, if a vector column named PHAS exists
+    in the table as a one dimensional, 256  component  list  of  numbers
+    from  which  you  wanted to select the 57th component for use in the
+    expression, then PHAS[57] would do the  trick.   Higher  dimensional
+    arrays  of  data  may appear in a column.  But in order to interpret
+    them, the TDIMn keyword must appear in the header.  Assuming that  a
+    (4,4,4,4)  array  is packed into each row of a column named ARRAY4D,
+    the  (1,2,3,4)  component  element  of  each  row  is  accessed   by
+    ARRAY4D[1,2,3,4].    Arrays   up   to   dimension  5  are  currently
+    supported.  Each vector index can itself be an expression,  although
+    it  must  evaluate  to  an  integer  value  within the bounds of the
+    vector.  Vector columns which contain spaces or arithmetic operators
+    must   have   their   names  enclosed  in  "$"  characters  as  with
+    $ARRAY-4D$[1,2,3,4].
+
+<P>
+A  more  C-like  syntax  for  specifying  vector  indices  is   also
+    available.   The element used in the preceding example alternatively
+    could be specified with the syntax  ARRAY4D[4][3][2][1].   Note  the
+    reverse  order  of  indices  (as in C), as well as the fact that the
+    values are still ones-based (as  in  Fortran  -  adopted  to  avoid
+    ambiguity  for  1D vectors).  With this syntax, one does not need to
+    specify all of the indices.  To  extract  a  3D  slice  of  this  4D
+    array, use ARRAY4D[4].
+
+<P>
+Variable-length vector columns are not supported.
+
+<P>
+Vectors can  be manually constructed  within the expression  using a
+    comma-separated list of  elements surrounded by curly braces ('{}').
+    For example, '{1,3,6,1}' is a 4-element vector containing the values
+    1, 3, 6, and 1.  The  vector can contain  only boolean, integer, and
+    real values (or expressions).  The elements will  be promoted to the
+    highest  data type   present.  Any   elements   which  are themselves
+    vectors, will be expanded out with  each of its elements becoming an
+    element in the constructed vector.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1599"
+  HREF="node104.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1595"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1589"
+  HREF="node102.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1597"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1600"
+  HREF="node104.html">10.11.4 Row Access</A>
+<B>Up:</B> <A NAME="tex2html1596"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1590"
+  HREF="node102.html">10.11.2 Bit Masks</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

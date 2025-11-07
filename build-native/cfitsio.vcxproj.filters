@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\buffers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\cfileio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\checksum.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\drvrfile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\drvrmem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\drvrnet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\drvrsmem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\editcol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\edithdu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\eval_f.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\eval_l.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\eval_y.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\f77_wrap1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\f77_wrap2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\f77_wrap3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\f77_wrap4.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\fits_hcompress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\fits_hdecompress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\fitscore.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcolb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcold.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcole.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcoli.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcolj.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcolk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcoll.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcols.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcolsb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcolui.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcoluj.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getcoluk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\getkey.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\group.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\grparser.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\histo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\imcompress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\iraffits.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\modkey.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\pliocomp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcolb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcold.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcole.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcoli.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcolj.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcolk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcoll.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcols.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcolsb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcolu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcolui.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcoluj.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putcoluk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\putkey.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\quantize.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\region.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\ricecomp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\scalnull.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\simplerng.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\swapproc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\wcssub.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\wcsutil.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\zcompress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\zuncompress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\fitsio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\fitsio2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\longnam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Gus\Documents\VS Code Projects\NINA Canon\cfitsio-4.6.3\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{34A107D8-B0B7-3EC7-8509-12EC4F423602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{5049A4AD-E2AE-31FF-AA2E-176D23192EFF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

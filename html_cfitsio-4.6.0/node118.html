@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>12.2 Long String Keyword Values.</TITLE>
+<META NAME="description" CONTENT="12.2 Long String Keyword Values.">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node119.html">
+<LINK REL="previous" HREF="node117.html">
+<LINK REL="up" HREF="node116.html">
+<LINK REL="next" HREF="node119.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1785"
+  HREF="node119.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1781"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1775"
+  HREF="node117.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1783"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1786"
+  HREF="node119.html">12.3 Arrays of Fixed-Length</A>
+<B>Up:</B> <A NAME="tex2html1782"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1776"
+  HREF="node117.html">12.1 64-Bit Long Integers</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001320000000000000000">
+<SPAN CLASS="arabic">12</SPAN>.<SPAN CLASS="arabic">2</SPAN> Long String Keyword Values.</A>
+</H1>
+
+<P>
+The length of a standard FITS string keyword is limited to 68
+characters because it must fit entirely within a single FITS header
+keyword record.  In some instances it is necessary to encode strings
+longer than this limit, so CFITSIO supports a local convention in which
+the string value is continued over multiple keywords.  This
+continuation convention uses an ampersand character at the end of each
+substring to indicate that it is continued on the next keyword, and the
+continuation keywords all have the name CONTINUE without an equal sign
+in column 9. The string value may be continued in this way over as many
+additional CONTINUE keywords as is required.  The following lines
+illustrate this continuation convention which is used in the value of
+the STRKEY keyword:
+
+<P>
+<PRE>
+LONGSTRN= 'OGIP 1.0'    / The OGIP Long String Convention may be used.
+STRKEY  = 'This is a very long string keyword&amp;'  / Optional Comment
+CONTINUE  ' value that is continued over 3 keywords in the &amp;  '
+CONTINUE  'FITS header.' / This is another optional comment.
+</PRE>
+It is recommended that the LONGSTRN keyword, as shown here, always be
+included in any HDU that uses this longstring convention as a warning
+to any software that must read the keywords.  A routine called fits_write_key_longwarn
+has been provided in CFITSIO to write this keyword if it does not
+already exist.
+
+<P>
+This long string convention is supported by the following CFITSIO
+routines:
+
+<P>
+<PRE>
+    fits_write_key_longstr  - write a long string keyword value
+    fits_insert_key_longstr - insert a long string keyword value
+    fits_modify_key_longstr - modify a long string keyword value
+    fits_update_key_longstr - modify a long string keyword value
+    fits_read_key_longstr   - read  a long string keyword value
+    fits_delete_key         - delete a keyword
+</PRE>
+The fits_read_key_longstr routine is unique among all the CFITSIO
+routines in that it internally allocates memory for the long string
+value;  all the other CFITSIO routines that deal with arrays require
+that the calling program pre-allocate adequate space to hold the array
+of data.  Consequently, programs which use the fits_read_key_longstr
+routine must be careful to free the allocated memory for the string
+when it is no longer needed.
+
+<P>
+The following 2 routines also have limited support for this long string
+convention,
+
+<P>
+<PRE>
+      fits_modify_key_str - modify an existing string keyword value
+      fits_update_key_str - update a string keyword value
+</PRE>
+in that they will correctly overwrite an existing long string value,
+but the new string value is limited to a maximum of 68 characters in
+length.
+
+<P>
+The more commonly used CFITSIO routines to write string valued keywords
+(fits_update_key and fits_write_key) do not support this long
+string convention and only support strings up to 68 characters in
+length.  This has been done deliberately to prevent programs from
+inadvertently writing keywords using this non-standard convention
+without the explicit intent of the programmer or user.   The
+fits_write_key_longstr routine must be called instead to write long
+strings.  This routine can also be used to write ordinary string values
+less than 68 characters in length.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1785"
+  HREF="node119.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1781"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1775"
+  HREF="node117.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1783"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1786"
+  HREF="node119.html">12.3 Arrays of Fixed-Length</A>
+<B>Up:</B> <A NAME="tex2html1782"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1776"
+  HREF="node117.html">12.1 64-Bit Long Integers</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

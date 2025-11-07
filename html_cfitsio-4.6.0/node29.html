@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.10 Variable-Length Arrays in Binary Tables</TITLE>
+<META NAME="description" CONTENT="4.10 Variable-Length Arrays in Binary Tables">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node30.html">
+<LINK REL="previous" HREF="node28.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node30.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html630"
+  HREF="node30.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html626"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html620"
+  HREF="node28.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html628"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html631"
+  HREF="node30.html">4.11 Multiple Access to</A>
+<B>Up:</B> <A NAME="tex2html627"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html621"
+  HREF="node28.html">4.9 Error Status Values</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION005100000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">10</SPAN> Variable-Length Arrays in Binary Tables</A>
+</H1>
+
+<P>
+CFITSIO provides easy-to-use support for reading and writing data in
+variable length fields of a binary table. The variable length columns
+have TFORMn keyword values of the form `1Pt(len)' or `1Qt(len)' where `t'
+is the data type code (e.g., I, J, E, D, etc.) and `len' is an integer
+specifying the maximum length of the vector in the table.  The 'P' type
+variable length columns use 32-bit array length and byte offset values, whereas
+the 'Q' type columns use 64-bit values, which may be required when dealing
+with large arrays.  CFITSIO supports a local convention that interprets
+the 'P' type descriptors as unsigned 32-bit integers, which provides
+a factor of 2 greater range for the array length or heap address than
+is possible with 32-bit 'signed' integers.  Note, however, that other software
+packages may not support this convention, and may be unable to read thees
+extended range variable length records.
+
+<P>
+If the value
+of `len' is not specified when the table is created (e.g., if the TFORM
+keyword value is simply specified as '1PE' instead of '1PE(400) ), then
+CFITSIO will automatically scan the table when it is closed to
+determine the maximum length of the vector and will append this value
+to the TFORMn value.
+
+<P>
+The same routines that read and write data in an ordinary fixed length
+binary table extension are also used for variable length fields,
+however, the routine parameters take on a slightly different
+interpretation as described below.
+
+<P>
+All the data in a variable length field is written into an area called
+the `heap' which follows the main fixed-length FITS binary table. The
+size of the heap, in bytes, is specified by the PCOUNT keyword in the
+FITS header. When creating a new binary table, the initial value of
+PCOUNT should usually be set to zero. CFITSIO will recompute the size
+of the heap as the data is written and will automatically update the
+PCOUNT keyword value when the table is closed.  When writing variable
+length data to a table, CFITSIO will automatically extend the size
+of the heap area if necessary, so that any following HDUs do not
+get overwritten.
+
+<P>
+By default the heap data area starts immediately after the last row of
+the fixed-length table.  This default starting location may be
+overridden by the THEAP keyword, but this is not recommended.
+If additional rows of data are added to the table, CFITSIO will
+automatically shift the the heap down to make room for the new
+rows, but it is obviously be more efficient to initially
+create the table with the necessary number of blank rows, so that
+the heap does not needed to be constantly moved.
+
+<P>
+When writing row of data to a variable length field the entire array of values for
+a given row of the table must be written with a single call to
+fits_write_col.
+The total length of the array is given by nelements
++ firstelem - 1.  Additional elements cannot be appended to an existing
+vector at a later time since any attempt to do so will simply overwrite
+all the previously written data and the new data will be
+written to a new area of the heap.  The fits_compress_heap routine
+is provided to compress the heap and recover any unused space.
+To avoid having to deal with this issue, it is recommended
+that rows in a variable length field should only be written once.
+An exception to
+this general rule occurs when setting elements of an array as
+undefined.  It is allowed to first write a dummy value into the array with
+fits_write_col, and then call fits_write_col_nul to flag the
+desired elements as undefined. Note that the rows of a table,
+whether fixed or variable length, do not have to be written
+consecutively and may be written in any order.
+
+<P>
+When writing to a variable length ASCII character field (e.g., TFORM =
+'1PA') only a single character string can be written.  The `firstelem'
+and `nelements' parameter values in the fits_write_col routine are
+ignored and the number of characters to write is simply determined by
+the length of the input null-terminated character string.
+
+<P>
+The fits_write_descript routine is useful in situations where
+multiple rows of a variable length column have the identical array of
+values.  One can simply write the array once for the first row, and
+then use fits_write_descript to write the same descriptor values into
+the other rows;  all the rows will then point to the same storage
+location thus saving disk space.
+
+<P>
+When reading from a variable length array field one can only read as
+many elements as actually exist in that row of the table; reading does
+not automatically continue with the next row of the table as occurs
+when reading an ordinary fixed length table field.  Attempts to read
+more than this will cause an error status to be returned.  One can
+determine the number of elements in each row of a variable column with
+the fits_read_descript routine.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html630"
+  HREF="node30.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html626"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html620"
+  HREF="node28.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html628"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html631"
+  HREF="node30.html">4.11 Multiple Access to</A>
+<B>Up:</B> <A NAME="tex2html627"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html621"
+  HREF="node28.html">4.9 Error Status Values</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>11.3 Template Parser Directives</TITLE>
+<META NAME="description" CONTENT="11.3 Template Parser Directives">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node113.html">
+<LINK REL="previous" HREF="node111.html">
+<LINK REL="up" HREF="node109.html">
+<LINK REL="next" HREF="node113.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1709"
+  HREF="node113.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1705"
+  HREF="node109.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1699"
+  HREF="node111.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1707"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1710"
+  HREF="node113.html">11.4 Formal Template Syntax</A>
+<B>Up:</B> <A NAME="tex2html1706"
+  HREF="node109.html">11. Template Files</A>
+<B> Previous:</B> <A NAME="tex2html1700"
+  HREF="node111.html">11.2 Auto-indexing of Keywords</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001230000000000000000">
+<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">3</SPAN> Template Parser Directives</A>
+</H1>
+
+<P>
+In addition to the template lines which define individual keywords, the
+template parser recognizes 3 special directives which are each preceded
+by the backslash character:  <code> \include, \group</code>, and <code> \end</code>.
+
+<P>
+The 'include' directive must be followed by a filename. It forces the
+parser to temporarily stop reading the current template file and begin
+reading the include file. Once the parser reaches the end of the
+include file it continues parsing the current template file.  Include
+files can be nested, and HDU definitions can span multiple template
+files.
+
+<P>
+The start of a GROUP definition is denoted with the 'group' directive,
+and the end of a GROUP definition is denoted with the 'end' directive.
+Each GROUP contains 0 or more member blocks (HDUs or GROUPs). Member
+blocks of type GROUP can contain their own member blocks. The GROUP
+definition itself occupies one FITS file HDU of special type (GROUP
+HDU), so if a template specifies 1 group with 1 member HDU like:
+
+<P>
+<PRE>
+\group
+grpdescr = 'demo'
+xtension bintable
+# this bintable has 0 cols, 0 rows
+\end
+</PRE>
+then the parser creates a FITS file with 3 HDUs :
+
+<P>
+<PRE>
+1) dummy PHDU
+2) GROUP HDU (has 1 member, which is bintable in HDU number 3)
+3) bintable (member of GROUP in HDU number 2)
+</PRE>
+Technically speaking, the GROUP HDU is a BINTABLE with 6 columns. Applications
+can define additional columns in a GROUP HDU using TFORMn and TTYPEn
+(where n is 7, 8, ....) keywords or their auto-indexing equivalents.
+
+<P>
+For a more complicated example of a template file using the group directives,
+look at the sample.tpl file that is included in the CFITSIO distribution.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1709"
+  HREF="node113.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1705"
+  HREF="node109.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1699"
+  HREF="node111.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1707"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1710"
+  HREF="node113.html">11.4 Formal Template Syntax</A>
+<B>Up:</B> <A NAME="tex2html1706"
+  HREF="node109.html">11. Template Files</A>
+<B> Previous:</B> <A NAME="tex2html1700"
+  HREF="node111.html">11.2 Auto-indexing of Keywords</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.12 Binning or Histogramming Specification</TITLE>
+<META NAME="description" CONTENT="10.12 Binning or Histogramming Specification">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node100.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node109.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1655"
+  HREF="node109.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1651"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1647"
+  HREF="node107.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1653"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1656"
+  HREF="node109.html">11. Template Files</A>
+<B>Up:</B> <A NAME="tex2html1652"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1648"
+  HREF="node107.html">10.11.7 Example Row Filters</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION0011120000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">12</SPAN>  Binning or Histogramming Specification</A>
+</H1>
+
+<P>
+The optional binning specifier is enclosed in square brackets and can
+be distinguished from a general row filter specification by the fact
+that it begins with the keyword 'bin'  not immediately followed by an
+equals sign.  When binning is specified, a temporary N-dimensional FITS
+primary array is created by computing the histogram of the values in
+the specified columns of a FITS table extension.  After the histogram
+is computed the input FITS file containing the table is then closed and
+the temporary FITS primary array is opened and passed to the
+application program.  Thus, the application program never sees the
+original FITS table and only sees the image in the new temporary file
+(which has no additional extensions).  Obviously, the application
+program must be expecting to open a FITS image and not a FITS table in
+this case.
+
+<P>
+The data type of the FITS histogram image may be specified by appending
+'b' (for 8-bit byte), 'i' (for 16-bit integers), 'j' (for 32-bit
+integer), 'r' (for 32-bit floating points), or 'd' (for 64-bit double
+precision floating point)  to the 'bin' keyword (e.g. '[binr X]'
+creates a real floating point image).  If the data type is not
+explicitly specified then a 32-bit integer image will be created by
+default, unless the weighting option is also specified in which case
+the image will have a 32-bit floating point data type by default.
+
+<P>
+The histogram image may have from 1 to 4 dimensions (axes), depending
+on the number of columns that are specified.  The general form of the
+binning specification is:
+
+<P>
+<PRE>
+ [bin{bijrd}  Xcol=min:max:binsize, Ycol= ..., Zcol=..., Tcol=...; weight]
+</PRE>
+in which up to 4 columns, each corresponding to an axis of the image,
+are listed. The column names are case insensitive, and the column
+number may be given instead of the name, preceded by a pound sign
+(e.g., [bin #4=1:512]).  If the column name is not specified, then
+CFITSIO will first try to use the 'preferred column' as specified by
+the CPREF keyword if it exists (e.g., 'CPREF = 'DETX,DETY'), otherwise
+column names 'X', 'Y', 'Z', and 'T' will be assumed for each of the 4
+axes, respectively.  In cases where the column name could be confused
+with an arithmetic expression, enclose the column name in parentheses to
+force the name to be interpreted literally.
+
+<P>
+In addition to binning by a FITS column, any arbitrary calculator
+expression may be specified as well.  Usage of this form would appear
+as:
+
+<P>
+<PRE>
+ [bin  Xcol(arbitrary expression)=min:max:binsize, ... ]
+</PRE>
+
+<P>
+The column name must still be specified, and is used to label
+coordinate axes of the resulting image.  The expression appears
+immediately after the name, enclosed in parentheses.  The expression
+may use any combination of columns, keywords, functions and constants
+and allowed by the CFITSIO calculator.
+
+<P>
+The column name (and optional expression) may be followed by an equals
+sign and then the lower and upper range of the histogram, and the size
+of the histogram bins, separated by colons.  Spaces are allowed before
+and after the equals sign but not within the 'min:max:binsize' string.
+The min, max and binsize values may be integer or floating point
+numbers, or they may be the names of keywords in the header of the
+table.  If the latter, then the value of that keyword is substituted
+into the expression.
+
+<P>
+Default values for the min, max and binsize quantities will be
+used if not explicitly given in the binning expression as shown
+in these examples:
+
+<P>
+<PRE>
+    [bin x = :512:2]  - use default minimum value
+    [bin x = 1::2]    - use default maximum value
+    [bin x = 1:512]   - use default bin size
+    [bin x = 1:]      - use default maximum value and bin size
+    [bin x = :512]    - use default minimum value and bin size
+    [bin x = 2]       - use default minimum and maximum values
+    [bin x]           - use default minimum, maximum and bin size
+    [bin 4]           - default 2-D image, bin size = 4 in both axes
+    [bin]             - default 2-D image
+</PRE>
+CFITSIO  will use the value of the TLMINn, TLMAXn, and TDBINn keywords,
+if they exist, for the default min, max, and binsize, respectively.  If
+they do not exist then CFITSIO will use the actual minimum and maximum
+values in the column for the histogram min and max values.  The default
+binsize will be set to 1, or (max - min) / 10., whichever is smaller,
+so that the histogram will have at least 10 bins along each axis.
+
+<P>
+Please note that if explicit min and max values (or TLMINn/TLMAXn keywords)
+are not present, then CFITSIO must check every value of the binned quantity
+in advance to determine the binning limits.  This is especially relevant 
+for binning expressions, which must be evaluated multiple times to determine
+the limits of the expression.  Thus, it is always advisable to specify 
+min and max limits where possible.
+
+<P>
+A shortcut notation is allowed if all the columns/axes have the same
+binning specification.  In this case all the column names may be listed
+within parentheses, followed by the (single) binning specification, as
+in:
+
+<P>
+<PRE>
+    [bin (X,Y)=1:512:2]
+    [bin (X,Y) = 5]
+</PRE>
+
+<P>
+The optional weighting factor is the last item in the binning
+specifier and, if present, is separated from the list of columns by a
+semi-colon.  As the histogram is accumulated, this weight is used to
+incremented the value of the appropriated bin in the histogram.  If
+the weighting factor is not specified, then the default weight = 1 is
+assumed.  The weighting factor may be a constant integer or floating
+point number, or the name of a keyword containing the weighting value.
+The weighting factor may also be the name of a table column in which
+case the value in that column, on a row by row basis, will be used.
+It may also be an expression, enclosed in parenthesis, in which case
+the weighting value will be evaluated for each binned row and applied
+accordingly.
+
+<P>
+In some cases, the column or keyword may give the reciprocal of the
+actual weight value that is needed.  In this case, precede the weight
+keyword or column name by a slash '/' to tell CFITSIO to use the
+reciprocal of the value when constructing the histogram.  An expression,
+enclosed in parentheses, may also appear after the slash, to
+indicate the reciprocal value of the expression.
+
+<P>
+For complex or commonly used histograms, one can also place its
+description into a text file and import it into the binning
+specification using the syntax [bin @filename.txt].  The file's
+contents can extend over multiple lines, although it must still
+conform to the no-spaces rule for the min:max:binsize syntax and each
+axis specification must still be comma-separated.  Any lines in the
+external text file that begin with 2 slash characters ('//') will be
+ignored and may be used to add comments into the file.
+
+<P>
+Examples:
+
+<P>
+<PRE>
+    [bini detx, dety]                - 2-D, 16-bit integer histogram
+                                       of DETX and DETY columns, using
+                                       default values for the histogram
+                                       range and binsize
+
+    [bin (detx, dety)=16; /exposure] - 2-D, 32-bit real histogram of DETX
+                                       and DETY columns with a bin size = 16
+                                       in both axes. The histogram values
+                                       are divided by the EXPOSURE keyword
+                                       value.
+
+    [bin time=TSTART:TSTOP:0.1]      - 1-D lightcurve, range determined by
+                                       the TSTART and TSTOP keywords,
+                                       with 0.1 unit size bins.
+
+    [bin pha, time=8000.:8100.:0.1]  - 2-D image using default binning
+                                       of the PHA column for the X axis,
+                                       and 1000 bins in the range
+                                       8000. to 8100. for the Y axis.
+
+    [bin pha, gti_num(gtifind())=1:2:1] - a 2-D image, where PHA is the
+                                       X axis and the Y axis is an expression
+                                       which evaluates to the GTI number, 
+                                       as determined using the
+                                       GTIFIND() function.
+
+    [bin time=0:4000:2000, HR( (LC2/LC1).lt.1.5 ? 1 : 2 )=1:2:1] - a 2-D
+                                       histogram which determines the number
+                                       of samples in two time bins between 0 and
+                                       4000 and separating hardness ratio, 
+                                       evaluated as (LC2/LC1), between less than
+                                       1.5 or greater than 1.5.  The ?: 
+                                       conditional function is used to decide
+                                       less (or greater) than 1.5 and assign
+                                       HR bin 1 or 2.
+
+    [bin @binFilter.txt]             - Use the contents of the text file
+                                       binFilter.txt for the binning
+                                       specifications.
+</PRE>
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1655"
+  HREF="node109.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1651"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1647"
+  HREF="node107.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1653"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1656"
+  HREF="node109.html">11. Template Files</A>
+<B>Up:</B> <A NAME="tex2html1652"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1648"
+  HREF="node107.html">10.11.7 Example Row Filters</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

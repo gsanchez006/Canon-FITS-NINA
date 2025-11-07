@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\x64\Release\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\cfitsio.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\TestProg.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\cookbook.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\fitscopy.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\fitsverify.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\fpack.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\funpack.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\imcopy.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\Release\speed.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Gus\Documents\VS Code Projects\NINA Canon\build-native\x64\Release\ALL_BUILD</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

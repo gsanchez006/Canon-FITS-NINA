@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>6. The CFITSIO Iterator Function </TITLE>
+<META NAME="description" CONTENT="6. The CFITSIO Iterator Function ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node58.html">
+<LINK REL="previous" HREF="node33.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node54.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html938"
+  HREF="node54.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html934"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html928"
+  HREF="node52.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html936"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html939"
+  HREF="node54.html">6.1 The Iterator Work</A>
+<B>Up:</B> <A NAME="tex2html935"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html929"
+  HREF="node52.html">5.8.3 General Utility Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00700000000000000000">
+<SPAN CLASS="arabic">6</SPAN>.   The CFITSIO Iterator Function </A>
+</H1>
+
+<P>
+The fits_iterate_data function in CFITSIO provides a unique method of
+executing an arbitrary user-supplied `work' function that operates on
+rows of data in  FITS tables or on pixels in FITS images.  Rather than
+explicitly reading and writing the FITS images or columns of data, one
+instead calls the CFITSIO iterator routine, passing to it the name of
+the user's work function that is to be executed along with a list of
+all the table columns or image arrays that are to be passed to the work
+function.  The CFITSIO iterator function then does all the work of
+allocating memory for the arrays, reading the input data from the FITS
+file, passing them to the work function, and then writing any output
+data back to the FITS file after the work function exits.  Because
+it is often more efficient to process only a subset of the total table
+rows at one time, the iterator function can determine the optimum
+amount of data to pass in each iteration and repeatedly call the work
+function until the entire table been processed.
+
+<P>
+For many applications this single CFITSIO iterator function can
+effectively replace all the other CFITSIO routines for reading or
+writing data in FITS images or tables.  Using the iterator has several
+important advantages over the traditional method of reading and writing
+FITS data files:
+
+<P>
+
+<UL>
+<LI>It cleanly separates the data I/O from the routine that operates on
+the data.  This leads to a more modular and `object oriented'
+programming style.
+
+<P>
+</LI>
+<LI>It simplifies the application program by eliminating the need to allocate
+memory for the data arrays and eliminates most of the calls to the CFITSIO
+routines that explicitly read and write the data.
+
+<P>
+</LI>
+<LI>It ensures that the data are processed as efficiently as possible.
+This is especially important when processing tabular data since
+the iterator function will calculate the most efficient number
+of rows in the table to be passed at one time to the user's work
+function on each iteration.
+
+<P>
+</LI>
+<LI>Makes it possible for larger projects to develop a library of work
+functions that all have a uniform calling sequence and are all
+independent of the details of the FITS file format.
+
+<P>
+</LI>
+</UL>
+
+<P>
+There are basically 2 steps in using the CFITSIO iterator function.
+The first step is to design the work function itself which must have a
+prescribed set of input parameters.  One of these parameters is a
+structure containing pointers to the arrays of data; the work function
+can perform any desired operations on these arrays and does not need to
+worry about how the input data were read from the file or how the
+output data get written back to the file.
+
+<P>
+The second step is to design the driver routine that opens all the
+necessary FITS files and initializes  the input parameters to the
+iterator function.  The driver program calls the CFITSIO iterator
+function which then reads the data and passes it to the user's work
+function.
+
+<P>
+The following 2 sections describe these steps in more detail.  There
+are also several example programs included with the CFITSIO
+distribution which illustrate how to use the iterator function.
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html940"
+  HREF="node54.html"><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">1</SPAN> The Iterator Work Function</A>
+<LI><A NAME="tex2html941"
+  HREF="node55.html"><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">2</SPAN> The Iterator Driver Function</A>
+<LI><A NAME="tex2html942"
+  HREF="node56.html"><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">3</SPAN> Guidelines for Using the Iterator Function</A>
+<LI><A NAME="tex2html943"
+  HREF="node57.html"><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">4</SPAN> Complete List of Iterator Routines</A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html938"
+  HREF="node54.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html934"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html928"
+  HREF="node52.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html936"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html939"
+  HREF="node54.html">6.1 The Iterator Work</A>
+<B>Up:</B> <A NAME="tex2html935"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html929"
+  HREF="node52.html">5.8.3 General Utility Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

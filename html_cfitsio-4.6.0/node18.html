@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>3. A FITS Primer </TITLE>
+<META NAME="description" CONTENT="3. A FITS Primer ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node19.html">
+<LINK REL="previous" HREF="node7.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node19.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html485"
+  HREF="node19.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html481"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html475"
+  HREF="node17.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html483"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html486"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B>Up:</B> <A NAME="tex2html482"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html476"
+  HREF="node17.html">2.6 Example Program</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00400000000000000000">
+<SPAN CLASS="arabic">3</SPAN>.   A FITS Primer </A>
+</H1>
+
+<P>
+This section gives a brief overview of the structure of FITS files.
+Users should refer to the documentation available from the FITS Support OFfice,
+as described in the introduction, for more detailed information on FITS
+formats.
+
+<P>
+FITS was first developed in the late 1970's as a standard data
+interchange format between various astronomical observatories.  Since
+then FITS has become the standard data format supported by most
+astronomical data analysis software packages.
+
+<P>
+A FITS file consists of one or more Header + Data Units (HDUs), where
+the first HDU is called the `Primary HDU', or `Primary Array'.  The
+primary array contains an N-dimensional array of pixels, such as a 1-D
+spectrum, a 2-D image, or a 3-D data cube.  Six different primary
+data types are supported: Unsigned 8-bit bytes, 16-bit, 32-bit, and 64-bit signed
+integers, and 32 and 64-bit floating point reals.  FITS also has a
+convention for storing 16, 32-bit, and 64-bit unsigned integers (see the later
+section entitled `Unsigned Integers' for more details). The primary HDU
+may also consist of only a header with a null array containing no
+data pixels.
+
+<P>
+Any number of additional HDUs may follow the primary array; these
+additional HDUs are called FITS `extensions'.  There are currently 3
+types of extensions defined by the FITS standard:
+
+<P>
+
+<UL>
+<LI>Image Extension - a N-dimensional array of pixels, like in a primary array
+</LI>
+<LI>ASCII Table Extension - rows and columns of data in ASCII character format
+</LI>
+<LI>Binary Table Extension - rows and columns of data in binary representation
+</LI>
+</UL>
+
+<P>
+In each case the HDU consists of an ASCII Header Unit followed by an optional
+Data Unit.  For historical reasons, each Header or Data unit must be an
+exact multiple of 2880 8-bit bytes long.  Any unused space is padded
+with fill characters (ASCII blanks or zeros).
+
+<P>
+Each Header Unit consists of any number of 80-character keyword records
+or `card images' which have the
+general form:
+
+<P>
+<PRE>
+  KEYNAME = value / comment string
+  NULLKEY =       / comment: This keyword has no value
+</PRE>
+The keyword names may be up to 8 characters long and can only contain
+uppercase letters, the digits 0-9, the hyphen, and the underscore
+character. The keyword name is (usually) followed by an equals sign and
+a space character (= ) in columns 9 - 10 of the record, followed by the
+value of the keyword which may be either an integer, a floating point
+number, a character string (enclosed in single quotes), or a boolean
+value (the letter T or F).   A keyword may also have a null or undefined
+value if there is no specified value string, as in the second example, above
+
+<P>
+The last keyword in the header is always the `END' keyword which has no
+value or comment fields. There are many rules governing the exact
+format of a keyword record (see the FITS Standard) so it is better
+to rely on standard interface software like CFITSIO to correctly
+construct or to parse the keyword records rather than try to deal
+directly with the raw FITS formats.
+
+<P>
+Each Header Unit begins with a series of required keywords which depend
+on the type of HDU.  These required keywords specify the size and
+format of the following Data Unit.  The header may contain other
+optional keywords to describe other aspects of the data, such as the
+units or scaling values.  Other COMMENT or HISTORY keywords are also
+frequently added to further document the data file.
+
+<P>
+The optional Data Unit immediately follows the last 2880-byte block in
+the Header Unit.  Some HDUs do not have a Data Unit and only consist of
+the Header Unit.
+
+<P>
+If there is more than one HDU in the FITS file, then the Header Unit of
+the next HDU immediately follows the last 2880-byte block of the
+previous Data Unit (or Header Unit if there is no Data Unit).
+
+<P>
+The main required keywords in FITS primary arrays or image extensions are:
+
+<UL>
+<LI>BITPIX - defines the data type of the array: 8, 16, 32, 64, -32, -64 for
+unsigned 8-bit byte, 16-bit signed integer, 32-bit signed integer,
+32-bit IEEE floating point, and 64-bit IEEE double precision floating
+point, respectively.
+</LI>
+<LI>NAXIS -  the number of dimensions in the array, usually 0, 1, 2, 3, or 4.
+</LI>
+<LI>NAXISn - (n ranges from 1 to NAXIS) defines the size of each dimension.
+</LI>
+</UL>
+
+<P>
+FITS tables start with the keyword XTENSION = `TABLE' (for ASCII
+tables) or XTENSION = `BINTABLE' (for binary tables) and have the
+following main keywords:
+
+<UL>
+<LI>TFIELDS - number of fields or columns in the table
+</LI>
+<LI>NAXIS2 - number of rows in the table
+</LI>
+<LI>TTYPEn - for each column (n ranges from 1 to TFIELDS) gives the
+name of the column
+</LI>
+<LI>TFORMn - the data type of the column
+</LI>
+<LI>TUNITn - the physical units of the column (optional)
+</LI>
+</UL>
+
+<P>
+Users should refer to the FITS Support Office at <TT>http://fits.gsfc.nasa.gov</TT>
+for further information about the FITS format and related software
+packages.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html485"
+  HREF="node19.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html481"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html475"
+  HREF="node17.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html483"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html486"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B>Up:</B> <A NAME="tex2html482"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html476"
+  HREF="node17.html">2.6 Example Program</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

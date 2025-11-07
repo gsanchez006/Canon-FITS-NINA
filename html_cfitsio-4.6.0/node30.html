@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.11 Multiple Access to the Same FITS File</TITLE>
+<META NAME="description" CONTENT="4.11 Multiple Access to the Same FITS File">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node31.html">
+<LINK REL="previous" HREF="node29.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node31.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html642"
+  HREF="node31.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html638"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html632"
+  HREF="node29.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html640"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html643"
+  HREF="node31.html">4.12 When the Final</A>
+<B>Up:</B> <A NAME="tex2html639"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html633"
+  HREF="node29.html">4.10 Variable-Length Arrays in</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION005110000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">11</SPAN> Multiple Access to the Same FITS File</A>
+</H1>
+
+<P>
+CFITSIO supports simultaneous read and write access to different
+HDUs in the same FITS file in some circumstances, as described
+below:
+
+<P>
+
+<UL>
+<LI>Multi-threaded programs
+
+<P>
+When CFITSIO is compiled with the -D_REENTRANT directive (as can be
+tested with the fits_is_reentrant function) different threads can
+call any of the CFITSIO routines  to simultaneously read or write
+separate  FITS files.  Multiple threads can also read data from the
+same FITS file simultaneously, as long as the file was opened
+independently by each thread.  This relies on the operating system
+to correctly deal with reading the same file by multiple processes.
+Different threads should not share the same 'fitsfile' pointer to
+read an opened FITS file, unless locks are placed around the calls
+to  the CFITSIO reading routines.  Different threads should  never
+try to write to the same FITS file.
+
+<P>
+</LI>
+<LI>Multiple read access to the same FITS file within a single
+program/thread
+
+<P>
+A single process may open the same FITS file with READONLY access
+multiple times, and thus create multiple 'fitsfile*' pointers to
+that same file within CFITSIO. This relies on the operating system's
+ability to open a single file multiple times and correctly manage
+the subsequent read requests directed to the different C 'file*'
+pointers, which actually all point to the same file.  CFITSIO simply
+executes the read requests to the differnet 'fitsfile*' pointers the
+same as if they were physically different files.
+
+<P>
+</LI>
+<LI>Multiple write access to the same FITS file within a single
+program/thread
+
+<P>
+CFITSIO supports opening the same FITS file multiple times with
+WRITE access, but it only physically opens the file (at the
+operating system level) once, on the first call to fits_open_file.
+If fits_open_file is subsequently called to open the same file
+again, CFITSIO will recognize that the file is already open, and
+will return a new 'fitsfile*' pointer that logically points to the
+first 'fitsfile*' pointer, without actually opening the file a
+second time. The application program can then treat the 2
+'fitsfile*' pointers as if they point to different files, and can
+seemingly move to and write data to 2 different  HDUs within the
+same file.  However, each time the application program switches
+which 'fitsfile*' pointer it is writing to, CFITSIO will flush  any
+internal buffers that contain data written to the first 'fitsfile*'
+pointer,  then move to the HDU that the other 'fitsfile*' pointer
+is writing to. Obviously, this may add a significant amount of
+computational overhead if the  application program uses this feature
+to frequently switch back and forth between writing to 2 (or more)
+HDUs in the same file, so this capability should be used
+judiciously.
+
+<P>
+Note that CFITSIO will not allow a FITS file to be opened a second
+time with READWRITE access if it was opened previously with READONLY
+access.
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html642"
+  HREF="node31.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html638"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html632"
+  HREF="node29.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html640"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html643"
+  HREF="node31.html">4.12 When the Final</A>
+<B>Up:</B> <A NAME="tex2html639"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html633"
+  HREF="node29.html">4.10 Variable-Length Arrays in</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

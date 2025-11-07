@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.2 Current Header Data Unit (CHDU)</TITLE>
+<META NAME="description" CONTENT="4.2 Current Header Data Unit (CHDU)">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node22.html">
+<LINK REL="previous" HREF="node20.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node22.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html534"
+  HREF="node22.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html530"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html524"
+  HREF="node20.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html532"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html535"
+  HREF="node22.html">4.3 Function Names and</A>
+<B>Up:</B> <A NAME="tex2html531"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html525"
+  HREF="node20.html">4.1 CFITSIO Definitions</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00520000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">2</SPAN> Current Header Data Unit (CHDU)</A>
+</H1>
+
+<P>
+The concept of the Current Header and Data Unit, or CHDU, is
+fundamental to the use of the CFITSIO library.  A simple FITS image may
+only contain a single Header and Data unit (HDU), but in general FITS
+files can contain multiple Header Data Units (also known as
+`extensions'), concatenated one after the other in the file.  The user
+can specify which HDU should be initially opened at run time by giving
+the HDU name or number after the root file name.  For example,
+'myfile.fits[4]' opens the 5th HDU in the file (note that the numbering
+starts with 0), and 'myfile.fits[EVENTS] opens the HDU with the name
+'EVENTS' (as defined by the EXTNAME or HDUNAME keywords).  If no HDU is
+specified then CFITSIO opens the first HDU (the primary array) by
+default.  The CFITSIO routines which read and write data  only operate
+within the opened HDU,  Other CFITSIO routines are provided to move to
+and open any other existing HDU within the FITS file or to append or
+insert new HDUs in the FITS file.
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.2 Filetype</TITLE>
+<META NAME="description" CONTENT="10.2 Filetype">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node92.html">
+<LINK REL="previous" HREF="node84.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node86.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1372"
+  HREF="node86.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1368"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1362"
+  HREF="node84.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1370"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1373"
+  HREF="node86.html">10.2.1 Notes about HTTP</A>
+<B>Up:</B> <A NAME="tex2html1369"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1363"
+  HREF="node84.html">10.1 Overview</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001120000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN> Filetype</A>
+</H1>
+
+<P>
+The type of file determines the medium on which the file is located
+(e.g., disk or network) and, hence, which internal device driver is used by
+CFITSIO to read and/or write the file.  Currently supported types are
+
+<P>
+<PRE>
+        file://  - file on local magnetic disk (default)
+         ftp://  - a readonly file accessed with the anonymous FTP protocol.
+                   It also supports  ftp://username:password@hostname/...
+                   for accessing password-protected ftp sites.
+        http://  - a readonly file accessed with the HTTP protocol.  It
+                   supports username:password just like the ftp driver.
+                   Proxy HTTP servers are supported using the http_proxy
+                   environment variable (see following note).
+       https://  - a readonly file accessed with the HTTPS protocol.  This
+                   is available only if CFITSIO was built with the libcurl
+                   library (see the following note).
+       ftps://  -  a readonly file accessed with the FTPS protocol.  This
+                   is available only if CFITSIO was built with the libcurl
+                   library.
+      stream://  - special driver to read an input FITS file from the stdin
+                   stream, and/or write an output FITS file to the stdout
+		   stream.  This driver is fragile and has limited
+		   functionality (see the following note).
+      gsiftp://  - access files on a computational grid using the gridftp
+                   protocol in the Globus toolkit (see following note).
+        root://  - uses the CERN root protocol for writing as well as
+                   reading files over the network (see following note).
+       shmem://  - opens or creates a file which persists in the computer's
+                   shared memory (see following note).
+         mem://  - opens a temporary file in core memory.  The file
+                   disappears when the program exits so this is mainly
+                   useful for test purposes when a permanent output file
+                   is not desired.
+</PRE>
+If the filetype is not specified, then type file:// is assumed.
+The double slashes '//' are optional and may be omitted in most cases.
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1374"
+  HREF="node86.html"><SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN> Notes about HTTP proxy servers</A>
+<LI><A NAME="tex2html1375"
+  HREF="node87.html"><SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">2</SPAN> Notes about HTTPS and FTPS file access</A>
+<LI><A NAME="tex2html1376"
+  HREF="node88.html"><SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">3</SPAN> Notes about the stream filetype driver</A>
+<LI><A NAME="tex2html1377"
+  HREF="node89.html"><SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">4</SPAN> Notes about the gsiftp filetype</A>
+<LI><A NAME="tex2html1378"
+  HREF="node90.html"><SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">5</SPAN> Notes about the root filetype</A>
+<LI><A NAME="tex2html1379"
+  HREF="node91.html"><SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">6</SPAN> Notes about the shmem filetype:</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

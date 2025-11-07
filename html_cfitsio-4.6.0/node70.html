@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.3.2 Read and Write the Required Keywords</TITLE>
+<META NAME="description" CONTENT="9.3.2 Read and Write the Required Keywords">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node71.html">
+<LINK REL="previous" HREF="node69.html">
+<LINK REL="up" HREF="node68.html">
+<LINK REL="next" HREF="node71.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1169"
+  HREF="node71.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1165"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1159"
+  HREF="node69.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1167"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1170"
+  HREF="node71.html">9.3.3 Write Keyword Routines</A>
+<B>Up:</B> <A NAME="tex2html1166"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1160"
+  HREF="node69.html">9.3.1 Header Information Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001032000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">2</SPAN> Read and Write the Required Keywords</A>
+</H2>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Write the required extension header keywords into the CHU.
+  These routines are not required, and instead the appropriate
+  header may be constructed by writing each individual keyword in the
+  proper sequence.
+
+<P>
+The simpler fits_write_imghdr routine is equivalent to calling
+  fits_write_grphdr with the default values of simple = TRUE, pcount
+  = 0, gcount = 1, and extend = TRUE.  The PCOUNT, GCOUNT and EXTEND
+  keywords are not required in the primary header and are only written
+  if pcount is not equal to zero, gcount is not equal to zero or one,
+  and if extend is TRUE, respectively.  When writing to an IMAGE
+  extension, the SIMPLE and EXTEND parameters are ignored.  It is
+  recommended that fits_create_image or fits_create_tbl be used
+  instead of these routines to write the
+  required header keywords. The general fits_write_exthdr routine
+  may be used to write the header of any conforming FITS
+ extension.  <A NAME="ffphpr"></A> <A NAME="ffphps"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_imghdr / ffphps
+      (fitsfile *fptr, int bitpix, int naxis, long *naxes, &gt; int *status)
+
+  int fits_write_imghdrll / ffphpsll
+      (fitsfile *fptr, int bitpix, int naxis, LONGLONG *naxes, &gt; int *status)
+
+  int fits_write_grphdr / ffphpr
+      (fitsfile *fptr, int simple, int bitpix, int naxis, long *naxes,
+       LONGLONG pcount, LONGLONG gcount, int extend, &gt; int *status)
+
+  int fits_write_grphdrll / ffphprll
+      (fitsfile *fptr, int simple, int bitpix, int naxis, LONGLONG *naxes,
+       LONGLONG pcount, LONGLONG gcount, int extend, &gt; int *status)
+
+  int fits_write_exthdr /ffphext
+      (fitsfile *fptr, char *xtension, int bitpix, int naxis, long *naxes,
+       LONGLONG pcount, LONGLONG gcount, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Write the ASCII table header keywords into the CHU.  The optional
+    TUNITn and EXTNAME keywords are written only if the input pointers
+    are not null.  A null pointer may given for the
+    *tbcol parameter in which case a single space will be inserted
+    between each column of the table.  Similarly, if rowlen is
+    given = 0, then CFITSIO will calculate the default rowlength based on
+   the tbcol and ttype values. <A NAME="ffphtb"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_atblhdr / ffphtb
+      (fitsfile *fptr, LONGLONG rowlen, LONGLONG nrows, int tfields, char **ttype,
+       long *tbcol, char **tform, char **tunit, char *extname, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Write the binary table header keywords into the CHU.   The optional
+   TUNITn and EXTNAME keywords are written only if the input pointers
+   are not null.  The pcount parameter, which specifies the
+   size of the variable length array heap, should initially = 0;
+   CFITSIO will automatically update the PCOUNT keyword value if any
+   variable length array data is written to the heap.  The TFORM keyword
+   value for variable length vector columns should have the form 'Pt(len)'
+   or '1Pt(len)' where `t' is the data type code letter (A,I,J,E,D, etc.)
+   and  `len' is an integer specifying the maximum length of the vectors
+   in that column (len must be greater than or equal to the longest
+   vector in the column).  If `len' is not specified when the table is
+   created (e.g., the input TFORMn value is just '1Pt') then CFITSIO will
+   scan the column when the table is first closed and will append the
+   maximum length to the TFORM keyword value.  Note that if the table
+   is subsequently modified to increase the maximum length of the vectors
+   then the modifying program is responsible for also updating the TFORM
+  keyword value.  <A NAME="ffphbn"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_btblhdr / ffphbn
+      (fitsfile *fptr, LONGLONG nrows, int tfields, char **ttype,
+       char **tform, char **tunit, char *extname, LONGLONG pcount, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Read the required keywords from the CHDU (image or table).  When
+    reading from an IMAGE extension the SIMPLE and EXTEND parameters are
+    ignored.  A null pointer may be supplied for any of the returned
+   parameters that are not needed. <A NAME="ffghpr"></A> <A NAME="ffghtb"></A> <A NAME="ffghbn"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_read_imghdr / ffghpr
+      (fitsfile *fptr, int maxdim, &gt; int *simple, int *bitpix, int *naxis,
+       long *naxes, long *pcount, long *gcount, int *extend, int *status)
+
+  int fits_read_imghdrll / ffghprll
+      (fitsfile *fptr, int maxdim, &gt; int *simple, int *bitpix, int *naxis,
+       LONGLONG *naxes, long *pcount, long *gcount, int *extend, int *status)
+
+  int fits_read_atblhdr / ffghtb
+      (fitsfile *fptr,int maxdim, &gt; long *rowlen, long *nrows,
+       int *tfields, char **ttype, LONGLONG *tbcol, char **tform, char **tunit,
+       char *extname,  int *status)
+
+  int fits_read_atblhdrll / ffghtbll
+      (fitsfile *fptr,int maxdim, &gt; LONGLONG *rowlen, LONGLONG *nrows,
+       int *tfields, char **ttype, long *tbcol, char **tform, char **tunit,
+       char *extname,  int *status)
+
+  int fits_read_btblhdr / ffghbn
+      (fitsfile *fptr, int maxdim, &gt; long *nrows, int *tfields,
+       char **ttype, char **tform, char **tunit, char *extname,
+       long *pcount, int *status)
+
+  int fits_read_btblhdrll / ffghbnll
+      (fitsfile *fptr, int maxdim, &gt; LONGLONG *nrows, int *tfields,
+       char **ttype, char **tform, char **tunit, char *extname,
+       long *pcount, int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1169"
+  HREF="node71.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1165"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1159"
+  HREF="node69.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1167"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1170"
+  HREF="node71.html">9.3.3 Write Keyword Routines</A>
+<B>Up:</B> <A NAME="tex2html1166"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1160"
+  HREF="node69.html">9.3.1 Header Information Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

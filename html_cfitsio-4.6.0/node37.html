@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.4 Header Keyword Read/Write Routines</TITLE>
+<META NAME="description" CONTENT="5.4 Header Keyword Read/Write Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node40.html">
+<LINK REL="previous" HREF="node36.html">
+<LINK REL="up" HREF="node33.html">
+<LINK REL="next" HREF="node38.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html743"
+  HREF="node38.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html739"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html733"
+  HREF="node36.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html741"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html744"
+  HREF="node38.html">5.4.1 Keyword Reading Routines</A>
+<B>Up:</B> <A NAME="tex2html740"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html734"
+  HREF="node36.html">5.3 HDU Access Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00640000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">4</SPAN> Header Keyword Read/Write Routines</A>
+</H1>
+
+<P>
+These routines read or write keywords in the Current Header Unit
+(CHU).  Wild card characters (*, ?, or #) may be used when specifying
+the name of the keyword to be read: a '?' will match any single
+character at that position in the keyword name and a '*' will match any
+length (including zero) string of characters.  The '#' character will
+match any consecutive string of decimal digits (0 - 9).  When a wild
+card is used the routine will only search for a match from the current
+header position to the end of the header and will not resume the search
+from the top of the header back to the original header position as is
+done when no wildcards are included in the keyword name.  The
+fits_read_record routine may be used to set the starting position
+when doing wild card searches.  A status value of KEY_NO_EXIST is
+returned if the specified keyword to be read is not found in the
+header.
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html745"
+  HREF="node38.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">1</SPAN> Keyword Reading Routines</A>
+<LI><A NAME="tex2html746"
+  HREF="node39.html"><SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">2</SPAN> Keyword Writing Routines</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

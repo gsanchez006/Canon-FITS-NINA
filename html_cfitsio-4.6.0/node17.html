@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>2.6 Example Program</TITLE>
+<META NAME="description" CONTENT="2.6 Example Program">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node16.html">
+<LINK REL="up" HREF="node7.html">
+<LINK REL="next" HREF="node18.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html473"
+  HREF="node18.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html469"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html465"
+  HREF="node16.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html471"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html474"
+  HREF="node18.html">3. A FITS Primer</A>
+<B>Up:</B> <A NAME="tex2html470"
+  HREF="node7.html">2. Creating the CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html466"
+  HREF="node16.html">2.5 Getting Started with</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00360000000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">6</SPAN> Example Program</A>
+</H1>
+
+<P>
+The following listing shows an example of how to use the CFITSIO
+routines in a C program.    Refer to the cookbook.c program that is
+included with the CFITSIO distribution for other example routines.
+
+<P>
+This program creates a new FITS file, containing a FITS image.  An
+`EXPOSURE' keyword is written to the header, then the image data are
+written to the FITS file before closing the FITS file.
+
+<P>
+<PRE>
+#include "fitsio.h"  /* required by every program that uses CFITSIO  */
+main()
+{
+    fitsfile *fptr;       /* pointer to the FITS file; defined in fitsio.h */
+    int status, ii, jj;
+    long  fpixel = 1, naxis = 2, nelements, exposure;
+    long naxes[2] = { 300, 200 };   /* image is 300 pixels wide by 200 rows */
+    short array[200][300];
+
+    status = 0;         /* initialize status before calling fitsio routines */
+    fits_create_file(&amp;fptr, "testfile.fits", &amp;status);   /* create new file */
+
+    /* Create the primary array image (16-bit short integer pixels */
+    fits_create_img(fptr, SHORT_IMG, naxis, naxes, &amp;status);
+
+    /* Write a keyword; must pass the ADDRESS of the value */
+    exposure = 1500.;
+    fits_update_key(fptr, TLONG, "EXPOSURE", &amp;exposure,
+         "Total Exposure Time", &amp;status);
+
+    /* Initialize the values in the image with a linear ramp function */
+    for (jj = 0; jj &lt; naxes[1]; jj++)
+        for (ii = 0; ii &lt; naxes[0]; ii++)
+            array[jj][ii] = ii + jj;
+
+    nelements = naxes[0] * naxes[1];          /* number of pixels to write */
+
+    /* Write the array of integers to the image */
+    fits_write_img(fptr, TSHORT, fpixel, nelements, array[0], &amp;status);
+
+    fits_close_file(fptr, &amp;status);            /* close the file */
+
+    fits_report_error(stderr, status);  /* print out any error messages */
+    return( status );
+}
+</PRE>
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

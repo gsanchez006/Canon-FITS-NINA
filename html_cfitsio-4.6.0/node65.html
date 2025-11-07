@@ -1,0 +1,380 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.1.1 File Access</TITLE>
+<META NAME="description" CONTENT="9.1.1 File Access">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node66.html">
+<LINK REL="previous" HREF="node64.html">
+<LINK REL="up" HREF="node64.html">
+<LINK REL="next" HREF="node66.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1104"
+  HREF="node66.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1100"
+  HREF="node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1094"
+  HREF="node64.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1102"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1105"
+  HREF="node66.html">9.1.2 Download Utility Functions</A>
+<B>Up:</B> <A NAME="tex2html1101"
+  HREF="node64.html">9.1 FITS File Access</A>
+<B> Previous:</B> <A NAME="tex2html1095"
+  HREF="node64.html">9.1 FITS File Access</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001011000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">1</SPAN>.<SPAN CLASS="arabic">1</SPAN> File Access</A>
+</H2>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Open an existing FITS file residing in core computer memory.  This
+routine is analogous to fits_open_file.   The 'filename'  is
+currently ignored by this routine and may be any arbitrary string. In
+general, the application must have preallocated an initial block of
+memory to hold the FITS file prior to calling this routine:  'memptr'
+points to the starting address and 'memsize' gives the initial size of
+the block of memory.  'mem_realloc' is a pointer to an optional
+function that CFITSIO can call to allocate additional memory, if needed
+(only if mode = READWRITE), and is modeled after the standard C
+'realloc' function;  a null pointer may be given if the initial
+allocation of memory is all that will be required (e.g., if the file is
+opened with mode = READONLY).  The 'deltasize' parameter may be used to
+suggest a minimum amount of additional memory that should be allocated
+during each call to the memory reallocation function.  By default,
+CFITSIO will reallocate enough additional space to hold the entire
+currently defined FITS file (as given by the NAXISn keywords) or 1 FITS
+block (= 2880 bytes), which ever is larger.  Values of deltasize less
+than 2880 will be ignored.  Since the memory reallocation operation can
+be computationally expensive, allocating a larger initial block of
+memory, and/or specifying a larger deltasize value may help to reduce
+the number of reallocation calls and make the application program run
+faster.  Note that values of the memptr and memsize pointers will be updated
+by CFITSIO if the location or size of the FITS file in memory
+should change as a result of allocating more memory. <A NAME="ffomem"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_open_memfile / ffomem
+      (fitsfile **fptr, const char *filename, int mode, void **memptr,
+       size_t *memsize, size_t deltasize,
+       void *(*mem_realloc)(void *p, size_t newsize), int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Create a new FITS file residing in core computer memory.  This
+routine is analogous to fits_create_file.    In general, the
+application must have preallocated an initial block of memory to hold
+the FITS file prior to calling this routine:  'memptr' points to the
+starting address and 'memsize' gives the initial size of the block of
+memory.  'mem_realloc' is a pointer to an optional function that
+CFITSIO can call to allocate additional memory, if needed, and is
+modeled after the standard C 'realloc' function;  a null pointer may be
+given if the initial allocation of memory is all that will be
+required.  The 'deltasize' parameter may be used to suggest a minimum
+amount of additional memory that should be allocated during each call
+to the memory reallocation function.  By default, CFITSIO will
+reallocate enough additional space to hold 1 FITS block (= 2880 bytes)
+and  values of deltasize less than 2880 will be ignored.  Since the
+memory reallocation operation can be computationally expensive,
+allocating a larger initial block of memory, and/or specifying a larger
+deltasize value may help to reduce the number of reallocation calls
+and make the application program run
+faster. Note that values of the memptr and memsize pointers will be updated
+by CFITSIO if the location or size of the FITS file in memory
+should change as a result of allocating more memory. <A NAME="ffimem"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_create_memfile / ffimem
+      (fitsfile **fptr, void **memptr,
+       size_t *memsize, size_t deltasize,
+       void *(*mem_realloc)(void *p, size_t newsize), int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Reopen a FITS file that was previously opened with
+    fits_open_file or fits_create_file.  The new fitsfile
+    pointer may then be treated as a separate file, and one may
+    simultaneously read or write to 2 (or more)  different extensions in
+    the same file.   The fits_open_file routine (above) automatically
+    detects cases where a previously opened file is being opened again,
+    and then internally call fits_reopen_file, so programs should rarely
+    need to explicitly call this routine.
+<A NAME="ffreopen"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_reopen_file / ffreopen
+      (fitsfile *openfptr, fitsfile **newfptr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Create a new FITS file, using a template file to define its
+  initial size and structure.  The template may be another FITS HDU
+  or an ASCII template file.  If the input template file name pointer
+  is null, then this routine behaves the same as fits_create_file.
+  The currently supported format of the ASCII template file is described
+  under the fits_parse_template routine (in the general Utilities
+  section)
+<A NAME="fftplt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_create_template / fftplt
+      (fitsfile **fptr, char *filename, char *tpltfile &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Parse the input filename or URL into its component parts, namely:
+
+<UL>
+<LI>the file type (file://, ftp://, http://, etc),
+</LI>
+<LI>the base input file name,
+</LI>
+<LI>the name of the output file that the input file is to be copied to prior
+to opening,
+</LI>
+<LI>the HDU or extension specification,
+</LI>
+<LI>the filtering specifier,
+</LI>
+<LI>the binning specifier,
+</LI>
+<LI>the column specifier,
+</LI>
+<LI>and the
+image pixel filtering specifier.
+</LI>
+</UL>
+A null pointer (0) may be be specified for any of the output string arguments
+that are not needed.  Null strings will be returned for any components that are not
+present in the input file name.  The calling routine must allocate sufficient
+memory to hold the returned character strings.  Allocating the string lengths
+equal to FLEN_FILENAME is guaranteed to be safe.
+These routines are mainly for internal use
+by other CFITSIO routines. <A NAME="ffiurl"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_parse_input_url / ffiurl
+      (char *filename, &gt; char *filetype, char *infile, char *outfile, char
+       *extspec, char *filter, char *binspec, char *colspec, int *status)
+
+  int fits_parse_input_filename / ffifile
+      (char *filename, &gt; char *filetype, char *infile, char *outfile, char
+       *extspec, char *filter, char *binspec, char *colspec, char *pixspec,
+       int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Parse the input filename and return the HDU number that would be
+moved to if the file were opened with fits_open_file.  The returned
+HDU number begins with 1 for the primary array, so for example, if the
+input filename = `myfile.fits[2]' then hdunum = 3 will be returned.
+CFITSIO does not open the file to check if the extension actually
+exists if an extension number is specified. If an extension name is
+included in the file name specification (e.g.  `myfile.fits[EVENTS]'
+then this routine will have to open the FITS file and look for the
+position of the named extension, then close file again.  This is not
+possible if the file is being read from the stdin stream, and an error
+will be returned in this case.  If the filename does not specify an
+explicit extension (e.g. 'myfile.fits') then hdunum = -99 will be
+returned, which is functionally equivalent to hdunum = 1. This routine
+is mainly used for backward compatibility in the ftools software
+package and is not recommended for general use.  It is generally better
+and more efficient to first open the FITS file with fits_open_file,
+then use fits_get_hdu_num to determine which HDU in the file has
+been opened, rather than calling fits_parse_input_url followed by a
+call to fits_open_file.
+ <A NAME="ffextn"></A></DD>
+</DL>
+
+<P>
+<PRE>
+   int fits_parse_extnum / ffextn
+       (char *filename, &gt; int *hdunum, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>7 </STRONG></DT>
+<DD>Parse the input file name and return the root file name.  The root
+name includes the file type if specified, (e.g.  'ftp://' or 'http://')
+and the full path name, to the extent that it is specified in the input
+filename.  It does not include the HDU name or number, or any filtering
+specifications. The calling routine must allocate sufficient
+memory to hold the returned rootname character string.  Allocating the length
+equal to FLEN_FILENAME is guaranteed to be safe.
+ <A NAME="ffrtnm"></A></DD>
+</DL>
+
+<P>
+<PRE>
+   int fits_parse_rootname / ffrtnm
+       (char *filename, &gt; char *rootname, int *status);
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>8 </STRONG></DT>
+<DD>Test if the input file or a compressed version of the file (with
+a .gz, .Z, .z, or .zip extension) exists on disk.  The returned value of
+the 'exists' parameter will have 1 of the 4 following values:
+
+<P>
+<PRE>
+   2:  the file does not exist, but a compressed version does exist
+   1:  the disk file does exist
+   0:  neither the file nor a compressed version of the file exist
+  -1:  the input file name is not a disk file (could be a ftp, http,
+       smem, or mem file, or a file piped in on the STDIN stream)
+</PRE>
+
+<P>
+<A NAME="ffexist"></A></DD>
+</DL>
+
+<P>
+<PRE>
+   int fits_file_exists / ffexist
+       (char *filename, &gt; int *exists, int *status);
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>9 </STRONG></DT>
+<DD>Flush any internal buffers of data to the output FITS file. These
+   routines rarely need to be called, but can be useful in cases where
+   other processes need to access the same FITS file in real time,
+   either on disk or in memory.  These routines also help to ensure
+   that if the application program subsequently aborts then the FITS
+   file will have been closed properly.  The first routine,
+   fits_flush_file is more rigorous and completely closes, then
+   reopens, the current HDU, before flushing the internal buffers, thus
+   ensuring that the output FITS file is identical to what would be
+   produced if the FITS was closed at that point (i.e., with a call to
+   fits_close_file).  The second routine, fits_flush_buffer simply
+   flushes the internal CFITSIO buffers of data to the output FITS
+   file, without updating and closing the current HDU.  This is much
+   faster, but there may be circumstances where the flushed file does
+   not completely reflect the final state of the file as it will exist
+   when the file is actually closed.
+
+<P>
+A typical use of these routines would be to flush the state of a
+   FITS table to disk after each row of the table is written.  It is
+   recommend that fits_flush_file be called after the first row is
+   written, then fits_flush_buffer may be called after each
+   subsequent row is written.  Note that this latter routine will not
+   automatically update the NAXIS2 keyword which records the number of
+   rows of data in the table, so this keyword must be explicitly
+   updated by the application program after each row is written.
+  <A NAME="ffflus"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_flush_file / ffflus
+      (fitsfile *fptr, &gt; int *status)
+
+  int fits_flush_buffer / ffflsh
+      (fitsfile *fptr, 0, &gt; int *status)
+
+      (Note:  The second argument must be 0).
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>10 </STRONG></DT>
+<DD>Wrapper functions for global initialization and cleanup of the libcurl library used
+   when accessing files with the HTTPS or FTPS protocols.  If an HTTPS/FTPS file transfer is to
+   be performed, it is recommended that you call the init function once near the start of your 
+   program before any file_open calls, and before creating any threads. The cleanup function
+   should be called after all HTTPS/FTPS file accessing is completed, and after all threads are 
+   completed.  The functions return 0 upon successful initialization and cleanup.  These
+   are NOT THREAD-SAFE.    
+  <A NAME="ffihtps"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_init_https / ffihtps
+      ()
+      
+  int fits_cleanup_https / ffchtps
+      ()
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1104"
+  HREF="node66.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1100"
+  HREF="node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1094"
+  HREF="node64.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1102"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1105"
+  HREF="node66.html">9.1.2 Download Utility Functions</A>
+<B>Up:</B> <A NAME="tex2html1101"
+  HREF="node64.html">9.1 FITS File Access</A>
+<B> Previous:</B> <A NAME="tex2html1095"
+  HREF="node64.html">9.1 FITS File Access</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

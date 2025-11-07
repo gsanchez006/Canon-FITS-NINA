@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9. Specialized CFITSIO Interface Routines </TITLE>
+<META NAME="description" CONTENT="9. Specialized CFITSIO Interface Routines ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node83.html">
+<LINK REL="previous" HREF="node60.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node64.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1059"
+  HREF="node64.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1055"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1049"
+  HREF="node62.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1057"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1060"
+  HREF="node64.html">9.1 FITS File Access</A>
+<B>Up:</B> <A NAME="tex2html1056"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html1050"
+  HREF="node62.html">8.2 Group Member Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001000000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.  Specialized CFITSIO Interface Routines </A>
+</H1>
+
+<P>
+The basic interface routines described previously are recommended
+for most uses, but the routines described in this chapter
+are also available if necessary.  Some of these routines perform more
+specialized function that cannot easily be done with the basic
+interface routines while others duplicate the functionality of the
+basic routines but have a slightly different calling sequence.
+See Appendix B for the definition of each function parameter.
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1061"
+  HREF="node64.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">1</SPAN> FITS File Access Routines</A>
+<UL>
+<LI><A NAME="tex2html1062"
+  HREF="node65.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">1</SPAN>.<SPAN CLASS="arabic">1</SPAN> File Access</A>
+<LI><A NAME="tex2html1063"
+  HREF="node66.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">1</SPAN>.<SPAN CLASS="arabic">2</SPAN> Download Utility Functions</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html1064"
+  HREF="node67.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">2</SPAN> HDU Access Routines</A>
+<LI><A NAME="tex2html1065"
+  HREF="node68.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN> Specialized Header Keyword Routines</A>
+<UL>
+<LI><A NAME="tex2html1066"
+  HREF="node69.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">1</SPAN> Header Information Routines</A>
+<LI><A NAME="tex2html1067"
+  HREF="node70.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">2</SPAN> Read and Write the Required Keywords</A>
+<LI><A NAME="tex2html1068"
+  HREF="node71.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">3</SPAN> Write Keyword Routines</A>
+<LI><A NAME="tex2html1069"
+  HREF="node72.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">4</SPAN> Insert Keyword Routines</A>
+<LI><A NAME="tex2html1070"
+  HREF="node73.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">5</SPAN> Read Keyword Routines</A>
+<LI><A NAME="tex2html1071"
+  HREF="node74.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">6</SPAN> Modify Keyword Routines</A>
+<LI><A NAME="tex2html1072"
+  HREF="node75.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">7</SPAN> Update Keyword Routines</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html1073"
+  HREF="node76.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">4</SPAN> Define Data Scaling and Undefined Pixel Parameters</A>
+<LI><A NAME="tex2html1074"
+  HREF="node77.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">5</SPAN> Specialized FITS Primary Array or IMAGE Extension I/O Routines</A>
+<LI><A NAME="tex2html1075"
+  HREF="node78.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">6</SPAN> Specialized FITS ASCII and Binary Table Routines</A>
+<UL>
+<LI><A NAME="tex2html1076"
+  HREF="node79.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">1</SPAN> General Column Routines</A>
+<LI><A NAME="tex2html1077"
+  HREF="node80.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">2</SPAN> Low-Level Table Access Routines</A>
+<LI><A NAME="tex2html1078"
+  HREF="node81.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">3</SPAN> Write Column Data Routines</A>
+<LI><A NAME="tex2html1079"
+  HREF="node82.html"><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">4</SPAN> Read Column Data Routines </A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

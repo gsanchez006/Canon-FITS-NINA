@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.3.3 Write Keyword Routines</TITLE>
+<META NAME="description" CONTENT="9.3.3 Write Keyword Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node72.html">
+<LINK REL="previous" HREF="node70.html">
+<LINK REL="up" HREF="node68.html">
+<LINK REL="next" HREF="node72.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1181"
+  HREF="node72.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1177"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1171"
+  HREF="node70.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1179"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1182"
+  HREF="node72.html">9.3.4 Insert Keyword Routines</A>
+<B>Up:</B> <A NAME="tex2html1178"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1172"
+  HREF="node70.html">9.3.2 Read and Write</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001033000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">3</SPAN> Write Keyword Routines</A>
+</H2>
+
+<P>
+These routines simply append a new keyword to the header and do not
+check to see if a keyword with the same name already exists.  In
+general it is preferable to use the fits_update_key routine to ensure
+that the same keyword is not written more than once to the header.  See
+Appendix B for the definition of the parameters used in these
+routines.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Write (append) a new keyword of the appropriate data type into the CHU.
+     A null pointer may be entered for the comment parameter, which
+     will cause the comment field of the keyword to be left blank.  The
+     flt, dbl, cmp, and dblcmp versions of this routine have the added
+     feature that if the 'decimals' parameter is negative, then the 'G'
+     display format rather then the 'E' format will be used when
+     constructing the keyword value, taking the absolute value of
+     'decimals' for the precision.  This will suppress trailing zeros,
+     and will use a fixed format rather than an exponential format,
+    depending on the magnitude of the value. <A NAME="ffpkyx"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_key_str / ffpkys
+      (fitsfile *fptr, char *keyname, char *value, char *comment,
+       &gt; int *status)
+
+  int fits_write_key_[log, lng] /  ffpky[lj]
+      (fitsfile *fptr, char *keyname, DTYPE numval, char *comment,
+       &gt; int *status)
+
+  int fits_write_key_[flt, dbl, fixflg, fixdbl] / ffpky[edfg]
+      (fitsfile *fptr, char *keyname, DTYPE numval, int decimals,
+      char *comment, &gt; int *status)
+
+  int fits_write_key_[cmp, dblcmp, fixcmp, fixdblcmp] / ffpk[yc,ym,fc,fm]
+      (fitsfile *fptr, char *keyname, DTYPE *numval, int decimals,
+      char *comment, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Write (append) a string valued keyword into the CHU which may be longer
+    than 68 characters in length.  This uses the Long String Keyword
+    convention that is described in the`Local FITS Conventions' section
+    in Chapter 4.  Since this uses a non-standard FITS convention to
+    encode the long keyword string, programs which use this routine
+    should also call the fits_write_key_longwarn routine to add some
+    COMMENT keywords to warn users of the FITS file that this
+    convention is being used.  The fits_write_key_longwarn routine
+    also writes a keyword called LONGSTRN to record the version of the
+    longstring convention that has been used, in case a new convention
+    is adopted at some point in the future.   If the LONGSTRN keyword
+    is already present in the header, then fits_write_key_longwarn
+    will
+   simply return without doing anything. <A NAME="ffpkls"></A> <A NAME="ffplsw"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_key_longstr / ffpkls
+      (fitsfile *fptr, char *keyname, char *longstr, char *comment,
+       &gt; int *status)
+
+  int fits_write_key_longwarn / ffplsw
+      (fitsfile *fptr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Write (append) a numbered sequence of keywords into the CHU.  The
+    starting index number (nstart) must be greater than 0. One may
+    append the same comment to every keyword (and eliminate the need
+    to have an array of identical comment strings, one for each keyword) by
+    including the ampersand character as the last non-blank character in the
+    (first) COMMENTS string parameter.  This same string
+    will then be used for the comment field in all the keywords.
+    One may also enter a null pointer for the comment parameter to
+   leave the comment field of the keyword blank. <A NAME="ffpknx"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_keys_str / ffpkns
+      (fitsfile *fptr, char *keyroot, int nstart, int nkeys,
+       char **value, char **comment, &gt; int *status)
+
+  int fits_write_keys_[log, lng] / ffpkn[lj]
+      (fitsfile *fptr, char *keyroot, int nstart, int nkeys,
+       DTYPE *numval, char **comment, int *status)
+
+  int fits_write_keys_[flt, dbl, fixflg, fixdbl] / ffpkne[edfg]
+      (fitsfile *fptr, char *keyroot, int nstart, int nkey,
+       DTYPE *numval, int decimals, char **comment, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Copy an indexed keyword from one HDU to another, modifying
+    the index number of the keyword name in the process.  For example,
+    this routine could read the TLMIN3 keyword from the input HDU
+    (by giving keyroot = `TLMIN' and innum = 3) and write it to the
+    output HDU with the keyword name TLMIN4 (by setting outnum = 4).
+    If the input keyword does not exist, then this routine simply
+   returns without indicating an error. <A NAME="ffcpky"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_key / ffcpky
+      (fitsfile *infptr, fitsfile *outfptr, int innum, int outnum,
+       char *keyroot, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Write (append) a `triple precision' keyword into the CHU in F28.16 format.
+    The floating point keyword value is constructed by concatenating the
+    input integer value with the input double precision fraction value
+    (which must have a value between 0.0 and 1.0). The ffgkyt routine should
+    be used to read this keyword value, because the other keyword reading
+   routines will not preserve the full precision of the value. <A NAME="ffpkyt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_key_triple / ffpkyt
+      (fitsfile *fptr, char *keyname, long intval, double frac,
+       char *comment, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Write keywords to the CHDU that are defined in an ASCII template file.
+   The format of the template file is described under the fits_parse_template
+  routine. <A NAME="ffpktp"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_key_template / ffpktp
+      (fitsfile *fptr, const char *filename, &gt; int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1181"
+  HREF="node72.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1177"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1171"
+  HREF="node70.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1179"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1182"
+  HREF="node72.html">9.3.4 Insert Keyword Routines</A>
+<B>Up:</B> <A NAME="tex2html1178"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1172"
+  HREF="node70.html">9.3.2 Read and Write</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>6.3 Guidelines for Using the Iterator Function</TITLE>
+<META NAME="description" CONTENT="6.3 Guidelines for Using the Iterator Function">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node57.html">
+<LINK REL="previous" HREF="node55.html">
+<LINK REL="up" HREF="node53.html">
+<LINK REL="next" HREF="node57.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html978"
+  HREF="node57.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html974"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html968"
+  HREF="node55.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html976"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html979"
+  HREF="node57.html">6.4 Complete List of</A>
+<B>Up:</B> <A NAME="tex2html975"
+  HREF="node53.html">6. The CFITSIO Iterator</A>
+<B> Previous:</B> <A NAME="tex2html969"
+  HREF="node55.html">6.2 The Iterator Driver</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00730000000000000000">
+<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">3</SPAN> Guidelines for Using the Iterator Function</A>
+</H1>
+
+<P>
+The totaln, offset, firstn, and nvalues parameters that are passed to
+the work function are useful for determining how much of the data has
+been processed and how much remains left to do.  On the very first call
+to the work function firstn will be equal to offset + 1;  the work
+function may need to perform various initialization tasks before
+starting to  process the data. Similarly, firstn + nvalues - 1 will be
+equal to totaln on the last iteration, at which point the work function
+may need to perform some clean up operations before exiting for the
+last time.  The work function can also force an early termination of
+the iterations by returning a status value = -1.
+
+<P>
+The narrays and iteratorCol.datatype arguments allow the work function
+to double check that the number of input arrays and their data types
+have the expected values.  The iteratorCol.fptr and iteratorCol.colnum
+structure elements can be used if the work function needs to read or
+write the values of other keywords in the FITS file associated with
+the array.  This should generally only be done during the
+initialization step or during the clean up step after the last set of
+data has been processed.  Extra FITS file I/O during the main
+processing loop of the work function can seriously degrade the speed of
+the program.  Note that the behavior of the <code>fits_iterate_data()</code>
+is undefined if narrays is zero.
+
+<P>
+If variable-length array columns are being processed, then the iterator
+will operate on one row of the table at a time.  In this case the
+the repeat element in the interatorCol structure will be set equal to
+the number of elements in the current row that is being processed.
+
+<P>
+One important feature of the iterator is that the first element in each
+array that is passed to the work function gives the value that is used
+to represent null or undefined values in the array.  The real data then
+begins with the second element of the array (i.e., array[1], not
+array[0]).  If the first array element is equal to zero, then this
+indicates that all the array elements have defined values and there are
+no undefined values.  If array[0] is not equal to zero, then this
+indicates that some of the data values are undefined and this value
+(array[0]) is used to represent them.  In the case of output arrays
+(i.e., those arrays that will be written back to the FITS file by the
+iterator function after the work function exits) the work function must
+set the first array element to the desired null value if necessary,
+otherwise the first element should be set to zero to indicate that
+there are no null values in the output array.  CFITSIO defines 2
+values, FLOATNULLVALUE and DOUBLENULLVALUE, that can be used as default
+null values for float and double data types, respectively.  In the case
+of character string data types, a null string is always used to
+represent undefined strings.
+
+<P>
+In some applications it may be necessary to recursively call the iterator
+function.  An example of this is given by one of the example programs
+that is distributed with CFITSIO: it first calls a work function that
+writes out a 2D histogram image.  That work function in turn calls
+another work function that reads the  `X' and `Y' columns in a table to
+calculate the value of each 2D histogram image pixel. Graphically, the
+program structure can be described as:
+
+<P>
+<PRE>
+ driver --&gt; iterator --&gt; work1_fn --&gt; iterator --&gt; work2_fn
+</PRE>
+
+<P>
+Finally, it should be noted that the table columns or image arrays that
+are passed to the work function do not all have to come from the same
+FITS file and instead may come from any combination of sources as long
+as they have the same length.   The length of the first table column or
+image array is used by the iterator if they do not all have the same
+length.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html978"
+  HREF="node57.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html974"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html968"
+  HREF="node55.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html976"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html979"
+  HREF="node57.html">6.4 Complete List of</A>
+<B>Up:</B> <A NAME="tex2html975"
+  HREF="node53.html">6. The CFITSIO Iterator</A>
+<B> Previous:</B> <A NAME="tex2html969"
+  HREF="node55.html">6.2 The Iterator Driver</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

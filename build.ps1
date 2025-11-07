@@ -38,80 +38,27 @@ try {
     }
     Write-Host ""
 
-    # Step 4: Copy Dependencies
-    Write-Host "[4/5] Copying dependencies..." -ForegroundColor Yellow
+    # Step 4: Verify Dependencies
+    Write-Host "[4/5] Verifying dependencies..." -ForegroundColor Yellow
     
     if (-not (Test-Path $OutputDir)) {
         throw "Output directory not found: $OutputDir"
     }
 
-    # Note: The .csproj file automatically copies:
-    # - lib\*.dll to output directory
-    # - EDSDK\**\*.dll to output directory
+    # All dependencies are automatically copied by .csproj from dependencies/ folder:
+    # - dependencies/cfitsio-4.6.3/x64/*.dll (cfitsio.dll, zlib.dll)
+    # - dependencies/edsdk-13.19.0/x64/*.dll (EDSDK.dll, EdsImage.dll)
+    # - dependencies/edsdk-13.19.0/x64/DPP4Lib/** (Canon RAW processing)
+    # - dependencies/edsdk-13.19.0/x64/IHL/** (Canon Image Handling Library)
+    # - dependencies/CSharpFITS_v1.1.dll (Alternative FITS writer)
     #
-    # This includes:
-    # - lib\CSharpFITS_v1.1.dll
-    # - lib\EDSDK.dll
-    # - lib\EdsImage.dll
-    # - EDSDK\DPP4Lib\**\*.dll
-    # - EDSDK\IHL\**\*.dll
-    #
-    # CFitsio is built separately and copied here:
-
-    # Copy cfitsio.dll
-    $cfitsioFound = $false
-    if (Test-Path "build\cfitsio.dll") {
-        Copy-Item "build\cfitsio.dll" $OutputDir -Force
-        Write-Host "  - Copied cfitsio.dll from build\" -ForegroundColor Green
-        $cfitsioFound = $true
-    }
-    elseif (Test-Path "cfitsio-4.6.3\cfitsio.dll") {
-        Copy-Item "cfitsio-4.6.3\cfitsio.dll" $OutputDir -Force
-        Write-Host "  - Copied cfitsio.dll from cfitsio-4.6.3\" -ForegroundColor Green
-        $cfitsioFound = $true
-    }
+    # All dependencies are Windows-native (built with MSVC, no GCC/MSYS2 dependencies)
     
-    if (-not $cfitsioFound) {
-        Write-Host "  - WARNING: cfitsio.dll not found" -ForegroundColor Yellow
-    }
+    Write-Host "  All dependencies are Windows-native (MSVC builds)" -ForegroundColor Green
 
-    # Copy GCC/UCRT64 Runtime dependencies (required by cfitsio.dll built with GCC)
+    # Verify all required dependencies are present in output
     Write-Host ""
-    Write-Host "  Copying GCC/UCRT64 Runtime dependencies..." -ForegroundColor Cyan
-    
-    $gccRuntimePath = "C:\msys64\ucrt64\bin"
-    $gccRuntimeFiles = @(
-        "libgcc_s_seh-1.dll",
-        "libstdc++-6.dll",
-        "libwinpthread-1.dll",
-        "zlib1.dll"
-    )
-    
-    $gccRuntimeCopied = 0
-    if (Test-Path $gccRuntimePath) {
-        foreach ($file in $gccRuntimeFiles) {
-            $sourcePath = Join-Path $gccRuntimePath $file
-            if (Test-Path $sourcePath) {
-                Copy-Item $sourcePath $OutputDir -Force
-                Write-Host "  - Copied $file from MSYS2/UCRT64" -ForegroundColor Green
-                $gccRuntimeCopied++
-            }
-            else {
-                Write-Host "  - WARNING: $file not found in $gccRuntimePath" -ForegroundColor Yellow
-            }
-        }
-    }
-    else {
-        Write-Host "  - WARNING: MSYS2/UCRT64 path not found - cfitsio.dll may not work" -ForegroundColor Yellow
-    }
-    
-    if ($gccRuntimeCopied -eq $gccRuntimeFiles.Count) {
-        Write-Host "  - GCC Runtime dependencies: OK" -ForegroundColor Green
-    }
-
-    # Verify all required dependencies are present
-    Write-Host ""
-    Write-Host "Verifying dependencies:" -ForegroundColor Yellow
+    Write-Host "Verifying dependencies in output:" -ForegroundColor Yellow
     
     $allPresent = $true
     
@@ -120,12 +67,9 @@ try {
         "EDSDK.dll" = "$OutputDir\EDSDK.dll"
         "EdsImage.dll" = "$OutputDir\EdsImage.dll"
         "cfitsio.dll" = "$OutputDir\cfitsio.dll"
-        "libgcc_s_seh-1.dll" = "$OutputDir\libgcc_s_seh-1.dll"
-        "libstdc++-6.dll" = "$OutputDir\libstdc++-6.dll"
-        "libwinpthread-1.dll" = "$OutputDir\libwinpthread-1.dll"
-        "zlib1.dll" = "$OutputDir\zlib1.dll"
-        "EDSDK\DPP4Lib" = "$OutputDir\EDSDK\DPP4Lib"
-        "EDSDK\IHL" = "$OutputDir\EDSDK\IHL"
+        "zlib.dll" = "$OutputDir\zlib.dll"
+        "DPP4Lib folder" = "$OutputDir\DPP4Lib"
+        "IHL folder" = "$OutputDir\IHL"
     }
 
     foreach ($dep in $dependencies.GetEnumerator()) {
@@ -142,8 +86,9 @@ try {
 
     if (-not $allPresent) {
         Write-Host ""
-        Write-Host "WARNING: Some dependencies are missing!" -ForegroundColor Yellow
-        Write-Host "Make sure all required files are in lib\ and EDSDK\ folders" -ForegroundColor Yellow
+        Write-Host "ERROR: Some dependencies are missing!" -ForegroundColor Red
+        Write-Host "Check that dependencies/ folder structure is correct" -ForegroundColor Red
+        throw "Missing dependencies in build output"
     }
     
     Write-Host ""
@@ -161,13 +106,10 @@ try {
     # Copy main plugin DLL
     Copy-Item "$OutputDir\NINA.Plugin.Canon.EDSDK.dll" "$PackageDir\$PackageName\" -Force
 
-    # Copy all dependencies from build output
+    # Copy all dependencies from build output (Windows-native builds)
     $filesToCopy = @(
         "cfitsio.dll",
-        "libgcc_s_seh-1.dll",
-        "libstdc++-6.dll",
-        "libwinpthread-1.dll",
-        "zlib1.dll",
+        "zlib.dll",
         "CSharpFITS_v1.1.dll",
         "EDSDK.dll",
         "EdsImage.dll"
@@ -180,22 +122,15 @@ try {
         }
     }
 
-    # Copy EDSDK folders from build output
-    if (Test-Path "$OutputDir\EDSDK\DPP4Lib") {
-        Copy-Item "$OutputDir\EDSDK\DPP4Lib" "$PackageDir\$PackageName\EDSDK\DPP4Lib" -Recurse -Force
-    }
-
-    if (Test-Path "$OutputDir\EDSDK\IHL") {
-        Copy-Item "$OutputDir\EDSDK\IHL" "$PackageDir\$PackageName\EDSDK\IHL" -Recurse -Force
-    }
-
-    # Also copy standalone folders if they exist (backward compatibility)
+    # Copy Canon EDSDK folders (DPP4Lib and IHL)
     if (Test-Path "$OutputDir\DPP4Lib") {
         Copy-Item "$OutputDir\DPP4Lib" "$PackageDir\$PackageName\DPP4Lib" -Recurse -Force
+        Write-Host "  - Packaged DPP4Lib folder" -ForegroundColor Green
     }
 
     if (Test-Path "$OutputDir\IHL") {
         Copy-Item "$OutputDir\IHL" "$PackageDir\$PackageName\IHL" -Recurse -Force
+        Write-Host "  - Packaged IHL folder" -ForegroundColor Green
     }
 
     # Copy documentation

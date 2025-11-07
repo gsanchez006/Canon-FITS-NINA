@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.2.2 Notes about HTTPS and FTPS file access</TITLE>
+<META NAME="description" CONTENT="10.2.2 Notes about HTTPS and FTPS file access">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node88.html">
+<LINK REL="previous" HREF="node86.html">
+<LINK REL="up" HREF="node85.html">
+<LINK REL="next" HREF="node88.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1402"
+  HREF="node88.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1398"
+  HREF="node85.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1392"
+  HREF="node86.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1400"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1403"
+  HREF="node88.html">10.2.3 Notes about the</A>
+<B>Up:</B> <A NAME="tex2html1399"
+  HREF="node85.html">10.2 Filetype</A>
+<B> Previous:</B> <A NAME="tex2html1393"
+  HREF="node86.html">10.2.1 Notes about HTTP</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001122000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">2</SPAN> Notes about HTTPS and FTPS file access</A>
+</H2>
+
+<P>
+CFITSIO depends upon the availability of the libcurl library in order to perform 
+HTTPS/FTPS file access.  (This should be the development version of the library, as
+it contains the curl.h header file required by the CFITSIO code.)   The CFITSIO
+'configure' script will search for this library on your system, and if it finds it 
+it will automatically be incorporated into the build.  
+
+<P>
+Note that if you have this library package on your system, you will also have the 'curl-config'
+executable.  You can run the 'curl-config' executable with various options to learn
+more about the features of your libcurl installation.
+
+<P>
+If the CFITSIO 'configure' succeeded in finding a usable libcurl, you will see the flag
+'-DCFITSIO_HAVE_CURL=1' in the CFITSIO Makefile and in the compilation output.  
+If 'configure' is unable to find a usable libcurl, CFITSIO will still build 
+but it won't have HTTPS/FTPS capability.
+
+<P>
+The libcurl package is normally included as part of Xcode on Macs.  However on Linux platforms you 
+may need to manually install it. This can be easily done on Ubuntu Linux using
+the 'apt get' command to retrieve the libcurl4-openssl-dev or the libcurl4-gnutls-dev packages.
+
+<P>
+When accessing a file with HTTPS or FTPS, the default CFITSIO behavior is to attempt
+to verify both the host name and the SSL certificate.  If it cannot, it will still 
+perform the file access but will issue a warning to the terminal window.
+
+<P>
+The user can override this behavior to force CFITSIO to only allow file transfers
+when the host name and SSL certificate have been successfully verified.  This is
+done by setting the CFITSIO_VERIFY_HTTPS environment variable to 'True'. ie. in a
+csh shell:
+
+<P>
+setenv CFITSIO_VERIFY_HTTPS True
+
+<P>
+the default setting for this is 'False'.
+
+<P>
+CFITSIO has 3 functions which apply specifically to HTTPS/FTPS access:  fits_init_https, 
+fits_cleanup_https, and fits_verbose_https. It is recommended that you call the 
+init and cleanup functions near the beginning and end of your program respectively. 
+For more information about these functions, please see the 'FITS File Access Routines'
+section in the preceding chapter ('Specialized CFITSIO Interface Routines'). 
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1402"
+  HREF="node88.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1398"
+  HREF="node85.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1392"
+  HREF="node86.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1400"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1403"
+  HREF="node88.html">10.2.3 Notes about the</A>
+<B>Up:</B> <A NAME="tex2html1399"
+  HREF="node85.html">10.2 Filetype</A>
+<B> Previous:</B> <A NAME="tex2html1393"
+  HREF="node86.html">10.2.1 Notes about HTTP</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

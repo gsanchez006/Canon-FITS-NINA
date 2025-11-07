@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.3 Function Names and Variable Datatypes</TITLE>
+<META NAME="description" CONTENT="4.3 Function Names and Variable Datatypes">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node23.html">
+<LINK REL="previous" HREF="node21.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node23.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html546"
+  HREF="node23.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html542"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html536"
+  HREF="node21.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html544"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html547"
+  HREF="node23.html">4.4 Support for Unsigned</A>
+<B>Up:</B> <A NAME="tex2html543"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html537"
+  HREF="node21.html">4.2 Current Header Data</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00530000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">3</SPAN> Function Names and Variable Datatypes</A>
+</H1>
+
+<P>
+Most of the CFITSIO routines have both a short name as well as a
+longer descriptive name.  The short name is only 5 or 6 characters long
+and is similar to the subroutine name in the Fortran-77 version of
+FITSIO.  The longer name is more descriptive and it is recommended that
+it be used instead of the short name to more clearly document the
+source code.
+
+<P>
+Many of the CFITSIO routines come in families which differ only in the
+data type of the associated parameter(s).  The data type of these
+routines is indicated by the suffix of the routine name.  The short
+routine names have a 1 or 2 character suffix (e.g., 'j' in 'ffpkyj')
+while the long routine names have a 4 character or longer suffix
+as shown in the following table:
+
+<P>
+<PRE>
+    Long      Short  Data
+    Names     Names  Type
+    -----     -----  ----
+    _bit        x    bit
+    _byt        b    unsigned byte
+    _sbyt       sb   signed byte
+    _sht        i    short integer
+    _lng        j    long integer
+    _lnglng     jj   8-byte LONGLONG integer (see note below)
+    _usht       ui   unsigned short integer
+    _ulng       uj   unsigned long integer
+    _ulnglng    ujj  unsigned long long integer
+    _uint       uk   unsigned int integer
+    _int        k    int integer
+    _flt        e    real exponential floating point (float)
+    _fixflt     f    real fixed-decimal format floating point (float)
+    _dbl        d    double precision real floating-point (double)
+    _fixdbl     g    double precision fixed-format floating point (double)
+    _cmp        c    complex reals (pairs of float values)
+    _fixcmp     fc   complex reals, fixed-format floating point
+    _dblcmp     m    double precision complex (pairs of double values)
+    _fixdblcmp  fm   double precision complex, fixed-format floating point
+    _log        l    logical (int)
+    _str        s    character string
+</PRE>
+
+<P>
+The logical data type corresponds to `int' for logical keyword values,
+and `byte' for logical binary table columns.  In other words, the value
+when writing a logical keyword must be stored in an `int' variable, and
+must be stored in a `char' array when reading or writing to `L' columns
+in a binary table.  Implicit data type conversion is not supported for
+logical table columns, but is for keywords, so a logical keyword may be
+read and cast to any numerical data type; a returned value = 0
+indicates false, and any other value = true.
+
+<P>
+The `int' data type may be 2 bytes long on some old PC compilers,
+but otherwise it is nearly always 4 bytes long.   Some 64-bit
+machines, like the Alpha/OSF, define the `short', `int',
+and `long' integer data types to be 2, 4, and 8 bytes long,
+respectively.
+
+<P>
+Because there is no universal C compiler standard for the name of the
+8-byte integer datatype, the fitsio.h include file typedef's
+'LONGLONG'  to be equivalent to  an
+appropriate 8-byte integer data type on each supported platform.
+For maximum software portability it is recommended that
+this LONGLONG datatype be used to define 8-byte integer variables
+rather than using the native data type name on a particular
+platform. On most
+32-bit Unix and Mac OS-X operating systems LONGLONG is equivalent to the
+intrinsic 'long long' 8-byte integer datatype.  On 64-bit systems (which currently
+includes Alpha OSF/1, 64-bit Sun Solaris, 64-bit SGI MIPS, and  64-bit
+Itanium and Opteron PC systems), LONGLONG is  simply typedef'ed to be
+equivalent to 'long'.   Microsoft Visual C++ Version 6.0 does not define
+a 'long long'  data type, so LONGLONG is typedef'ed to be equivalent to
+the '__int64' data type on 32-bit windows systems when using Visual C++.
+
+<P>
+A related issue that affects the portability of software is how to print
+out the value of a 'LONGLONG' variable with printf.  Developers may
+find it convenient to use the following preprocessing statements
+in their C programs to handle this in a machine-portable manner:
+
+<P>
+<PRE>
+#if defined(_MSC_VER) /* Microsoft Visual C++ */
+          printf("%I64d", longlongvalue);
+	
+#elif (USE_LL_SUFFIX == 1)
+          printf("%lld", longlongvalue);
+	
+#else
+          printf("%ld", longlongvalue);
+#endif
+</PRE>
+
+<P>
+Similarly, the name of the C utility routine that converts a character
+string of digits into a 8-byte integer value is platform dependent:
+
+<P>
+<PRE>
+#if defined(_MSC_VER) /* Microsoft Visual C++ */
+      /* VC++ 6.0 does not seem to have an 8-byte conversion routine */
+	
+#elif (USE_LL_SUFFIX == 1)
+          longlongvalue = atoll(*string);
+	
+#else
+          longlongvalue = atol(*string);
+#endif
+</PRE>
+
+<P>
+When dealing with the FITS byte data type it is important to remember
+that the raw values (before any scaling by the BSCALE and BZERO, or
+TSCALn and TZEROn keyword values) in byte arrays (BITPIX = 8) or byte
+columns (TFORMn = 'B') are interpreted as unsigned bytes with values
+ranging from 0 to 255.  Some C compilers define a 'char' variable as
+signed, so it is important to explicitly declare a numeric char
+variable as 'unsigned char' to avoid any ambiguity
+
+<P>
+One feature of the CFITSIO routines is that they can operate on a `X'
+(bit) column in a binary table as though it were a `B' (byte) column.
+For example a `11X' data type column can be interpreted the same as a
+`2B' column (i.e., 2 unsigned 8-bit bytes).  In some instances, it can
+be more efficient to read and write whole bytes at a time, rather than
+reading or writing each individual bit.
+
+<P>
+The complex and double precision complex data types are not directly
+supported in ANSI C so these data types should be interpreted as pairs
+of float or double values, respectively, where the first  value in each
+pair is the real part, and the second is the imaginary part.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html546"
+  HREF="node23.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html542"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html536"
+  HREF="node21.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html544"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html547"
+  HREF="node23.html">4.4 Support for Unsigned</A>
+<B>Up:</B> <A NAME="tex2html543"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html537"
+  HREF="node21.html">4.2 Current Header Data</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

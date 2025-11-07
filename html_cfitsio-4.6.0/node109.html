@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>11. Template Files </TITLE>
+<META NAME="description" CONTENT="11. Template Files ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node116.html">
+<LINK REL="previous" HREF="node83.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node110.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1667"
+  HREF="node110.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1663"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1657"
+  HREF="node108.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1665"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1668"
+  HREF="node110.html">11.1 Detailed Template Line</A>
+<B>Up:</B> <A NAME="tex2html1664"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html1658"
+  HREF="node108.html">10.12 Binning or Histogramming</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001200000000000000000">
+<SPAN CLASS="arabic">11</SPAN>. Template Files </A>
+</H1>
+
+<P>
+When a new FITS file is created with a call to fits_create_file, the
+name of a template file may be supplied in parentheses immediately
+following the name of the new file to be created.  This template is
+used to define the structure of one or more HDUs in the new file.  The
+template file may be another FITS file, in which case the newly created
+file will have exactly the same keywords in each HDU as in the template
+FITS file, but all the data units will be filled with zeros.  The
+template file may also be an ASCII text file, where each line (in
+general) describes one FITS keyword record.  The format of the ASCII
+template file is described in the following sections.
+
+<P>
+<BR> <HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html1669"
+  HREF="node110.html"><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">1</SPAN> Detailed Template Line Format</A>
+<LI><A NAME="tex2html1670"
+  HREF="node111.html"><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">2</SPAN> Auto-indexing of Keywords</A>
+<LI><A NAME="tex2html1671"
+  HREF="node112.html"><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">3</SPAN> Template Parser Directives</A>
+<LI><A NAME="tex2html1672"
+  HREF="node113.html"><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">4</SPAN> Formal Template Syntax</A>
+<LI><A NAME="tex2html1673"
+  HREF="node114.html"><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">5</SPAN> Errors</A>
+<LI><A NAME="tex2html1674"
+  HREF="node115.html"><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">6</SPAN> Examples</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>1.3 Acknowledgments</TITLE>
+<META NAME="description" CONTENT="1.3 Acknowledgments">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node6.html">
+<LINK REL="previous" HREF="node4.html">
+<LINK REL="up" HREF="node2.html">
+<LINK REL="next" HREF="node6.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html321"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html317"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html311"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html319"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html322"
+  HREF="node6.html">1.4 Legal Stuff</A>
+<B>Up:</B> <A NAME="tex2html318"
+  HREF="node2.html">1. Introduction</A>
+<B> Previous:</B> <A NAME="tex2html312"
+  HREF="node4.html">1.2 Sources of FITS</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00230000000000000000">
+<SPAN CLASS="arabic">1</SPAN>.<SPAN CLASS="arabic">3</SPAN> Acknowledgments</A>
+</H1>
+
+<P>
+The development of the many powerful features in CFITSIO was made
+possible through collaborations with many people or organizations from
+around the world.  The following in particular have made especially
+significant contributions:
+
+<P>
+Programmers from the Integral Science Data Center, Switzerland (namely,
+Jurek Borkowski, Bruce O'Neel, and Don Jennings), designed the concept
+for the plug-in I/O drivers that was introduced with CFITSIO 2.0.  The
+use of `drivers' greatly simplified  the low-level I/O, which in turn
+made other new features in CFITSIO (e.g., support for compressed FITS
+files and support for IRAF format image files) much easier to
+implement.  Jurek Borkowski wrote the Shared Memory driver, and Bruce
+O'Neel wrote the drivers for accessing FITS files over the network
+using the FTP, HTTP, and ROOT protocols.  Also, in 2009, Bruce O'Neel
+was the key developer of the thread-safe version of CFITSIO.
+
+<P>
+The ISDC also provided the template parsing routines (written by Jurek
+Borkowski) and the hierarchical grouping routines (written by Don
+Jennings).  The ISDC DAL (Data Access Layer) routines are layered on
+top of CFITSIO and make extensive use of these features.
+
+<P>
+Giuliano Taffoni and Andrea Barisani, at INAF, University of Trieste,
+Italy, implemented the I/O driver routines for accessing FITS files
+on the computational grids using the gridftp protocol.
+
+<P>
+Uwe Lammers (XMM/ESA/ESTEC, The Netherlands) designed the
+high-performance lexical parsing algorithm that is used to do
+on-the-fly filtering of FITS tables.  This algorithm essentially
+pre-compiles the user-supplied selection expression into a form that
+can be rapidly evaluated for each row.  Peter Wilson (RSTX, NASA/GSFC)
+then wrote the parsing routines used by CFITSIO based on Lammers'
+design, combined with other techniques such as the CFITSIO iterator
+routine to further enhance the data processing throughput.  This effort
+also benefited from a much earlier lexical parsing routine that was
+developed by Kent Blackburn (NASA/GSFC). More recently, Craig Markwardt
+(NASA/GSFC) implemented additional functions (median, average, stddev)
+and other enhancements to the lexical parser.
+
+<P>
+The CFITSIO iterator function is loosely based on similar ideas
+developed for the XMM Data Access Layer.
+
+<P>
+Peter Wilson (RSTX, NASA/GSFC) wrote the complete set of
+Fortran-callable wrappers for all the CFITSIO routines, which in turn
+rely on the CFORTRAN macro developed by Burkhard Burow.
+
+<P>
+The syntax used by CFITSIO for filtering or binning input FITS files is
+based on ideas developed for the AXAF Science Center Data Model by
+Jonathan McDowell, Antonella Fruscione, Aneta Siemiginowska and Bill
+Joye. See http://heasarc.gsfc.nasa.gov/docs/journal/axaf7.html for
+further description of the AXAF Data Model.
+
+<P>
+The file decompression code were taken directly from the gzip (GNU zip)
+program developed by Jean-loup Gailly and others.
+
+<P>
+The new compressed image data format (where the image is tiled and
+the compressed byte stream from each tile is stored in a binary table)
+was implemented in collaboration with Richard White (STScI), Perry
+Greenfield (STScI) and Doug Tody (NOAO).
+
+<P>
+Doug Mink (SAO) provided the routines for converting IRAF format
+images into FITS format.
+
+<P>
+Martin Reinecke (Max Planck Institute, Garching)) provided the modifications to
+cfortran.h that are necessary to support 64-bit integer values when calling
+C routines from fortran programs.  The cfortran.h macros were originally developed
+by Burkhard Burow (CERN).
+
+<P>
+Julian Taylor (ESO, Garching) provided the fast byte-swapping algorithms
+that use the SSE2 and SSSE3 machine instructions available on x86_64 CPUs.
+
+<P>
+In addition, many other people have made valuable contributions to the
+development of CFITSIO.  These include (with apologies to others that may
+have inadvertently been omitted):
+
+<P>
+Steve Allen, Carl Akerlof, Keith Arnaud, Morten Krabbe Barfoed, Kent
+Blackburn, G Bodammer, Romke Bontekoe, Lucio Chiappetti, Keith Costorf,
+Robin Corbet, John Davis,  Richard Fink, Ning Gan, Emily Greene, Gretchen
+Green, Joe Harrington, Cheng Ho, Phil Hodge, Jim Ingham, Yoshitaka
+Ishisaki, Diab Jerius, Mark Levine, Todd Karakaskian, Edward King,
+Scott Koch,  Claire Larkin, Rob Managan, Eric Mandel, Richard Mathar,
+John Mattox, Carsten Meyer, Emi Miyata, Stefan Mochnacki, Mike Noble,
+Oliver Oberdorf, Clive Page, Arvind Parmar, Jeff Pedelty, Tim Pearson,
+Philippe Prugniel, Maren Purves, Scott Randall, Chris Rogers, Arnold Rots,
+Rob Seaman, Barry Schlesinger, Robin Stebbins, Andrew Szymkowiak, Allyn Tennant,
+Peter Teuben, James Theiler, Doug Tody, Shiro Ueno, Steve Walton, Archie
+Warnock, Alan Watson, Dan Whipple, Wim Wimmers, Peter Young, Jianjun Xu,
+and Nelson Zarate.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html321"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html317"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html311"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html319"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html322"
+  HREF="node6.html">1.4 Legal Stuff</A>
+<B>Up:</B> <A NAME="tex2html318"
+  HREF="node2.html">1. Introduction</A>
+<B> Previous:</B> <A NAME="tex2html312"
+  HREF="node4.html">1.2 Sources of FITS</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

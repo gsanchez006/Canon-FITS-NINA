@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>12.3 Arrays of Fixed-Length Strings in Binary Tables</TITLE>
+<META NAME="description" CONTENT="12.3 Arrays of Fixed-Length Strings in Binary Tables">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node120.html">
+<LINK REL="previous" HREF="node118.html">
+<LINK REL="up" HREF="node116.html">
+<LINK REL="next" HREF="node120.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1797"
+  HREF="node120.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1793"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1787"
+  HREF="node118.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1795"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1798"
+  HREF="node120.html">12.4 Keyword Units Strings</A>
+<B>Up:</B> <A NAME="tex2html1794"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1788"
+  HREF="node118.html">12.2 Long String Keyword</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001330000000000000000">
+<SPAN CLASS="arabic">12</SPAN>.<SPAN CLASS="arabic">3</SPAN> Arrays of Fixed-Length Strings in Binary Tables</A>
+</H1>
+
+<P>
+CFITSIO supports 2 ways to specify that a character column in a binary
+table contains an array of fixed-length strings.  The first way, which
+is officially supported by the FITS Standard document, uses the TDIMn keyword.
+For example, if TFORMn = '60A' and TDIMn = '(12,5)' then that
+column will be interpreted as containing an array of 5 strings, each 12
+characters long.
+
+<P>
+CFITSIO also supports a
+local convention for the format of the TFORMn keyword value of the form
+'rAw' where 'r' is an integer specifying the total width in characters
+of the column, and 'w' is an integer specifying the (fixed) length of
+an individual unit string within the vector.  For example, TFORM1 =
+'120A10' would indicate that the binary table column is 120 characters
+wide and consists of 12 10-character length strings.  This convention
+is recognized by the CFITSIO routines that read or write strings in
+binary tables.   The Binary Table definition document specifies that
+other optional characters may follow the data type code in the TFORM
+keyword, so this local convention is in compliance with the
+FITS standard although other FITS readers may not
+recognize this convention.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1797"
+  HREF="node120.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1793"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1787"
+  HREF="node118.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1795"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1798"
+  HREF="node120.html">12.4 Keyword Units Strings</A>
+<B>Up:</B> <A NAME="tex2html1794"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1788"
+  HREF="node118.html">12.2 Long String Keyword</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

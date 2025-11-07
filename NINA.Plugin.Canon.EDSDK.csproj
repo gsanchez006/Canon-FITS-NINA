@@ -8,6 +8,8 @@
     <RootNamespace>NINA.Plugin.Canon.EDSDK</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- Exclude EDSDK raw distribution folder (sample code, documentation only) -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);EDSDK_v13.19.0_Raw_Win\**</DefaultItemExcludes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NINA.Core" Version="3.0.*" />
@@ -21,13 +23,31 @@
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="CSharpFITS_v1.1">
-      <HintPath>lib\CSharpFITS_v1.1.dll</HintPath>
+      <HintPath>dependencies\CSharpFITS_v1.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="EDSDK\**\*.dll" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="lib\*.dll" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Copy CFitsio dependencies (Windows-native, built with MSVC) -->
+    <None Include="dependencies\cfitsio-4.6.3\x64\*.dll" Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    
+    <!-- Copy Canon EDSDK core DLLs -->
+    <None Include="dependencies\edsdk-13.19.0\x64\*.dll" Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    
+    <!-- Copy Canon EDSDK DPP4Lib (RAW processing library) - preserve folder structure -->
+    <None Include="dependencies\edsdk-13.19.0\x64\DPP4Lib\**\*.*">
+      <Link>DPP4Lib\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    
+    <!-- Copy Canon EDSDK IHL (Image Handling Library) - preserve folder structure -->
+    <None Include="dependencies\edsdk-13.19.0\x64\IHL\**\*.*">
+      <Link>IHL\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    
+    <!-- Copy CSharpFITS -->
+    <None Include="dependencies\CSharpFITS_v1.1.dll" Link="CSharpFITS_v1.1.dll" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
 

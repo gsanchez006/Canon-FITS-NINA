@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>8.2 Group Member Routines</TITLE>
+<META NAME="description" CONTENT="8.2 Group Member Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node61.html">
+<LINK REL="up" HREF="node60.html">
+<LINK REL="next" HREF="node63.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1047"
+  HREF="node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1043"
+  HREF="node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1039"
+  HREF="node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1045"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1048"
+  HREF="node63.html">9. Specialized CFITSIO Interface</A>
+<B>Up:</B> <A NAME="tex2html1044"
+  HREF="node60.html">8. Hierarchical Grouping Routines</A>
+<B> Previous:</B> <A NAME="tex2html1040"
+  HREF="node61.html">8.1 Grouping Table Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00920000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">2</SPAN> Group Member Routines</A>
+</H1>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Return the number of member HDUs in a grouping table gfptr. The number
+    of member HDUs is just the NAXIS2 value (number of rows) of the grouping
+   table. <A NAME="ffgtnm"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_num_members / ffgtnm
+      (fitsfile *gfptr, &gt; long *nmembers, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Return the number of groups to which the HDU pointed to by mfptr is
+     linked, as defined by the number of GRPIDn/GRPLCn keyword records that
+     appear in its header. Note that each time this function is called, the
+     indices of the GRPIDn/GRPLCn keywords are checked to make sure they
+     are continuous (ie no gaps) and are re-enumerated to eliminate gaps if
+    found.  <A NAME="ffgmng"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_num_groups / ffgmng
+      (fitsfile *mfptr, &gt; long *nmembers, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Open a member of the grouping table pointed to by gfptr. The member to
+    open is identified by its row number within the grouping table as given
+    by the parameter 'member' (first member == 1) . A fitsfile pointer to
+    the opened member HDU is returned as mfptr. Note that if the member HDU
+    resides in a FITS file different from the grouping table HDU then the
+   member file is first opened readwrite and, failing this, opened readonly. <A NAME="ffgmop"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_open_member / ffgmop
+      (fitsfile *gfptr, long member, &gt; fitsfile **mfptr, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Copy (append) a member HDU of the grouping table pointed to by gfptr.
+   The member HDU is identified by its row number within the grouping table
+   as given by the parameter 'member' (first member == 1). The copy of the
+   group member HDU will be appended to the FITS file pointed to by mfptr,
+   and upon return mfptr shall point to the copied member HDU. The cpopt
+   parameter may take on the following values: OPT_MCP_ADD which adds a new
+   entry in gfptr for the copied member HDU, OPT_MCP_NADD which does not add
+   an entry in gfptr for the copied member, and OPT_MCP_REPL which replaces
+  the original member entry with the copied member entry. <A NAME="ffgmcp"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_member / ffgmcp
+      (fitsfile *gfptr, fitsfile *mfptr, long member, int cpopt, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Transfer a group member HDU from the grouping table pointed to by
+   infptr to the grouping table pointed to by outfptr. The member HDU to
+   transfer is identified by its row number within infptr as specified by
+   the parameter 'member' (first member == 1). If tfopt == OPT_MCP_ADD then
+   the member HDU is made
+   a member of outfptr and remains a member of infptr. If tfopt == OPT_MCP_MOV
+  then the member HDU is deleted from infptr after the transfer to outfptr. <A NAME="ffgmtf"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_transfer_member / ffgmtf
+      (fitsfile *infptr, fitsfile *outfptr, long member, int tfopt,
+       &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Remove a member HDU from the grouping table pointed to by gfptr. The
+   member HDU to be deleted is identified by its row number in the grouping
+   table as specified by the parameter 'member' (first member == 1). The rmopt
+   parameter may take on the following values: OPT_RM_ENTRY which
+   removes the member HDU entry from the grouping table and updates the
+   member's GRPIDn/GRPLCn keywords, and OPT_RM_MBR which removes the member
+  HDU entry from the grouping table and deletes the member HDU itself. <A NAME="ffgmrm"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_remove_member / ffgmrm
+      (fitsfile *gfptr, long member, int rmopt, &gt; int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1047"
+  HREF="node63.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1043"
+  HREF="node60.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1039"
+  HREF="node61.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1045"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1048"
+  HREF="node63.html">9. Specialized CFITSIO Interface</A>
+<B>Up:</B> <A NAME="tex2html1044"
+  HREF="node60.html">8. Hierarchical Grouping Routines</A>
+<B> Previous:</B> <A NAME="tex2html1040"
+  HREF="node61.html">8.1 Grouping Table Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

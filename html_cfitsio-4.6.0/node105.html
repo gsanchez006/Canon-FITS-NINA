@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.11.5 Good Time Interval Filtering and Calculation</TITLE>
+<META NAME="description" CONTENT="10.11.5 Good Time Interval Filtering and Calculation">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node106.html">
+<LINK REL="previous" HREF="node104.html">
+<LINK REL="up" HREF="node100.html">
+<LINK REL="next" HREF="node106.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1623"
+  HREF="node106.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1619"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1613"
+  HREF="node104.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1621"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1624"
+  HREF="node106.html">10.11.6 Spatial Region Filtering</A>
+<B>Up:</B> <A NAME="tex2html1620"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1614"
+  HREF="node104.html">10.11.4 Row Access</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION0011115000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">5</SPAN> Good Time Interval Filtering and Calculation</A>
+</H2>
+
+<P>
+There are two functions for filtering and calculating based
+    on Good Time Intervals, or GTIs.  GTIs are commonly used to
+    express fragmented time ranges that are not easy to express with a
+    single start and stop time.  The time intervals are defined in a
+    FITS table extension which contains 2 columns giving the
+    start and stop time of each good interval.
+
+<P>
+A common filtering method involves selecting rows which have a
+    time value which lies within any GTI.  The gtifilter() filtering
+    operation accepts only those rows of the input table which have an
+    associated time which falls within one of the time intervals
+    defined in a separate GTI extension.  gtifilter(a,b,c,d) evaluates
+    each row of the input table and returns TRUE or FALSE depending
+    whether the row is inside or outside the good time interval.  The
+    syntax is
+
+<P>
+<PRE>
+      gtifilter( [ "gtifile" [, expr [, "STARTCOL", "STOPCOL" ] ] ] )
+    or
+      gtifilter( [ 'gtifile' [, expr [, 'STARTCOL', 'STOPCOL' ] ] ] )
+</PRE>
+    where  each "[]" demarks optional parameters.  Note that  the quotes
+    around the gtifile and START/STOP column are required.  Either single
+    or double quotes may be used.  In cases where this expression is
+    entered on the Unix command line, enclose the entire expression in
+    double quotes, and then use single quotes within the expression to
+    enclose the 'gtifile' and other terms.  It is also usually possible
+    to do the reverse, and enclose the whole expression in single quotes
+    and then use double quotes within the expression.  The gtifile,
+    if specified,  can be blank  ("") which will  mean to use  the first
+    extension  with   the name "*GTI*"  in   the current  file,  a plain
+    extension  specifier (eg, "+2",  "[2]", or "[STDGTI]") which will be
+    used  to  select  an extension  in  the current  file, or  a regular
+    filename with or without an extension  specifier which in the latter
+    case  will mean to  use the first  extension  with an extension name
+    "*GTI*".  Expr can be   any arithmetic expression, including  simply
+    the time  column  name.  A  vector  time expression  will  produce a
+    vector boolean  result.  STARTCOL and  STOPCOL are the  names of the
+    START/STOP   columns in the    GTI extension.  If   one  of them  is
+    specified, they both  must be.
+
+<P>
+In  its  simplest form, no parameters need to be provided - default
+    values will be used.  The expression "gtifilter()" is equivalent to
+
+<P>
+<PRE>
+       gtifilter( "", TIME, "*START*", "*STOP*" )
+</PRE>
+    This will search the current file for a GTI  extension,  filter  the
+    TIME  column in the current table, using START/STOP times taken from
+    columns in the GTI  extension  with  names  containing  the  strings
+    "START"  and "STOP".  The wildcards ('*') allow slight variations in
+    naming conventions  such  as  "TSTART"  or  "STARTTIME".   The  same
+    default  values  apply for unspecified parameters when the first one
+    or  two  parameters  are  specified.   The  function   automatically
+    searches   for   TIMEZERO/I/F   keywords  in  the  current  and  GTI
+    extensions, applying a relative time offset, if necessary.
+
+<P>
+The related function, gtifind(a,b,c,d), is similar to gtifilter()
+    but instead of returning true/false, gtifind() returns the GTI
+    number that brackets the requested time sample.  gtifind() returns
+    the row number in the GTI table that matches the time sample, or
+    -1 if the time sample is not within any GTI.  gtifind() is
+    particularly useful when entries in a table must be categorized by
+    which GTI the fall within.  For example, if events in an event
+    list must be separated by good time interval.  The results of
+    gtifind() can be used with histogram binning techniques to bin an
+    event list by which GTI.
+
+<P>
+<PRE>
+      gtifind( "gtifile" , expr [, "STARTCOL", "STOPCOL" ] )
+</PRE>
+
+<P>
+The requirements for specifying the gtifile are the same as for
+    gtifilter() as described above.  Like gtifilter(), the expr is
+    the time-like expression and is optional (defaulting to TIME).
+    The start and stop columns default to START and STOP.
+
+<P>
+The function, gtioverlap(a,b,c,d,e), computes the overlap
+    between a user-requested time range and the entries in a GTI.  The
+    cases of no overlap, partial overlap, or overlap of many GTIs
+    within the user requested range are handled.  gtioverlap() is very
+    useful for calculating exposure times and fractional exposures of
+    individual time bins, say for a light curve.  The syntax of
+    gtioverlap() is
+
+<P>
+<PRE>
+      gtioverlap( "gtifile" , startExpr, stopExpr [, "STARTCOL", "STOPCOL" ] )
+    or
+      gtioverlap( 'gtifile' , startExpr, stopExpr [, 'STARTCOL', 'STOPCOL' ] )
+</PRE>
+
+<P>
+The requirements for specifying the gtifile are the same as for
+    gtifilter() as described above.  Unlike gtifilter(), the startExpr
+    and stopExpr are not optional.  startExpr provides a start of the
+    user requested time interval.  startExpr is typically TIME, but
+    can be any valid expression.  Likewise, stopExpr provides the stop
+    of the user requested time interval, and can be an expression.
+    For example, for a light curve with a TIME column and time bin
+    size of 1.0 seconds, the expression
+
+<P>
+<PRE>
+      gtioverlap('gtifile',TIME,TIME+1.0)
+</PRE>
+
+<P>
+would calculate the amount of overlap exposure time between each
+    one second time bin and the GTI in 'gtifile'.  In this case the
+    time bin is assumed to begin at the time specified by TIME and end
+    1 second later.  Neither startExpr nor stopExpr are required to be
+    constant, and a light curve is not required to have a constant bin
+    size.  For tables, the overlap is calculated for each entry in the
+    table.
+
+<P>
+It is also possible to calculate a single overlap value, which
+    would typically be placed in a keyword.  For example, a way to to
+    compute the total overlap exposure of a file whose TIME column is
+    bounded by the keywords TSTART and TSTOP, overlapping with the
+    specified GTI, would be
+
+<P>
+<PRE>
+      #EXPOSURE = gtioverlap('gtifile',#TSTART,#TSTOP)
+</PRE>
+
+<P>
+The <code>#EXPOSURE</code> syntax with a leading <code>#</code> ensures that the
+    requested values are treated as keywords.  Otherwise, a column
+    named EXPOSURE will be created with the (constant) exposure value
+    in each entry.  
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1623"
+  HREF="node106.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1619"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1613"
+  HREF="node104.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1621"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1624"
+  HREF="node106.html">10.11.6 Spatial Region Filtering</A>
+<B>Up:</B> <A NAME="tex2html1620"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1614"
+  HREF="node104.html">10.11.4 Row Access</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

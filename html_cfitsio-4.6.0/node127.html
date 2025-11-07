@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>B. Parameter Definitions </TITLE>
+<META NAME="description" CONTENT="B. Parameter Definitions ">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node128.html">
+<LINK REL="previous" HREF="node126.html">
+<LINK REL="up" HREF="cfitsio.html">
+<LINK REL="next" HREF="node128.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1891"
+  HREF="node128.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1887"
+  HREF="cfitsio.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1881"
+  HREF="node126.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1889"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1892"
+  HREF="node128.html">C. CFITSIO Error Status</A>
+<B>Up:</B> <A NAME="tex2html1888"
+  HREF="cfitsio.html">CFITSIO</A>
+<B> Previous:</B> <A NAME="tex2html1882"
+  HREF="node126.html">A. Index of Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001600000000000000000">
+B. Parameter Definitions </A>
+</H1>
+
+<P>
+<PRE>
+anynul   - set to TRUE (=1) if any returned values are undefined, else FALSE
+array    - array of numerical data values to read or write
+ascii    - encoded checksum string
+binspec  - the input table binning specifier
+bitpix   - bits per pixel. The following symbolic mnemonics are predefined:
+               BYTE_IMG   =   8 (unsigned char)
+               SHORT_IMG  =  16 (signed short integer)
+               LONG_IMG   =  32 (signed long integer)
+               LONGLONG_IMG =  64 (signed long 64-bit integer)
+               FLOAT_IMG  = -32 (float)
+               DOUBLE_IMG = -64 (double).
+           Two additional values, USHORT_IMG and ULONG_IMG are also available
+           for creating unsigned integer images.  These are equivalent to
+           creating a signed integer image with BZERO offset keyword values
+           of 32768 or 2147483648, respectively, which is the convention that
+           FITS uses to store unsigned integers.
+card     - header record to be read or written (80 char max, null-terminated)
+casesen  - CASESEN (=1) for case-sensitive string matching, else CASEINSEN (=0)
+cmopt    - grouping table "compact" option parameter. Allowed values are:
+           OPT_CMT_MBR and OPT_CMT_MBR_DEL.
+colname  - name of the column (null-terminated)
+colnum   - column number (first column = 1)
+colspec  - the input file column specification; used to delete, create, or rename
+           table columns
+comment  - the keyword comment field (72 char max, null-terminated)
+complm   - should the checksum be complemented?
+comptype - compression algorithm to use: GZIP_1, RICE_1, HCOMPRESS_1, or PLIO_1
+coordtype- type of coordinate projection (-SIN, -TAN, -ARC, -NCP,
+           -GLS, -MER, or -AIT)
+cpopt    - grouping table copy option parameter. Allowed values are:
+           OPT_GCP_GPT, OPT_GCP_MBR, OPT_GCP_ALL, OPT_MCP_ADD, OPT_MCP_NADD,
+           OPT_MCP_REPL, amd OPT_MCP_MOV.
+create_col- If TRUE, then insert a new column in the table, otherwise
+           overwrite the existing column.
+current  - if TRUE, then the current HDU will be copied
+dataok   - was the data unit verification successful (=1) or
+           not (= -1).  Equals zero if the DATASUM keyword is not present.
+datasum  - 32-bit 1's complement checksum for the data unit
+dataend  - address (in bytes) of the end of the HDU
+datastart- address (in bytes) of the start of the data unit
+datatype - specifies the data type of the value.  Allowed value are:  TSTRING,
+           TLOGICAL, TBYTE, TSBYTE, TSHORT, TUSHORT, TINT, TUINT, TLONG, TULONG,
+           TFLOAT, TDOUBLE, TCOMPLEX, and TDBLCOMPLEX
+datestr  - FITS date/time string: 'YYYY-MM-DDThh:mm:ss.ddd', 'YYYY-MM-dd',
+           or 'dd/mm/yy'
+day      - calendar day (UTC) (1-31)
+decimals - number of decimal places to be displayed
+deltasize - increment for allocating more memory
+dim1     - declared size of the first dimension of the image or cube array
+dim2     - declared size of the second dimension of the data cube array
+dispwidth - display width of a column = length of string that will be read
+dtype    - data type of the keyword ('C', 'L', 'I', 'F' or 'X')
+                C = character string
+                L = logical
+                I = integer
+                F = floating point number
+                X = complex, e.g., "(1.23, -4.56)"
+err_msg  - error message on the internal stack (80 chars max)
+err_text - error message string corresponding to error number (30 chars max)
+exact    - TRUE (=1) if the strings match exactly;
+           FALSE (=0) if wildcards are used
+exclist  - array of pointers to keyword names to be excluded from search
+exists   - flag indicating whether the file or compressed file exists on disk
+expr     - boolean or arithmetic expression
+extend   - TRUE (=1) if FITS file may have extensions, else FALSE (=0)
+extname  - value of the EXTNAME keyword (null-terminated)
+extspec  - the extension or HDU specifier; a number or name, version, and type
+extver   - value of the EXTVER keyword = integer version number
+filename - full name of the FITS file, including optional HDU and filtering specs
+filetype - type of file (file://, ftp://, http://, etc.)
+filter   - the input file filtering specifier
+firstchar- starting byte in the row (first byte of row = 1)
+firstfailed - member HDU ID (if positive) or grouping table GRPIDn index
+           value (if negative) that failed grouping table verification.
+firstelem- first element in a vector (ignored for ASCII tables)
+firstrow - starting row number (first row of table = 1)
+following- if TRUE, any HDUs following the current HDU will be copied
+fpixel   - coordinate of the first pixel to be read or written in the
+           FITS array.  The array must be of length NAXIS and have values such
+           that fpixel[0] is in the range 1 to NAXIS1, fpixel[1] is in the
+           range 1 to NAXIS2, etc.
+fptr     - pointer to a 'fitsfile' structure describing the FITS file.
+frac     - factional part of the keyword value
+gcount   - number of groups in the primary array (usually = 1)
+gfptr    - fitsfile* pointer to a grouping table HDU.
+group    - GRPIDn/GRPLCn index value identifying a grouping table HDU, or
+           data group number (=0 for non-grouped data)
+grouptype - Grouping table parameter that specifies the columns to be
+           created in a grouping table HDU. Allowed values are: GT_ID_ALL_URI,
+           GT_ID_REF, GT_ID_POS, GT_ID_ALL, GT_ID_REF_URI, and GT_ID_POS_URI.
+grpname  - value to use for the GRPNAME keyword value.
+hdunum   - sequence number of the HDU (Primary array = 1)
+hduok    - was the HDU verification successful (=1) or
+           not (= -1).  Equals zero if the CHECKSUM keyword is not present.
+hdusum   - 32 bit 1's complement checksum for the entire CHDU
+hdutype  - HDU type: IMAGE_HDU (0), ASCII_TBL (1), BINARY_TBL (2), ANY_HDU (-1)
+header   - returned character string containing all the keyword records
+headstart- starting address (in bytes) of the CHDU
+heapsize - size of the binary table heap, in bytes
+history  - the HISTORY keyword comment string (70 char max, null-terminated)
+hour     - hour within day (UTC) (0 - 23)
+inc      - sampling interval for pixels in each FITS dimension
+inclist  - array of pointers to matching keyword names
+incolnum - input column number; range = 1 to TFIELDS
+infile   - the input filename, including path if specified
+infptr   - pointer to a 'fitsfile' structure describing the input FITS file.
+intval   - integer part of the keyword value
+iomode   - file access mode: either READONLY (=0) or READWRITE (=1)
+keyname  - name of a keyword (8 char max, null-terminated)
+keynum   - position of keyword in header (1st keyword = 1)
+keyroot  - root string for the keyword name (5 char max, null-terminated)
+keysexist- number of existing keyword records in the CHU
+keytype  - header record type: -1=delete;  0=append or replace;
+                   1=append; 2=this is the END keyword
+longstr  - arbitrarily long string keyword value (null-terminated)
+lpixel   - coordinate of the last pixel to be read or written in the
+           FITS array.  The array must be of length NAXIS and have values such
+           that lpixel[0] is in the range 1 to NAXIS1, lpixel[1] is in the
+           range 1 to NAXIS2, etc.
+match    - TRUE (=1) if the 2 strings match, else FALSE (=0)
+maxdim   - maximum number of values to return
+member   - row number of a grouping table member HDU.
+memptr   - pointer to the a FITS file in memory
+mem_realloc - pointer to a function for reallocating more memory
+memsize  - size of the memory block allocated for the FITS file
+mfptr    - fitsfile* pointer to a grouping table member HDU.
+mgopt    - grouping table merge option parameter. Allowed values are:
+           OPT_MRG_COPY, and OPT_MRG_MOV.
+minute   - minute within hour (UTC) (0 - 59)
+month    - calendar month (UTC) (1 - 12)
+morekeys - space in the header for this many more keywords
+n_good_rows - number of rows evaluating to TRUE
+namelist - string containing a comma or space delimited list of names
+naxes    - size of each dimension in the FITS array
+naxis    - number of dimensions in the FITS array
+naxis1   - length of the X/first axis of the FITS array
+naxis2   - length of the Y/second axis of the FITS array
+naxis3   - length of the Z/third axis of the FITS array
+nbytes   - number of bytes or characters to read or write
+nchars   - number of characters to read or write
+nelements- number of data elements to read or write
+newfptr  - returned pointer to the reopened file
+newveclen- new value for the column vector repeat parameter
+nexc     - number of names in the exclusion list (may = 0)
+nfound   - number of keywords found (highest keyword number)
+nkeys    - number of keywords in the sequence
+ninc     - number of names in the inclusion list
+nmembers - Number of grouping table members (NAXIS2 value).
+nmove    - number of HDUs to move (+ or -), relative to current position
+nocomments - if equal to TRUE, then no commentary keywords will be copied
+noisebits- number of bits to ignore when compressing floating point images
+nrows    - number of rows in the table
+nstart   - first integer value
+nullarray- set to TRUE (=1) if corresponding data element is undefined
+nulval   - numerical value to represent undefined pixels
+nulstr   - character string used to represent undefined values in ASCII table
+numval   - numerical data value, of the appropriate data type
+offset   - byte offset in the heap or data unit to the first element of the vector
+openfptr - pointer to a currently open FITS file
+overlap  - number of bytes in the binary table heap pointed to by more than 1
+           descriptor
+outcolnum- output column number; range = 1 to TFIELDS + 1
+outfile  - and optional output filename; the input file will be copied to this prior
+           to opening the file
+outfptr  - pointer to a 'fitsfile' structure describing the output FITS file.
+pcount   - value of the PCOUNT keyword = size of binary table heap
+previous - if TRUE, any previous HDUs in the input file will be copied.
+repeat   - length of column vector (e.g. 12J); == 1 for ASCII table
+rmopt    - grouping table remove option parameter. Allowed values are:
+           OPT_RM_GPT, OPT_RM_ENTRY, OPT_RM_MBR, and OPT_RM_ALL.
+rootname - root filename, minus any extension or filtering specifications
+rot      - celestial coordinate rotation angle (degrees)
+rowlen   - length of a table row, in characters or bytes
+rowlist  - sorted list of row numbers to be deleted from the table
+rownum   - number of the row (first row = 1)
+rowrange - list of rows or row ranges: '3,6-8,12,56-80' or '500-'
+row_status - array of True/False results for each row that was evaluated
+scale    - linear scaling factor; true value = (FITS value) * scale + zero
+second   - second within minute (0 - 60.9999999999) (leap second!)
+section  - section of image to be copied (e.g. 21:80,101:200)
+simple   - TRUE (=1) if FITS file conforms to the Standard, else FALSE (=0)
+space    - number of blank spaces to leave between ASCII table columns
+status   - returned error status code (0 = OK)
+sum      - 32 bit unsigned checksum value
+tbcol    - byte position in row to start of column (1st col has tbcol = 1)
+tdisp    - Fortran style display format for the table column
+tdimstr  - the value of the TDIMn keyword
+templt   - template string used in comparison (null-terminated)
+tfields  - number of fields (columns) in the table
+tfopt    - grouping table member transfer option parameter. Allowed values are:
+           OPT_MCP_ADD, and OPT_MCP_MOV.
+tform    - format of the column (null-terminated); allowed values are:
+           ASCII tables:  Iw, Aw, Fww.dd, Eww.dd, or Dww.dd
+           Binary tables: rL, rX, rB, rI, rJ, rA, rAw, rE, rD, rC, rM
+           where 'w'=width of the field, 'd'=no. of decimals, 'r'=repeat count.
+           Variable length array columns are denoted by a '1P' before the data type
+           character (e.g., '1PJ').  When creating a binary table, 2 addition tform
+           data type codes are recognized by CFITSIO: 'rU' and 'rV' for unsigned
+           16-bit and unsigned 32-bit integer, respectively.
+
+theap    - zero indexed byte offset of starting address of the heap
+           relative to the beginning of the binary table data
+tilesize - array of length NAXIS that specifies the dimensions of
+           the image compression tiles
+ttype    - label or name for table column (null-terminated)
+tunit    - physical unit for table column (null-terminated)
+typechar - symbolic code of the table column data type
+typecode - data type code of the table column.  The negative of
+           the value indicates a variable length array column.
+                Datatype             typecode    Mnemonic
+                bit, X                   1        TBIT
+                byte, B                 11        TBYTE
+                logical, L              14        TLOGICAL
+                ASCII character, A      16        TSTRING
+                short integer, I        21        TSHORT
+                integer, J              41        TINT32BIT (same as TLONG)
+                long long integer, K    81        TLONGLONG
+                real, E                 42        TFLOAT
+                double precision, D     82        TDOUBLE
+                complex, C              83        TCOMPLEX
+                double complex, M      163        TDBLCOMPLEX
+unit     - the physical unit string (e.g., 'km/s') for a keyword
+unused   - number of unused bytes in the binary table heap
+urltype  - the file type of the FITS file (file://, ftp://, mem://, etc.)
+validheap- returned value = FALSE if any of the variable length array
+           address are outside the valid range of addresses in the heap
+value    - the keyword value string (70 char max, null-terminated)
+version  - current version number of the CFITSIO library
+width    - width of the character string field
+xcol     - number of the column containing the X coordinate values
+xinc     - X axis coordinate increment at reference pixel (deg)
+xpix     - X axis pixel location
+xpos     - X axis celestial coordinate (usually RA) (deg)
+xrefpix  - X axis reference pixel array location
+xrefval  - X axis coordinate value at the reference pixel (deg)
+ycol     - number of the column containing the X coordinate values
+year     - calendar year (e.g. 1999, 2000, etc)
+yinc     - Y axis coordinate increment at reference pixel (deg)
+ypix     - y axis pixel location
+ypos     - y axis celestial coordinate (usually DEC) (deg)
+yrefpix  - Y axis reference pixel array location
+yrefval  - Y axis coordinate value at the reference pixel (deg)
+zero     - scaling offset; true value = (FITS value) * scale + zero
+</PRE>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.7.6 Column Binning or Histogramming Routines</TITLE>
+<META NAME="description" CONTENT="5.7.6 Column Binning or Histogramming Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node47.html">
+<LINK REL="up" HREF="node42.html">
+<LINK REL="next" HREF="node49.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html879"
+  HREF="node49.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html875"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html871"
+  HREF="node47.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html877"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html880"
+  HREF="node49.html">5.8 Utility Routines</A>
+<B>Up:</B> <A NAME="tex2html876"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html872"
+  HREF="node47.html">5.7.5 Row Selection and</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00676000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">6</SPAN> Column Binning or Histogramming Routines</A>
+</H2>
+
+<P>
+The following routines may be useful when performing histogramming operations on
+column(s) of a table to generate an image in a primary array or image extension.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Calculate the histogramming parameters (min, max, and bin size
+for each axis of the histogram, based on a variety of possible input parameters.
+If the input names of the columns to be binned are null, then the routine will first
+look for the CPREF = "NAME1, NAME2, ..." keyword which lists the preferred
+columns.  If not present, then the routine will assume the column names X, Y, Z, and T
+for up to 4 axes (as specified by the NAXIS parameter).
+
+<P>
+MININ and MAXIN are input arrays that give the minimum and maximum value for
+the histogram, along each axis.  Alternatively, the name of keywords that give
+the min, max, and binsize may be give with the MINNAME, MAXNAME, and BINNAME
+array parameters.  If the value = DOUBLENULLVALUE and no keyword names are
+given,  then the routine will use the TLMINn and TLMAXn keywords, if present, or the
+actual min and/or max values in the column.
+
+<P>
+The &ldquo;d&rdquo; version has double precision floating point outputs as noted
+in the calling signature.  The version without &ldquo;d&rdquo; has single
+precision floating point outputs.
+
+<P>
+BINSIZEIN is an array giving the binsize along each axis.
+If the value =
+DOUBLENULLVALUE, and a keyword name is not specified with BINNAME,
+then this routine will first look for the TDBINn keyword, or else will
+use a binsize = 1, or a binsize that produces 10 histogram bins, which ever
+is smaller.
+ <A NAME="calcbinning"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_calc_binning[d]
+   Input parameters:
+     (fitsfile *fptr,  /* IO - pointer to table to be binned              */
+      int naxis,       /* I - number of axes/columns in the binned image  */
+      char colname[4][FLEN_VALUE],   /* I - optional column names         */
+      double *minin,     /* I - optional lower bound value for each axis  */
+      double *maxin,     /* I - optional upper bound value, for each axis */
+      double *binsizein, /* I - optional bin size along each axis         */
+      char minname[4][FLEN_VALUE], /* I - optional keywords for min       */
+      char maxname[4][FLEN_VALUE], /* I - optional keywords for max       */
+      char binname[4][FLEN_VALUE], /* I - optional keywords for binsize   */
+   Output parameters:
+      int *colnum,     /* O - column numbers, to be binned */
+      long *naxes,     /* O - number of bins in each histogram axis */
+      float[double] *amin,     /* O - lower bound of the histogram axes */
+      float[double] *amax,     /* O - upper bound of the histogram axes */
+      float[double] *binsize,  /* O - width of histogram bins/pixels on each axis */
+      int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Copy the relevant keywords from the header of the table that is being
+binned, to the the header of the output histogram image.  This will not
+copy the table structure keywords (e.g., NAXIS, TFORMn, TTYPEn, etc.) nor
+will it copy the keywords that apply to other columns of the table that are
+not used to create the histogram.  This routine will translate the names of
+the World Coordinate System (WCS) keywords for the binned columns into the
+form that is need for a FITS image (e.g., the TCTYPn table keyword will
+be translated to the CTYPEn image keyword).
+ <A NAME="copypixlist2image"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_pixlist2image
+      (fitsfile *infptr,   /* I - pointer to input HDU */
+       fitsfile *outfptr,  /* I - pointer to output HDU */
+       int firstkey,       /* I - first HDU keyword to start with */
+       int naxis,          /* I - number of axes in the image */
+       int *colnum,        /* I - numbers of the columns to be binned  */
+       int *status)        /* IO - error status */
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Write a set of default WCS keywords to the histogram header, IF the
+WCS keywords do not already exist.  This will create a linear WCS where
+the coordinate types are equal to the original column names.
+ <A NAME="writekeyshisto"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_write_keys_histo
+     (fitsfile *fptr,     /* I - pointer to table to be binned              */
+      fitsfile *histptr,  /* I - pointer to output histogram image HDU      */
+      int naxis,          /* I - number of axes in the histogram image      */
+      int *colnum,        /* I - column numbers of the binned columns       */
+      int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Update the WCS keywords in a histogram image header that give the location
+of the reference pixel (CRPIXn), and the pixel size (CDELTn), in the binned
+image.
+
+<P>
+The &ldquo;d&rdquo; version has double precision floating point inputs as noted
+in the calling signature.  The version without &ldquo;d&rdquo; has single
+precision floating point inputs.
+
+<P>
+<A NAME="rebinwcs"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_rebin_wcs[d]
+     (fitsfile *fptr,     /* I - pointer to table to be binned           */
+      int naxis,          /* I - number of axes in the histogram image   */
+      float[double] *amin,        /* I - first pixel include in each axis        */
+      float[double] *binsize,     /* I - binning factor for each axis            */
+      int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Bin the values in the input table columns, and write the histogram
+array to the output FITS image (histptr).
+
+<P>
+The &ldquo;d&rdquo; version has double precision floating point inputs as noted
+in the calling signature.  The version without &ldquo;d&rdquo; has single
+precision floating point inputs.
+ <A NAME="makehist"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_make_hist[d]
+   (fitsfile *fptr,    /* I - pointer to table with X and Y cols;      */
+    fitsfile *histptr, /* I - pointer to output FITS image             */
+    int bitpix,        /* I - datatype for image: 16, 32, -32, etc     */
+    int naxis,         /* I - number of axes in the histogram image    */
+    long *naxes,       /* I - size of axes in the histogram image      */
+    int *colnum,       /* I - column numbers (array length = naxis)    */
+    float[double] *amin,       /* I - minimum histogram value, for each axis   */
+    float[double] *amax,       /* I - maximum histogram value, for each axis   */
+    float[double] *binsize,    /* I - bin size along each axis                 */
+    float[double] weight,      /* I - binning weighting factor (FLOATNULLVALUE */
+                       /*     for no weighting)                        */
+    int wtcolnum,      /* I - keyword or col for weight      (or NULL) */
+    int recip,         /* I - use reciprocal of the weight? 0 or 1     */
+    char *selectrow,   /* I - optional array (length = no. of          */
+                       /* rows in the table).  If the element is true  */
+                       /* then the corresponding row of the table will */
+                       /* be included in the histogram, otherwise the  */
+                       /* row will be skipped.  Ingnored if *selectrow */
+                       /* is equal to NULL.                            */
+    int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html879"
+  HREF="node49.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html875"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html871"
+  HREF="node47.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html877"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html880"
+  HREF="node49.html">5.8 Utility Routines</A>
+<B>Up:</B> <A NAME="tex2html876"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html872"
+  HREF="node47.html">5.7.5 Row Selection and</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

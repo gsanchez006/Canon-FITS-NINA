@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.2.6 Notes about the shmem filetype:</TITLE>
+<META NAME="description" CONTENT="10.2.6 Notes about the shmem filetype:">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node90.html">
+<LINK REL="up" HREF="node85.html">
+<LINK REL="next" HREF="node92.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1448"
+  HREF="node92.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1444"
+  HREF="node85.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1440"
+  HREF="node90.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1446"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1449"
+  HREF="node92.html">10.3 Base Filename</A>
+<B>Up:</B> <A NAME="tex2html1445"
+  HREF="node85.html">10.2 Filetype</A>
+<B> Previous:</B> <A NAME="tex2html1441"
+  HREF="node90.html">10.2.5 Notes about the</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001126000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">6</SPAN> Notes about the shmem filetype:</A>
+</H2>
+
+<P>
+Shared memory files are currently supported on most Unix platforms,
+where the shared memory segments are managed by the operating system
+kernel and `live' independently of processes. They are not deleted (by
+default) when the process which created them terminates, although they
+will disappear if the system is rebooted.  Applications can create
+shared memory files in CFITSIO by calling:
+
+<P>
+<PRE>
+   fit_create_file(&amp;fitsfileptr, "shmem://h2", &amp;status);
+</PRE>
+where the root `file' names are currently restricted to be 'h0', 'h1',
+'h2', 'h3', etc., up to a maximum number defined by the the value of
+SHARED_MAXSEG (equal to 16 by default).  This is a prototype
+implementation of the shared memory interface and a more robust
+interface, which will have fewer restrictions on the number of files
+and on their names, may be developed in the future.
+
+<P>
+When opening an already existing FITS file in shared memory one calls
+the usual CFITSIO routine:
+
+<P>
+<PRE>
+   fits_open_file(&amp;fitsfileptr, "shmem://h7", mode, &amp;status)
+</PRE>
+The file mode can be READWRITE or READONLY just as with disk files.
+More than one process can operate on READONLY mode files at the same
+time.  CFITSIO supports proper file locking (both in READONLY and
+READWRITE modes), so calls to fits_open_file may be locked out until
+another other process closes the file.
+
+<P>
+When an application is finished accessing a FITS file in a shared
+memory segment, it may close it  (and the file will remain in the
+system) with fits_close_file, or delete it with fits_delete_file.
+Physical deletion is postponed until the last process calls
+ffclos/ffdelt.  fits_delete_file tries to obtain a READWRITE lock on
+the file to be deleted, thus it can be blocked if the object was not
+opened in READWRITE mode.
+
+<P>
+A shared memory management utility program called `smem', is included
+with the CFITSIO distribution.  It can be built by typing `make smem';
+then type `smem -h' to get a list of valid options.  Executing smem
+without any options causes it to list all the shared memory segments
+currently residing in the system and managed by the shared memory
+driver. To get a list of all the shared memory objects, run the system
+utility program `ipcs  [-a]'.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1448"
+  HREF="node92.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1444"
+  HREF="node85.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1440"
+  HREF="node90.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1446"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1449"
+  HREF="node92.html">10.3 Base Filename</A>
+<B>Up:</B> <A NAME="tex2html1445"
+  HREF="node85.html">10.2 Filetype</A>
+<B> Previous:</B> <A NAME="tex2html1441"
+  HREF="node90.html">10.2.5 Notes about the</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

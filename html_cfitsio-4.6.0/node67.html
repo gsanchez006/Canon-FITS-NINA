@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.2 HDU Access Routines</TITLE>
+<META NAME="description" CONTENT="9.2 HDU Access Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node68.html">
+<LINK REL="previous" HREF="node64.html">
+<LINK REL="up" HREF="node63.html">
+<LINK REL="next" HREF="node68.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1126"
+  HREF="node68.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1122"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1116"
+  HREF="node66.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1124"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1127"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B>Up:</B> <A NAME="tex2html1123"
+  HREF="node63.html">9. Specialized CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html1117"
+  HREF="node66.html">9.1.2 Download Utility Functions</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001020000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">2</SPAN> HDU Access Routines</A>
+</H1>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Get the byte offsets in the FITS file to the start of the header
+    and the start and end of the data in the CHDU. The difference
+    between headstart and dataend equals the size of the CHDU.  If the
+    CHDU is the last HDU in the file, then dataend is also equal to the
+    size of the entire FITS file.  Null pointers may be input for any
+   of the address parameters if their values are not needed. <A NAME="ffghad"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_get_hduaddr / ffghad  (only supports files up to 2.1 GB in size)
+       (fitsfile *fptr, &gt; long *headstart, long *datastart, long *dataend,
+        int *status)
+
+  int fits_get_hduaddrll / ffghadll  (supports large files)
+       (fitsfile *fptr, &gt; LONGLONG *headstart, LONGLONG *datastart,
+        LONGLONG *dataend, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Create (append) a new empty HDU at the end of the FITS file.
+    This is now  the CHDU but it is completely empty and has
+    no header keywords.  It is recommended that fits_create_img or
+ fits_create_tbl be used instead of this routine. <A NAME="ffcrhd"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_create_hdu / ffcrhd
+      (fitsfile *fptr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Insert a new IMAGE extension immediately following the CHDU, or
+    insert a new Primary Array at the beginning of the file.  Any
+    following extensions in the file will be shifted down to make room
+    for the new extension.  If the CHDU is the last HDU in the file
+    then the new image extension will simply be appended to the end of
+    the file.   One can force a new primary array to be inserted at the
+    beginning of the FITS file by setting status = PREPEND_PRIMARY prior
+    to calling the routine.  In this case the old primary array will be
+    converted to an IMAGE extension. The new extension (or primary
+    array) will become the CHDU.  Refer to Chapter 9 for a list of
+   pre-defined bitpix values.  <A NAME="ffiimg"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_insert_img / ffiimg
+      (fitsfile *fptr, int bitpix, int naxis, long *naxes, &gt; int *status)
+
+  int fits_insert_imgll / ffiimgll
+      (fitsfile *fptr, int bitpix, int naxis, LONGLONG *naxes, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Insert a new ASCII or binary table extension immediately following the CHDU.
+    Any following extensions will be shifted down to make room for the
+    new extension.  If there are no other following extensions then the
+    new table extension will simply be appended to the end of the
+    file.   If the FITS file is currently empty then this routine will
+    create a dummy primary array before appending the table to it. The
+    new extension will become the CHDU.  The tunit and extname
+    parameters are optional and a null pointer may be given if they are
+    not defined.  When inserting an ASCII table with
+    fits_insert_atbl, a null pointer  may given for the *tbcol
+    parameter in which case each column of the table will be separated
+    by a single space character. Similarly, if the input value of
+    rowlen is  0, then CFITSIO will calculate the default rowlength
+    based on the tbcol and ttype values.  Under normal circumstances,
+    the nrows
+    paramenter should have a value of 0; CFITSIO will automatically update
+    the number of rows as data is written to the table.  When inserting a binary table
+    with fits_insert_btbl, if there are following extensions in the
+    file and if the table contains variable length array columns then
+    pcount must specify the expected final size of the data heap,
+   otherwise pcount must = 0. <A NAME="ffitab"></A> <A NAME="ffibin"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_insert_atbl / ffitab
+      (fitsfile *fptr, LONGLONG rowlen, LONGLONG nrows, int tfields, char *ttype[],
+       long *tbcol, char *tform[], char *tunit[], char *extname, &gt; int *status)
+
+  int fits_insert_btbl / ffibin
+      (fitsfile *fptr, LONGLONG nrows, int tfields, char **ttype,
+      char **tform, char **tunit, char *extname, long pcount, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Modify the size, dimensions, and/or data type of the current
+    primary array or image extension. If the new image, as specified
+    by the input arguments, is larger than the current existing image
+    in the FITS file then zero fill data will be inserted at the end
+    of the current image and any following extensions will be moved
+    further back in the file.  Similarly, if the new image is
+    smaller than the current image then any following extensions
+    will be shifted up towards the beginning of the FITS file
+    and the image data will be truncated to the new size.
+    This routine rewrites the BITPIX, NAXIS, and NAXISn keywords
+   with the appropriate values for the new image. <A NAME="ffrsim"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_resize_img / ffrsim
+      (fitsfile *fptr, int bitpix, int naxis, long *naxes, &gt; int *status)
+
+  int fits_resize_imgll / ffrsimll
+      (fitsfile *fptr, int bitpix, int naxis, LONGLONG *naxes, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Copy the data (and not the header) from the CHDU associated with infptr
+    to the CHDU associated with outfptr. This will overwrite any data
+    previously in the output CHDU.  This low level routine is used by
+    fits_copy_hdu, but it may also be useful in certain application programs
+    that want to copy the data from one FITS file to another but also
+    want to modify the header keywords. The required FITS header keywords
+    which define the structure of the HDU must be written to the
+   output CHDU before calling this routine. <A NAME="ffcpdt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_data / ffcpdt
+      (fitsfile *infptr, fitsfile *outfptr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>7 </STRONG></DT>
+<DD>Read or write a specified number of bytes starting at the specified byte
+    offset from the start of the extension data unit.  These low
+    level routine are intended mainly for accessing the data in
+    non-standard, conforming extensions, and should not be used for standard
+   IMAGE, TABLE, or BINTABLE extensions. <A NAME="ffgextn"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_read_ext / ffgextn
+      (fitsfile *fptr, LONGLONG offset, LONGLONG nbytes, void *buffer)
+  int fits_write_ext / ffpextn
+      (fitsfile *fptr, LONGLONG offset, LONGLONG nbytes, void *buffer)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>8 </STRONG></DT>
+<DD>This routine forces CFITSIO to rescan the current header keywords that
+    define the structure of the HDU (such as the NAXIS and BITPIX
+    keywords) so that it reinitializes the internal buffers that
+    describe the HDU structure.  This routine is useful for
+    reinitializing the structure of an HDU if any of the required
+    keywords (e.g., NAXISn) have been modified.  In practice it should
+    rarely be necessary to call this routine because CFITSIO
+   internally calls it in most situations. <A NAME="ffrdef"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_set_hdustruc / ffrdef
+      (fitsfile *fptr, &gt; int *status)   (DEPRECATED)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1126"
+  HREF="node68.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1122"
+  HREF="node63.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1116"
+  HREF="node66.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1124"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1127"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B>Up:</B> <A NAME="tex2html1123"
+  HREF="node63.html">9. Specialized CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html1117"
+  HREF="node66.html">9.1.2 Download Utility Functions</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

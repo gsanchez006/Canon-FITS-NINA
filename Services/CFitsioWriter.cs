@@ -75,22 +75,18 @@ namespace NINA.Plugin.Canon.EDSDK.Services
                     }
                 }
 
-                // Create image array (16-bit signed, we'll set BZERO for unsigned interpretation)
+                // Create image array using USHORT_IMG for unsigned 16-bit integers
+                // CFitsio automatically sets BITPIX=16, BZERO=32768, BSCALE=1 for USHORT_IMG
                 // Note: With compression enabled, cfitsio creates a compressed IMAGE extension
                 // and puts it in HDU 1 with an empty primary HDU 0. This is FITS standard,
                 // but some software expects image in primary HDU. The NAXIS keywords are
                 // automatically set correctly by cfitsio in both the primary and extension HDUs.
-                Logger.Info($"  Creating image with naxis=2, naxes=[{naxes[0]}, {naxes[1]}], bitpix={CFitsioNative.SHORT_IMG}");
-                CFitsioNative.fits_create_img(fptr, CFitsioNative.SHORT_IMG, 2, naxes, out status);
+                Logger.Info($"  Creating image with naxis=2, naxes=[{naxes[0]}, {naxes[1]}], bitpix={CFitsioNative.USHORT_IMG} (unsigned 16-bit)");
+                CFitsioNative.fits_create_img(fptr, CFitsioNative.USHORT_IMG, 2, naxes, out status);
                 CFitsioNative.CheckStatus(status, "Creating image HDU");
 
-                // Set BZERO=32768 to interpret signed short as unsigned (0-65535 range)
-                CFitsioNative.fits_update_key_lng(fptr, "BZERO", 32768, "Offset for unsigned integer data", out status);
-                CFitsioNative.CheckStatus(status, "Writing BZERO");
-
-                // Write BSCALE (must be 1 for raw data)
-                CFitsioNative.fits_update_key_lng(fptr, "BSCALE", 1, "Data scaling factor", out status);
-                CFitsioNative.CheckStatus(status, "Writing BSCALE");
+                // BZERO=32768 and BSCALE=1 are automatically set by CFitsio for USHORT_IMG
+                // No manual keyword writing needed - CFitsio handles the unsigned integer convention
 
                 // Write all NINA metadata headers
                 WriteNinaMetadata(fptr, metadata);

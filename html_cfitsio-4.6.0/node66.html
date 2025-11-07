@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.1.2 Download Utility Functions</TITLE>
+<META NAME="description" CONTENT="9.1.2 Download Utility Functions">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node65.html">
+<LINK REL="up" HREF="node64.html">
+<LINK REL="next" HREF="node67.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1114"
+  HREF="node67.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1110"
+  HREF="node64.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1106"
+  HREF="node65.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1112"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1115"
+  HREF="node67.html">9.2 HDU Access Routines</A>
+<B>Up:</B> <A NAME="tex2html1111"
+  HREF="node64.html">9.1 FITS File Access</A>
+<B> Previous:</B> <A NAME="tex2html1107"
+  HREF="node65.html">9.1.1 File Access</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001012000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">1</SPAN>.<SPAN CLASS="arabic">2</SPAN> Download Utility Functions</A>
+</H2>
+
+<P>
+These routines do not need to be called for normal file accessing. They are
+primarily intended to help with debugging and diagnosing issues which occur 
+during file downloads.  These routines are NOT THREAD-SAFE.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Toggle the verbosity of the libcurl library diagnostic output when
+   accessing files with the HTTPS or FTPS protocol.  `flag' = 1 turns the output
+   on, 0 turns it off (the default).
+  <A NAME="ffvhtps"></A></DD>
+</DL>
+
+<P>
+<PRE>
+   void fits_verbose_https / ffvhtps
+        (int flag)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2</STRONG></DT>
+<DD>If `flag' is set to 1, this will display (to stderr) a progress 
+  bar during an https file download.  (This is not yet implemented
+  for other file transfer protocols.)  `flag' = 0 by default.
+ <A NAME="ffshdwn"></A></DD>
+</DL>
+
+<P>
+<PRE>
+   void fits_show_download_progress / ffshdwn
+        (int flag)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3</STRONG></DT>
+<DD>The timeout setting (in seconds) determines the maximum time
+  allowed for a net download to complete.  If a download has not finished within
+  the allowed time, the file transfer will terminate and the CFITSIO calling
+  function will return with an error.  Use fits_get_timeout will see the 
+  current timeout setting and fits_set_timeout to change the setting.  This
+  adjustmant may be particularly useful when having trouble downloading large 
+  files over slow connections.
+ <A NAME="ffgtmo"></A></DD>
+</DL>
+
+<P>
+<PRE>
+   int fits_get_timeout / ffgtmo
+       ()
+       
+   int fits_set_timeout / ffstmo
+       (int seconds, &gt; int *status)
+</PRE>
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

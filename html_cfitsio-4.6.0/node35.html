@@ -1,0 +1,315 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.2 FITS File Access Routines</TITLE>
+<META NAME="description" CONTENT="5.2 FITS File Access Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node36.html">
+<LINK REL="previous" HREF="node34.html">
+<LINK REL="up" HREF="node33.html">
+<LINK REL="next" HREF="node36.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html719"
+  HREF="node36.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html715"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html709"
+  HREF="node34.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html717"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html720"
+  HREF="node36.html">5.3 HDU Access Routines</A>
+<B>Up:</B> <A NAME="tex2html716"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html710"
+  HREF="node34.html">5.1 CFITSIO Error Status</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00620000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">2</SPAN> FITS File Access Routines</A>
+</H1>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Open an existing data file. <A NAME="ffopen"></A>
+<P>
+<PRE>
+int fits_open_file / ffopen
+    (fitsfile **fptr, char *filename, int iomode, &gt; int *status)
+
+int fits_open_diskfile / ffdkopn
+    (fitsfile **fptr, char *filename, int iomode, &gt; int *status)
+
+int fits_open_data / ffdopn
+    (fitsfile **fptr, char *filename, int iomode, &gt; int *status)
+
+int fits_open_table / fftopn
+    (fitsfile **fptr, char *filename, int iomode, &gt; int *status)
+
+int fits_open_image / ffiopn
+    (fitsfile **fptr, char *filename, int iomode, &gt; int *status)
+
+int fits_open_extlist / ffeopn
+    (fitsfile **fptr, char *filename, int iomode, char *extlist,
+    &gt;  int *hdutype, int *status)
+</PRE>
+
+<P>
+The iomode parameter determines the read/write access allowed in the
+file and can have values of READONLY (0) or READWRITE (1). The filename
+parameter gives the name of the file to be opened, followed by an
+optional argument giving the name or index number of the extension
+within the FITS file that should be moved to and opened (e.g.,
+<code>myfile.fits+3</code> or <code>myfile.fits[3]</code> moves to the 3rd extension within
+the file, and <code>myfile.fits[events]</code> moves to the extension with the
+keyword EXTNAME = 'EVENTS').
+
+<P>
+The fits_open_diskfile routine is similar to the fits_open_file routine
+except that it does not support the extended filename syntax in the input
+file name.  This routine simply tries to open the specified input file
+on magnetic disk.  This routine is mainly for use in cases where the
+filename (or directory path) contains square or curly bracket characters
+that would confuse the extended filename parser.
+
+<P>
+The fits_open_data routine is similar to the fits_open_file routine
+except that it will move to the first HDU containing significant data,
+if a HDU name or number to open was not explicitly specified as
+part of the filename.  In this case, it will look for the first
+IMAGE HDU with NAXIS greater than 0, or the first table that does not contain the
+strings `GTI' (Good Time Interval extension) or `OBSTABLE' in the
+EXTNAME keyword value.
+
+<P>
+The fits_open_table and fits_open_image routines are similar to
+fits_open_data except they will move to the first significant table
+HDU or image HDU in the file, respectively, if a HDU name or
+number is not specified as part of the filename.
+
+<P>
+The fits_open_extlist routine opens the file and attempts to move to
+a 'useful' HDU. If after opening the file CFITSIO is pointing to null
+primary array, then CFITSIO will attempt to move to the first
+extension that has an EXTNAME or HDUNAME keyword value that matches
+one of the names in the input extlist space-delimited list of names
+(wildcards are permitted).  If that fails, then CFITSIO simply moves
+to the 2nd HDU in the file.  Upon return, the type of the HDU is
+returned in *hdutype, as described in <A HREF="node36.html#ffmahd">5.3</A> HDU Access Routines.
+
+<P>
+IRAF images (.imh format files) and raw binary data arrays may also be
+opened with READONLY access.  CFITSIO will automatically test if the
+input file is an IRAF image, and if, so will convert it on the fly into
+a virtual FITS image before it is opened by the application program.
+If the input file is a raw binary data array of numbers, then the data type
+and dimensions of the array must be specified in square brackets
+following the name of the file (e.g.  'rawfile.dat[i512,512]' opens a
+512 x 512 short integer image).  See the `Extended File Name Syntax'
+chapter for more details on how to specify the raw file name.  The raw
+file is converted on the fly into a virtual FITS image in memory that
+is then opened by the application program with READONLY access.
+
+<P>
+Programs can read the input file from the 'stdin' file stream if a dash
+character ('-') is given as the filename. Files can also be opened over
+the network using FTP or HTTP protocols by supplying the appropriate URL
+as the filename.  The HTTPS and FTPS protocols are also supported if the CFITSIO
+build includes the libcurl library.  (If the CFITSIO 'configure' script
+finds a usable libcurl library on your system, it will automatically be 
+included in the build.)
+
+<P>
+The input file can be modified in various ways to create a virtual file
+(usually stored in memory) that is then opened by the application
+program by supplying a filtering or binning specifier in square brackets
+following the filename. Some of the more common filtering methods are
+illustrated in the following paragraphs, but users should refer to the
+'Extended File Name Syntax' chapter for a complete description of
+the full file filtering syntax.
+
+<P>
+When opening an image, a rectangular subset of the physical image may be
+opened by listing the first and last pixel in each dimension (and
+optional pixel skipping factor):
+
+<P>
+<PRE>
+myimage.fits[101:200,301:400]
+</PRE>
+will create and open a 100x100 pixel virtual image of that section of
+the physical image, and <code>myimage.fits[*,-*]</code> opens a virtual image
+that is the same size as the physical image but has been flipped in
+the vertical direction.
+
+<P>
+When opening a table, the filtering syntax can be used to add or delete
+columns or keywords in the virtual table:
+<code>myfile.fits[events][col !time; PI = PHA*1.2]</code> opens a virtual table in which the TIME column
+has been deleted and a new PI column has been added with a value 1.2
+times that of the PHA column. Similarly, one can filter a table to keep
+only those rows that satisfy a selection criterion:
+<code>myfile.fits[events][pha &gt; 50]</code> creates and opens a virtual table
+containing only those rows with a PHA value greater than 50. A large
+number of boolean and mathematical operators can be used in the
+selection expression. One can also filter table rows using 'Good Time
+Interval' extensions, and spatial region filters as in
+<code>myfile.fits[events][gtifilter()]</code> and
+<code>myfile.fits[events][regfilter( "stars.rng")]</code>.
+
+<P>
+Finally, table columns may be binned or histogrammed to generate a
+virtual image. For example, <code>myfile.fits[events][bin (X,Y)=4]</code> will
+result in a 2-dimensional image calculated by binning the X and Y
+columns in the event table with a bin size of 4 in each dimension. The
+TLMINn and TLMAXn keywords will be used by default to determine the
+range of the image.
+
+<P>
+A single program can open the same FITS file more than once and then
+treat the resulting fitsfile pointers as though they were completely
+independent FITS files. Using this facility, a program can open a FITS
+file twice, move to 2 different extensions within the file, and then
+ read and write data in those extensions in any order.
+</DD>
+</DL>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Create and open a new empty output FITS file. <A NAME="ffinit"></A>
+<P>
+<PRE>
+int fits_create_file / ffinit
+    (fitsfile **fptr, char *filename, &gt; int *status)
+
+int fits_create_diskfile / ffdkinit
+    (fitsfile **fptr, char *filename, &gt; int *status)
+</PRE>
+
+<P>
+An error will be returned if the specified file already exists, unless
+the filename is prefixed with an exclamation point (!). In that case
+CFITSIO will overwrite (delete) any existing file with the same name.
+Note that the exclamation point is a special UNIX character so if
+it is used on the command line it must be preceded by a backslash to
+force the UNIX shell to accept the character as part of the filename.
+
+<P>
+The output file will be written to the 'stdout' file stream if a dash
+character ('-') or the string 'stdout' is given as the filename. Similarly,
+'-.gz' or 'stdout.gz' will cause the file to be gzip compressed before
+it is written out to the stdout stream.
+
+<P>
+Optionally, the name of a template file that is used to define the
+structure of the new file may be specified in parentheses following the
+output file name. The template file may be another FITS file, in which
+case the new file, at the time it is opened, will be an exact copy of
+the template file except that the data structures (images and tables)
+will be filled with zeros. Alternatively, the template file may be an
+ASCII format text file containing directives that define the keywords to be
+created in each HDU of the file. See the 'Extended File Name Syntax'
+ section for a complete description of the template file syntax.
+
+<P>
+The fits_create_diskfile routine is similar to the fits_create_file routine
+except that it does not support the extended filename syntax in the input
+file name.  This routine simply tries to create the specified file
+on magnetic disk.  This routine is mainly for use in cases where the
+filename (or directory path) contains square or curly bracket characters
+ that would confuse the extended filename parser.
+</DD>
+</DL>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Close a previously opened FITS file.  The first routine simply
+closes the file, whereas the second one also DELETES the file, which
+can be useful in cases where a FITS file has been partially created,
+but then an error occurs which prevents it from being completed.
+Note that these routines behave differently than most other CFITSIO routines
+if the input value of the `status' parameter is not zero:  Instead of
+simply returning to the calling program without doing anything, these
+routines effectively ignore the input status value and still attempt
+to close or delete the file.
+ <A NAME="ffclos"></A> <A NAME="ffdelt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_close_file / ffclos (fitsfile *fptr, &gt; int *status)
+
+  int fits_delete_file / ffdelt (fitsfile *fptr, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Return the name, I/O mode (READONLY or READWRITE), and/or the file
+type (e.g. 'file://', 'ftp://') of the opened FITS file. <A NAME="ffflnm"></A> <A NAME="ffflmd"></A> <A NAME="ffurlt"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_file_name / ffflnm (fitsfile *fptr, &gt; char *filename, int *status)
+
+  int fits_file_mode / ffflmd (fitsfile *fptr, &gt; int *iomode, int *status)
+
+  int fits_url_type / ffurlt (fitsfile *fptr, &gt; char *urltype, int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html719"
+  HREF="node36.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html715"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html709"
+  HREF="node34.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html717"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html720"
+  HREF="node36.html">5.3 HDU Access Routines</A>
+<B>Up:</B> <A NAME="tex2html716"
+  HREF="node33.html">5. Basic CFITSIO Interface</A>
+<B> Previous:</B> <A NAME="tex2html710"
+  HREF="node34.html">5.1 CFITSIO Error Status</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

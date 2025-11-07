@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.7.3 Routines to Edit Rows or Columns</TITLE>
+<META NAME="description" CONTENT="5.7.3 Routines to Edit Rows or Columns">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node46.html">
+<LINK REL="previous" HREF="node44.html">
+<LINK REL="up" HREF="node42.html">
+<LINK REL="next" HREF="node46.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html845"
+  HREF="node46.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html841"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html835"
+  HREF="node44.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html843"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html846"
+  HREF="node46.html">5.7.4 Read and Write</A>
+<B>Up:</B> <A NAME="tex2html842"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html836"
+  HREF="node44.html">5.7.2 Column Information Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00673000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">3</SPAN> Routines to Edit Rows or Columns</A>
+</H2>
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Insert or delete rows in an ASCII or binary table. When inserting rows
+    all the rows following row FROW are shifted down by NROWS rows;  if
+    FROW = 0 then the blank rows are inserted at the beginning of the
+    table.  Note that it is *not* necessary to insert rows in a table before
+    writing data to those rows (indeed, it would be inefficient to do so).
+    Instead one may simply write data to any row of the table, whether that
+    row of data already exists or not.
+
+<P>
+The first delete routine deletes NROWS consecutive rows
+    starting with row FIRSTROW.  The second delete routine takes an
+    input string that lists the rows or row ranges (e.g.,
+    '5-10,12,20-30'), whereas the third delete routine takes an input
+    integer array that specifies each individual row to be deleted. In
+    both latter cases, the input list of rows to delete must be sorted
+    in ascending order.  These routines update the NAXIS2 keyword to
+    reflect the new number of rows in the
+   table. <A NAME="ffirow"></A> <A NAME="ffdrow"></A> <A NAME="ffdrws"></A> <A NAME="ffdrrg"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_insert_rows / ffirow
+      (fitsfile *fptr, LONGLONG firstrow, LONGLONG nrows, &gt; int *status)
+
+  int fits_delete_rows / ffdrow
+      (fitsfile *fptr, LONGLONG firstrow, LONGLONG nrows, &gt; int *status)
+
+  int fits_delete_rowrange / ffdrrg
+      (fitsfile *fptr, char *rangelist, &gt; int *status)
+
+  int fits_delete_rowlist / ffdrws
+      (fitsfile *fptr, long *rowlist, long nrows, &gt; int *status)
+
+  int fits_delete_rowlistll / ffdrwsll
+      (fitsfile *fptr, LONGLONG *rowlist, LONGLONG nrows, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Insert or delete column(s) in an ASCII or binary
+    table.  When inserting, COLNUM specifies the column number that the
+    (first) new column should occupy in the table.  NCOLS specifies how
+    many columns are to be inserted. Any existing columns from this
+    position and higher are shifted over to allow room for the new
+    column(s).  The index number on all the following keywords will be
+    incremented or decremented if necessary to reflect the new position
+    of the column(s) in the table:  TBCOLn, TFORMn, TTYPEn, TUNITn,
+    TNULLn, TSCALn, TZEROn, TDISPn, TDIMn, TLMINn, TLMAXn, TDMINn,
+    TDMAXn, TCTYPn, TCRPXn, TCRVLn, TCDLTn, TCROTn,
+   and TCUNIn. <A NAME="fficol"></A> <A NAME="fficls"></A> <A NAME="ffdcol"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_insert_col / fficol
+      (fitsfile *fptr, int colnum, char *ttype, char *tform,
+       &gt; int *status)
+
+  int fits_insert_cols / fficls
+      (fitsfile *fptr, int colnum, int ncols, char **ttype,
+       char **tform, &gt; int *status)
+
+  int fits_delete_col / ffdcol(fitsfile *fptr, int colnum, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Copy column(s) between HDUs.  If create_col = TRUE, then
+    new column(s) will be inserted in the output table, starting at
+    position `outcolumn', otherwise the existing output column(s) will
+    be overwritten (in which case they must have a compatible data
+    type).
+
+<P>
+The first form copies a single column incolnum to outcolnum.
+    Copying within the same HDU is permitted.  The second form copies
+    ncols columns from the input, starting at column incolnum to the
+    output, starting at outcolnum.  For the second form, the input and
+    output must be different HDUs.
+
+<P>
+If outcolnum is greater than the number of column in the output table, then
+    the new column(s) will be appended to the end of the table.
+    Note that the first column in a table is at colnum = 1.
+    The standard indexed keywords that related to the columns (e.g., TDISPn,
+    TUNITn, TCRPXn, TCDLTn, etc.) will also be copied. <A NAME="ffcpcl"></A> <A NAME="ffccls"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_col / ffcpcl
+      (fitsfile *infptr, fitsfile *outfptr, int incolnum, int outcolnum,
+       int create_col, &gt; int *status);
+
+  int fits_copy_cols / ffccls
+      (fitsfile *infptr, fitsfile *outfptr, int incolnum, int outcolnum, 
+       int ncols, int create_col, &gt; int *status);
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>4 </STRONG></DT>
+<DD>Copy 'nrows' consecutive rows from one table to another, beginning
+    with row 'firstrow'.  These rows will be appended to any existing
+    rows in the output table.
+   Note that the first row in a table is at row = 1. 
+
+<P>
+The <code>fits_copy_selrows</code> form copies only selected rows to the output.
+   Which rows are transferred is determined by an array of flags, <code>row_status[]</code>,
+   which could be returned by <code>fits_find_rows()</code> or constructed by the user.
+   FITS row N is copied if <code>row_status[N-first_row]</code> is non-zero.  
+   <A NAME="ffcprw"></A> <A NAME="ffcpsr"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_copy_rows / ffcprw
+      (fitsfile *infptr, fitsfile *outfptr, LONGLONG firstrow,
+       LONGLONG nrows, &gt; int *status);
+
+  int fits_copy_selrows / ffcpsr
+      (fitsfile *infptr, fitsfile *outfptr, LONGLONG firstrow,
+       LONGLONG nrows, char *row_status, &gt; int *status);
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Modify the vector length of a binary table column (e.g.,
+    change a column from TFORMn = '1E' to '20E').  The vector
+   length may be increased or decreased from the current value. <A NAME="ffmvec"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_modify_vector_len / ffmvec
+      (fitsfile *fptr, int colnum, LONGLONG newveclen, &gt; int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html845"
+  HREF="node46.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html841"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html835"
+  HREF="node44.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html843"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html846"
+  HREF="node46.html">5.7.4 Read and Write</A>
+<B>Up:</B> <A NAME="tex2html842"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html836"
+  HREF="node44.html">5.7.2 Column Information Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

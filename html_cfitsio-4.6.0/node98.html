@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.9 Image Transform Filters</TITLE>
+<META NAME="description" CONTENT="10.9 Image Transform Filters">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node99.html">
+<LINK REL="previous" HREF="node97.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node99.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1532"
+  HREF="node99.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1528"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1522"
+  HREF="node97.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1530"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1533"
+  HREF="node99.html">10.10 Column and Keyword</A>
+<B>Up:</B> <A NAME="tex2html1529"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1523"
+  HREF="node97.html">10.8 Image Section</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001190000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">9</SPAN> Image Transform Filters</A>
+</H1>
+
+<P>
+CFITSIO can apply a user-specified mathematical function to the value
+of every pixel in a FITS image, thus creating a new virtual image
+in computer memory that is then opened and read by the application
+program.  The original FITS image is not modified by this process.
+
+<P>
+The image transformation specifier is appended to the input
+FITS file name and is enclosed in square brackets.  It begins with the
+letters 'PIX' to distinguish it from other types of FITS file filters
+that are recognized by CFITSIO.  The image transforming function may
+use any of the mathematical operators listed in the following
+'Row Filtering Specification' section of this document.
+Some examples of  image transform filters are:
+
+<P>
+<PRE>
+ [pix X * 2.0]               - multiply each pixel by 2.0
+ [pix sqrt(X)]               - take the square root of each pixel
+ [pix X + #ZEROPT            - add the value of the ZEROPT keyword
+ [pix X&gt;0 ? log10(X) : -99.] - if the pixel value is greater
+                               than 0, compute the base 10 log,
+                               else set the pixel = -99.
+</PRE>
+Use the letter 'X' in the expression to represent the current pixel value
+in the image.  The expression is evaluated
+independently for each pixel in the image and may be a function of 1) the
+original pixel value, 2) the value of other pixels in the image at
+a given relative offset from the position of the pixel that is being
+evaluated, and 3) the value of
+any header keywords.  Header keyword values are represented
+by the name of the keyword preceded by the '#' sign.
+
+<P>
+To access the the value of adjacent pixels in the image,
+specify the (1-D) offset from the current pixel in curly brackets.
+For example
+
+<P>
+<PRE>
+ [pix  (x{-1} + x + x{+1}) / 3]
+</PRE>
+will replace each pixel value with the running mean of the values of that
+pixel and it's 2 neighboring pixels.  Note that in this notation the image
+is treated as a 1-D array, where each row of the image (or higher dimensional
+cube) is appended one after another in one long array of pixels.
+It is possible to refer to pixels
+in the rows above or below the current pixel by using the value of the
+NAXIS1 header keyword.  For example
+
+<P>
+<PRE>
+ [pix (x{-#NAXIS1} + x + x{#NAXIS1}) / 3]
+</PRE>
+will compute the mean of each image pixel and the pixels immediately
+above and below it in the adjacent rows of the image.
+The following more complex example
+creates a smoothed virtual image where each pixel
+is a 3 x 3 boxcar average of the input image pixels:
+
+<P>
+<PRE>
+  [pix (X + X{-1} + X{+1}
+      + X{-#NAXIS1} + X{-#NAXIS1 - 1} + X{-#NAXIS1 + 1}
+      + X{#NAXIS1} + X{#NAXIS1 - 1} + X{#NAXIS1 + 1}) / 9.]
+</PRE>
+If the pixel offset
+extends beyond the first or last pixel in the image, the function will
+evaluate to undefined, or NULL.
+
+<P>
+For  complex  or commonly used image filtering operations,
+one  can  write the expression into an external text  file and
+then import it  into the
+filter using  the syntax '[pix @filename.txt]'.   The mathematical
+expression can
+extend over multiple lines of text in the  file.
+Any lines in the external text file
+that begin with 2 slash characters ('//') will be ignored and may be
+used to add comments into the file.
+
+<P>
+By default, the datatype of the resulting image will be the same as
+the original image, but one may force a different datatype by appended
+a code letter to the 'pix' keyword:
+
+<P>
+<PRE>
+      pixb  -  8-bit byte    image with BITPIX =   8
+      pixi  - 16-bit integer image with BITPIX =  16
+      pixj  - 32-bit integer image with BITPIX =  32
+      pixr  - 32-bit float   image with BITPIX = -32
+      pixd  - 64-bit float   image with BITPIX = -64
+</PRE>
+Also by default, any other HDUs in the input file will be copied without
+change to the
+output virtual FITS file, but one may discard the other HDUs by adding
+the number '1' to the 'pix' keyword (and following any optional datatype code
+letter).  For example:
+
+<P>
+<PRE>
+     myfile.fits[3][pixr1  sqrt(X)]
+</PRE>
+will create a virtual FITS file containing only a primary array image
+with 32-bit floating point pixels that have a value equal to the square
+root of the pixels in the image that is in the 3rd extension
+of the 'myfile.fits' file.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1532"
+  HREF="node99.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1528"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1522"
+  HREF="node97.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1530"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1533"
+  HREF="node99.html">10.10 Column and Keyword</A>
+<B>Up:</B> <A NAME="tex2html1529"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1523"
+  HREF="node97.html">10.8 Image Section</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

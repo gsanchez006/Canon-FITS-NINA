@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>4.12 When the Final Size of the FITS HDU is Unknown</TITLE>
+<META NAME="description" CONTENT="4.12 When the Final Size of the FITS HDU is Unknown">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node32.html">
+<LINK REL="previous" HREF="node30.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node32.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html654"
+  HREF="node32.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html650"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html644"
+  HREF="node30.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html652"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html655"
+  HREF="node32.html">4.13 CFITSIO Size Limitations</A>
+<B>Up:</B> <A NAME="tex2html651"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html645"
+  HREF="node30.html">4.11 Multiple Access to</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION005120000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">12</SPAN> When the Final Size of the FITS HDU is Unknown</A>
+</H1>
+
+<P>
+It is not required to know the total size of a FITS data array or table
+before beginning to write the data to the FITS file.  In the case of
+the primary array or an image extension, one should initially create
+the array with the size of the highest dimension (largest NAXISn
+keyword) set to a dummy value, such as 1.  Then after all the data have
+been written and the true dimensions are known, then the NAXISn value
+should be updated using the fits_update_key routine before moving to
+another extension or closing the FITS file.
+
+<P>
+When writing to FITS tables, CFITSIO automatically keeps track of the
+highest row number that is written to, and will increase the size of
+the table if necessary.  CFITSIO will also automatically insert space
+in the FITS file if necessary, to ensure that the data 'heap', if it
+exists, and/or any additional HDUs that follow the table do not get
+overwritten as new rows are written to the table.
+
+<P>
+As a general rule it is best to specify the initial number of rows = 0
+when the table is created, then let CFITSIO keep track of the number of
+rows that are actually written.  The application program should not
+manually update the number of rows in the table (as given by the NAXIS2
+keyword) since CFITSIO does this automatically.  If a table is
+initially created with more than zero rows, then this will usually be
+considered as the minimum size of the table, even if fewer rows are
+actually written to the table.  Thus, if a table is initially created
+with NAXIS2 = 20, and CFITSIO only writes 10 rows of data before
+closing the table, then NAXIS2 will remain equal to 20.  If however, 30
+rows of data are written to this table, then NAXIS2 will be increased
+from 20 to 30.  The one exception to this automatic updating of the
+NAXIS2 keyword is if the application program directly modifies the
+value of NAXIS2 (up or down) itself just before closing the table.  In this
+case, CFITSIO does not update NAXIS2 again, since it assumes that the
+application program must have had a good reason for changing the value
+directly.  This is not recommended, however, and is only provided for
+backward compatibility with software that initially creates a table
+with a large number of rows, than decreases the NAXIS2 value to the
+actual smaller value just before closing the table.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html654"
+  HREF="node32.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html650"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html644"
+  HREF="node30.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html652"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html655"
+  HREF="node32.html">4.13 CFITSIO Size Limitations</A>
+<B>Up:</B> <A NAME="tex2html651"
+  HREF="node19.html">4. Programming Guidelines</A>
+<B> Previous:</B> <A NAME="tex2html645"
+  HREF="node30.html">4.11 Multiple Access to</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

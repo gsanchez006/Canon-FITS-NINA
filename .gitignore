@@ -13,6 +13,9 @@ obj/
 packages/
 .nuget/
 
+# EDSDK Raw Distribution (source only, not for compilation)
+EDSDK_v13.19.0_Raw_Win/
+
 # Visual Studio
 .vs/
 .vscode/

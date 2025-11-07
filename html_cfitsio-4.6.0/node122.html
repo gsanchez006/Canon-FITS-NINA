@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>12.6 Tile-Compressed Image Format</TITLE>
+<META NAME="description" CONTENT="12.6 Tile-Compressed Image Format">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node121.html">
+<LINK REL="up" HREF="node116.html">
+<LINK REL="next" HREF="node123.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1831"
+  HREF="node123.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1827"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1823"
+  HREF="node121.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1829"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1832"
+  HREF="node123.html">13. Optimizing Programs</A>
+<B>Up:</B> <A NAME="tex2html1828"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1824"
+  HREF="node121.html">12.5 HIERARCH Convention for</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001360000000000000000">
+<SPAN CLASS="arabic">12</SPAN>.<SPAN CLASS="arabic">6</SPAN> Tile-Compressed Image Format</A>
+</H1>
+
+<P>
+CFITSIO supports a convention for compressing n-dimensional images and
+storing the resulting byte stream in a variable-length column in a FITS
+binary table.  The general principle used in this convention is to
+first divide the n-dimensional image into a rectangular grid of
+subimages or `tiles'.  Each tile is then compressed as a continuous
+block of data, and the resulting compressed byte stream is stored in a
+row of a variable length column in a FITS binary table. By dividing the
+image into tiles it is generally possible to extract and uncompress
+subsections of the image without having to uncompress the whole image.
+The default tiling pattern treats each row of a 2-dimensional image (or
+higher dimensional cube) as a tile, such that each tile contains NAXIS1
+pixels (except the default with the HCOMPRESS algorithm is to
+compress the whole 2D image as a single tile). Any other rectangular
+tiling pattern may also be defined. In
+the case of relatively small images it may be sufficient to compress
+the entire image as a single tile, resulting in an output binary table
+with 1 row.  In the case of 3-dimensional data cubes, it may be
+advantageous to treat each plane of the cube as a separate tile if
+application software typically needs to access the cube on a plane by
+plane basis.
+
+<P>
+See section 5.6 &ldquo;Image Compression&rdquo;
+for more information on using this tile-compressed image format.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1831"
+  HREF="node123.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1827"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1823"
+  HREF="node121.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1829"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1832"
+  HREF="node123.html">13. Optimizing Programs</A>
+<B>Up:</B> <A NAME="tex2html1828"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1824"
+  HREF="node121.html">12.5 HIERARCH Convention for</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

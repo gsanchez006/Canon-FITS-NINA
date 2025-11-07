@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.3.4 Insert Keyword Routines</TITLE>
+<META NAME="description" CONTENT="9.3.4 Insert Keyword Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node73.html">
+<LINK REL="previous" HREF="node71.html">
+<LINK REL="up" HREF="node68.html">
+<LINK REL="next" HREF="node73.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1193"
+  HREF="node73.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1189"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1183"
+  HREF="node71.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1191"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1194"
+  HREF="node73.html">9.3.5 Read Keyword Routines</A>
+<B>Up:</B> <A NAME="tex2html1190"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1184"
+  HREF="node71.html">9.3.3 Write Keyword Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001034000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">4</SPAN> Insert Keyword Routines</A>
+</H2>
+
+<P>
+These insert routines are somewhat less efficient than the `update' or
+`write' keyword routines  because the following keywords in the header
+must be shifted down to make room for the inserted keyword.  See
+Appendix B for the definition of the parameters used in these
+routines.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Insert a new keyword record into the CHU at the specified position
+    (i.e., immediately preceding the (keynum)th keyword in the header.)
+  <A NAME="ffirec"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_insert_record / ffirec
+      (fitsfile *fptr, int keynum, char *card, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Insert a new keyword into the CHU.  The new keyword is inserted
+    immediately following the last keyword that has been read from the
+    header.  The `longstr' version has the same functionality as the
+    `str' version except that it also supports the local long string
+    keyword convention for strings longer than 68 characters.  A null
+    pointer may be entered for the comment parameter which will cause
+    the comment field to be left blank.  The flt, dbl, cmp, and dblcmp
+    versions of this routine have the added
+     feature that if the 'decimals' parameter is negative, then the 'G'
+     display format rather then the 'E' format will be used when
+     constructing the keyword value, taking the absolute value of
+     'decimals' for the precision.  This will suppress trailing zeros,
+     and will use a fixed format rather than an exponential format,
+    depending on the magnitude of the value. <A NAME="ffikyx"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_insert_card / ffikey
+      (fitsfile *fptr, char *card, &gt; int *status)
+
+  int fits_insert_key_[str, longstr] / ffi[kys, kls]
+      (fitsfile *fptr, char *keyname, char *value, char *comment,
+       &gt; int *status)
+
+  int fits_insert_key_[log, lng] / ffiky[lj]
+      (fitsfile *fptr, char *keyname, DTYPE numval, char *comment,
+       &gt; int *status)
+
+  int fits_insert_key_[flt, fixflt, dbl, fixdbl] / ffiky[edfg]
+      (fitsfile *fptr, char *keyname, DTYPE numval, int decimals,
+       char *comment, &gt; int *status)
+
+  int fits_insert_key_[cmp, dblcmp, fixcmp, fixdblcmp] / ffik[yc,ym,fc,fm]
+      (fitsfile *fptr, char *keyname, DTYPE *numval, int decimals,
+       char *comment, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>3 </STRONG></DT>
+<DD>Insert a new keyword with an undefined, or null, value into the CHU.
+   The value string of the keyword is left blank in this case. <A NAME="ffikyu"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_insert_key_null / ffikyu
+      (fitsfile *fptr, char *keyname, char *comment, &gt; int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1193"
+  HREF="node73.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1189"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1183"
+  HREF="node71.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1191"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1194"
+  HREF="node73.html">9.3.5 Read Keyword Routines</A>
+<B>Up:</B> <A NAME="tex2html1190"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1184"
+  HREF="node71.html">9.3.3 Write Keyword Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

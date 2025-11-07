@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.11.7 Example Row Filters</TITLE>
+<META NAME="description" CONTENT="10.11.7 Example Row Filters">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="previous" HREF="node106.html">
+<LINK REL="up" HREF="node100.html">
+<LINK REL="next" HREF="node108.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1645"
+  HREF="node108.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1641"
+  HREF="node100.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1637"
+  HREF="node106.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1643"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1646"
+  HREF="node108.html">10.12 Binning or Histogramming</A>
+<B>Up:</B> <A NAME="tex2html1642"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B> Previous:</B> <A NAME="tex2html1638"
+  HREF="node106.html">10.11.6 Spatial Region Filtering</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION0011117000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">7</SPAN> Example Row Filters</A>
+</H2>
+
+<P>
+<PRE>
+    [ binary &amp;&amp; mag &lt;= 5.0]        - Extract all binary stars brighter
+                                     than  fifth magnitude (note that
+                                     the initial space is necessary to
+                                     prevent it from being treated as a
+                                     binning specification)
+
+    [#row &gt;= 125 &amp;&amp; #row &lt;= 175]   - Extract row numbers 125 through 175
+
+    [IMAGE[4,5] .gt. 100]          - Extract all rows that have the
+                                     (4,5) component of the IMAGE column
+                                     greater than 100
+
+    [abs(sin(theta * #deg)) &lt; 0.5] - Extract all rows having the
+                                     absolute value of the sine of theta
+                                     less  than a half where the angles
+                                     are tabulated in degrees
+
+    [SUM( SPEC &gt; 3*BACKGRND )&gt;=1]  - Extract all rows containing a
+                                     spectrum, held in vector column
+                                     SPEC, with at least one value 3
+                                     times greater than the background
+                                     level held in a keyword, BACKGRND
+
+    [VCOL=={1,4,2}]                - Extract all rows whose vector column
+                                     VCOL contains the 3-elements 1, 4, and
+                                     2.
+
+    [@rowFilter.txt]               - Extract rows using the expression
+                                     contained within the text file
+                                     rowFilter.txt
+
+    [gtifilter()]                  - Search the current file for a GTI
+				     extension,  filter  the TIME
+				     column in the current table, using
+				     START/STOP times taken from
+				     columns in the GTI  extension
+
+    [regfilter("pow.reg")]         - Extract rows which have a coordinate
+                                     (as given in the X and Y columns)
+                                     within the spatial region specified
+                                     in the pow.reg region file.
+
+    [regfilter("pow.reg", Xs, Ys)] - Same as above, except that the
+                                     Xs and Ys columns will be used to
+                                     determine the coordinate of each
+                                     row in the table.
+</PRE>
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

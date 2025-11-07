@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>5.7.4 Read and Write Column Data Routines</TITLE>
+<META NAME="description" CONTENT="5.7.4 Read and Write Column Data Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node47.html">
+<LINK REL="previous" HREF="node45.html">
+<LINK REL="up" HREF="node42.html">
+<LINK REL="next" HREF="node47.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html857"
+  HREF="node47.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html853"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html847"
+  HREF="node45.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html855"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html858"
+  HREF="node47.html">5.7.5 Row Selection and</A>
+<B>Up:</B> <A NAME="tex2html854"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html848"
+  HREF="node45.html">5.7.3 Routines to Edit</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00674000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">4</SPAN> Read and Write Column Data Routines</A>
+</H2>
+
+<P>
+The following routines write or read data values in the current ASCII
+or binary table extension.  If a write operation extends beyond the
+current size of the table, then the number of rows in the table will
+automatically be increased and the NAXIS2 keyword value will be
+updated.  Attempts to read beyond the end of the table will result in
+an error.
+
+<P>
+Automatic data type conversion is performed for numerical data types
+(only) if the data type of the column (defined by the TFORMn keyword)
+differs from the data type of the array in the calling routine.  ASCII and binary
+tables support the following data type values:  TSTRING, TBYTE, TSBYTE, TSHORT,
+TUSHORT, TINT, TUINT, TLONG, TLONGLONG, TULONG, TULONGLONG, TFLOAT, or TDOUBLE.
+Binary tables also support TLOGICAL (internally mapped to the `char'
+data type), TCOMPLEX, and TDBLCOMPLEX.
+
+<P>
+Note that it is *not* necessary to insert rows in a table before
+writing data to those rows (indeed, it would be inefficient to do so).
+Instead, one may simply write data to any row of the table, whether that
+row of data already exists or not.
+
+<P>
+Individual bits in a binary table 'X' or 'B' column may be read/written
+to/from a *char array by specifying the TBIT datatype.  The *char
+array will be interpreted as an array of logical TRUE (1) or FALSE (0)
+values that correspond to the value of each bit in the FITS 'X' or 'B' column.
+Alternatively, the values in a binary table 'X' column may be read/written
+8 bits at a time to/from an array of 8-bit integers by specifying the
+TBYTE datatype.
+
+<P>
+Note that within the context of these routines, the TSTRING data type
+corresponds to a C 'char**' data type, i.e., a pointer to an array of
+pointers to an array of characters.  This is different from the keyword
+reading and writing routines where TSTRING corresponds to a C 'char*'
+data type, i.e., a single pointer to an array of characters.  When
+reading strings from a table, the char arrays obviously must have been
+allocated long enough to hold the whole FITS table string.
+See section <A HREF="node24.html#character-strings">4.5</A>
+(&ldquo;Dealing with Character Strings&rdquo;) for more information.
+
+<P>
+For complex and double complex data types, <code>nelements</code> is the number
+of numerical pairs; the number of floats or doubles stored by
+<code>array</code> must be <code>2*nelements</code>.
+
+<P>
+For the logical data (TLOGICAL), the C storage type is a <code>char</code>
+single-byte character.  A FITS value of `<code>T</code>'rue reads as 1 and
+`<code>F</code>' reads as 0; other non-FITS characters are preserved untranslated.
+
+<P>
+Numerical data values are automatically scaled by the TSCALn and TZEROn
+keyword values (if they exist).
+
+<P>
+In the case of binary tables with vector elements, the <code>firstelem</code>
+parameter defines the starting element (beginning with 1, not 0) within
+the cell (a cell is defined as the intersection of a row and a column
+and may contain a single value or a vector of values).  The <code>firstelem</code>
+parameter is ignored when dealing with ASCII tables. Similarly, in the
+case of binary tables the 'nelements' parameter specifies the total
+number of vector values to be read or written (continuing on subsequent
+rows if required) and not the number of table cells.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Write elements into an ASCII or binary table column.
+</DD>
+</DL>
+   The first routine simply writes the array of values to the FITS file
+   (doing data type conversion if necessary) whereas the second routine
+   will substitute the  appropriate FITS null value for all elements
+   which are equal to the input value of nulval (note that this
+   parameter gives the address of nulval, not the null value
+   itself).  For integer columns the FITS null value is defined by the
+   TNULLn keyword (an error is returned if the keyword doesn't exist).
+   For floating point columns  the special IEEE NaN (Not-a-Number)
+   value will be written into the FITS file.  If a null pointer is
+   entered for nulval, then the null value is ignored and this routine
+   behaves the same as the first routine.  The third routine
+   simply writes undefined pixel values to the column.  The fourth routine
+   fills every column in the table with null values, in the specified
+   rows (ignoring any columns that do not have a defined null value).
+
+<P>
+The <code>fits_write_cols()</code> variant writes multiple columns in a
+   single pass, which may be significantly faster for large data
+   files.  The &ldquo;chunk&rdquo; size is determined automatically based upon
+   CFITSIO's buffer sizes.  Only whole rows can be written, of any
+   type except TBIT or TSTRING.  For this variant, datatype, colnum,
+   array and nulval are arrays of the equivalent single-column
+   parameter (i.e. <code>datatype[i]</code> is the data type of column
+   <code>i</code>). 
+
+<P>
+<A NAME="ffpcl"></A> <A NAME="ffpcn"></A> <A NAME="ffpclu"></A> <A NAME="ffpcln"></A>
+<P>
+<PRE>
+  int fits_write_col / ffpcl
+      (fitsfile *fptr, int datatype, int colnum, LONGLONG firstrow,
+       LONGLONG firstelem, LONGLONG nelements, DTYPE *array, &gt; int *status)
+
+  int fits_write_colnull / ffpcn
+      (fitsfile *fptr, int datatype, int colnum, LONGLONG firstrow,
+      LONGLONG firstelem, LONGLONG nelements, DTYPE *array, DTYPE *nulval,
+      &gt; int *status)
+
+   int fits_write_col_null / ffpclu
+       (fitsfile *fptr, int colnum, LONGLONG firstrow, LONGLONG firstelem,
+        LONGLONG nelements, &gt; int *status)
+
+   int fits_write_nullrows / ffprwu
+       (fitsfile *fptr, LONGLONG firstrow, LONGLONG nelements, &gt; int *status)
+
+  int fits_write_cols / ffpcln
+      (fitsfile *fptr, int ncols, int *datatype, int *colnum, LONGLONG firstrow, 
+       LONGLONG nrows, DTYPE **array, DTYPE **nulval, int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Read elements from an ASCII or binary table column.  The data type
+    parameter specifies the data type of the `nulval' and `array'  pointers.
+    The caller is required to allocate the storage of <code>array</code> before calling.  
+    Undefined array elements will be returned with a value = *nullval,
+    (note that this parameter gives the address of the null value, not the
+    null value itself) unless nulval = 0 or *nulval = 0, in which case
+    no checking for undefined pixels will be performed.  The second
+    routine is similar except that any undefined pixels will have the
+    corresponding nullarray element set equal to TRUE (= 1).
+
+<P>
+Reading data as TSTRING values is different than for other data types
+    as described above.
+
+<P>
+Any column, regardless of it's intrinsic data type, may be read as a
+    string.  It should be noted however that reading a numeric column
+    as a string is 10 - 100 times slower than reading the same column
+    as a number due to the large overhead in constructing the formatted
+    strings.  The display format of the returned strings will be
+    determined by the TDISPn keyword, if it exists, otherwise by the
+    data type of the column.  The length of the returned strings (not
+    including the null terminating character) can be determined with
+    the fits_get_col_display_width routine.  The following TDISPn
+    display formats are currently supported:
+
+<P>
+<PRE>
+    Iw.m   Integer
+    Ow.m   Octal integer
+    Zw.m   Hexadecimal integer
+    Fw.d   Fixed floating point
+    Ew.d   Exponential floating point
+    Dw.d   Exponential floating point
+    Gw.d   General; uses Fw.d if significance not lost, else Ew.d
+</PRE>
+    where w is the width in characters of the displayed values, m is the minimum
+    number of digits displayed, and d is the number of digits to the right of the
+    decimal.  The .m field is optional.
+
+<P>
+The <code>fits_read_cols()</code> variant read multiple columns in a
+   single pass, which may be significantly faster for large data
+   files.  The &ldquo;chunk&rdquo; size is determined automatically based upon
+   CFITSIO's buffer sizes.  Only whole rows can be read, of any type
+   except TBIT or TSTRING.  For this variant, datatype, colnum, array
+   and nulval are arrays of the equivalent single-column parameter
+   (i.e. <code>datatype[i]</code> is the data type of column <code>i</code>).
+
+<P>
+<A NAME="ffgcv"></A> <A NAME="ffgcf"></A> <A NAME="ffgcvn"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_read_col / ffgcv
+      (fitsfile *fptr, int datatype, int colnum, LONGLONG firstrow, LONGLONG firstelem,
+       LONGLONG nelements, DTYPE *nulval, DTYPE *array, int *anynul, int *status)
+
+  int fits_read_colnull / ffgcf
+      (fitsfile *fptr, int datatype, int colnum, LONGLONG firstrow, LONGLONG firstelem,
+      LONGLONG nelements, DTYPE *array, char *nullarray, int *anynul, int *status)
+
+  int fits_read_cols / ffgcvn
+      (fitsfile *fptr, int ncols, int *datatype, int *colnum, LONGLONG firstrow, 
+       LONGLONG nrows, DTYPE **nulval, DTYPE **array, int **anynul, int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html857"
+  HREF="node47.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html853"
+  HREF="node42.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html847"
+  HREF="node45.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html855"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html858"
+  HREF="node47.html">5.7.5 Row Selection and</A>
+<B>Up:</B> <A NAME="tex2html854"
+  HREF="node42.html">5.7 ASCII and Binary</A>
+<B> Previous:</B> <A NAME="tex2html848"
+  HREF="node45.html">5.7.3 Routines to Edit</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

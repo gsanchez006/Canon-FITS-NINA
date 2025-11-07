@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>12.5 HIERARCH Convention for Extended Keyword Names</TITLE>
+<META NAME="description" CONTENT="12.5 HIERARCH Convention for Extended Keyword Names">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node122.html">
+<LINK REL="previous" HREF="node120.html">
+<LINK REL="up" HREF="node116.html">
+<LINK REL="next" HREF="node122.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1821"
+  HREF="node122.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1817"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1811"
+  HREF="node120.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1819"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1822"
+  HREF="node122.html">12.6 Tile-Compressed Image Format</A>
+<B>Up:</B> <A NAME="tex2html1818"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1812"
+  HREF="node120.html">12.4 Keyword Units Strings</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001350000000000000000">
+<SPAN CLASS="arabic">12</SPAN>.<SPAN CLASS="arabic">5</SPAN> HIERARCH Convention for Extended Keyword Names</A>
+</H1>
+
+<P>
+CFITSIO supports the HIERARCH keyword convention which allows keyword
+names that are longer than 8 characters.  This convention
+was developed at the European Southern Observatory (ESO) and allows characters
+consisting of digits 0-9, upper case letters A-Z, the dash '-' and the underscore '_'.
+The components of hierarchical keywords are separated by a single ASCII space charater.
+For instance:
+
+<P>
+<PRE>
+HIERARCH ESO INS FOCU POS = -0.00002500 / Focus position
+</PRE>
+Basically, this convention uses the FITS keyword 'HIERARCH' to indicate
+that this convention is being used, then the actual keyword name
+(<TT>'ESO INS FOCU POS'</TT> in this example) begins in column 10.  The
+equals sign marks the end of the keyword name and is followed by the
+usual value and comment fields just as in standard FITS keywords.
+Further details of this convention are described at
+http://fits.gsfc.nasa.gov/registry/hierarch_keyword.html
+and in Section 4.4 of the ESO Data Interface Control Document that
+is linked to from
+http://archive.eso.org/cms/tools-documentation/eso-data-interface-control.html.
+
+<P>
+This convention allows a broader range of keyword names
+than is allowed by the FITS Standard.  Here are more examples
+of such keywords:
+
+<P>
+<PRE>
+HIERARCH LONGKEYWORD = 47.5 / Keyword has &gt; 8 characters
+HIERARCH LONG-KEY_WORD2 = 52.3 / Long keyword with hyphen, underscore and digit
+HIERARCH EARTH IS A STAR = F / Keyword contains embedded spaces
+</PRE>
+CFITSIO will transparently read and write these keywords, so application
+programs do not in general need to know anything about the specific
+implementation details of the HIERARCH convention.  In particular,
+application programs do not need to specify the `HIERARCH' part of the
+keyword name when reading or writing keywords (although it
+may be included if desired).  When writing a keyword, CFITSIO first
+checks to see if the keyword name is legal as a standard FITS keyword
+(no more than 8 characters long and containing only letters, digits, or
+a minus sign or underscore). If so it writes it as a standard FITS
+keyword, otherwise it uses the hierarch convention to write the
+keyword.   The maximum keyword name length is 67 characters, which
+leaves only 1 space for the value field.  A more practical limit is
+about 40 characters, which leaves enough room for most keyword values.
+CFITSIO returns an error if there is not enough room for both the
+keyword name and the keyword value on the 80-character card, except for
+string-valued keywords which are simply truncated so that the closing
+quote character falls in column 80. A space is also required on either 
+side of the equal sign.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1821"
+  HREF="node122.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1817"
+  HREF="node116.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1811"
+  HREF="node120.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1819"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1822"
+  HREF="node122.html">12.6 Tile-Compressed Image Format</A>
+<B>Up:</B> <A NAME="tex2html1818"
+  HREF="node116.html">12. Local FITS Conventions</A>
+<B> Previous:</B> <A NAME="tex2html1812"
+  HREF="node120.html">12.4 Keyword Units Strings</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

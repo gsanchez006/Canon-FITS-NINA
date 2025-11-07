@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>6.2 The Iterator Driver Function</TITLE>
+<META NAME="description" CONTENT="6.2 The Iterator Driver Function">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node56.html">
+<LINK REL="previous" HREF="node54.html">
+<LINK REL="up" HREF="node53.html">
+<LINK REL="next" HREF="node56.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html966"
+  HREF="node56.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html962"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html956"
+  HREF="node54.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html964"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html967"
+  HREF="node56.html">6.3 Guidelines for Using</A>
+<B>Up:</B> <A NAME="tex2html963"
+  HREF="node53.html">6. The CFITSIO Iterator</A>
+<B> Previous:</B> <A NAME="tex2html957"
+  HREF="node54.html">6.1 The Iterator Work</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00720000000000000000">
+<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">2</SPAN> The Iterator Driver Function</A>
+</H1>
+
+<P>
+The iterator driver function must open the necessary FITS files and
+position them to the correct HDU.  It must also initialize the following
+parameters in the iteratorCol structure (defined above) for each
+column or image before calling the CFITSIO iterator function.
+Several `constructor' routines are provided in CFITSIO for this
+purpose.
+
+<P>
+
+<UL>
+<LI>*fptr -  The fitsfile pointer to the table or image.
+</LI>
+<LI>colnum - the number of the column in the table.  This value is ignored
+          in the case of images.  If colnum equals 0, then the column name
+          will be used to identify the column to be passed to the
+          work function.
+
+<P>
+</LI>
+<LI>colname - the name (TTYPEn keyword) of the column.  This is
+           only required if colnum = 0 and is ignored for images.
+</LI>
+<LI>datatype - The desired data type of the array to be passed to the
+            work function.  For numerical data the data type does
+            not need to be the same as the actual data type in the
+            FITS file, in which case CFITSIO will do the conversion.
+            Allowed values are: TSTRING, TLOGICAL, TBYTE, TSBYTE, TSHORT, TUSHORT,
+            TINT, TLONG, TULONG, TFLOAT, TDOUBLE.  If the input
+            value of data type equals 0, then the  existing
+            data type of the column or image will be used without
+            any conversion.
+
+<P>
+</LI>
+<LI>iotype - defines whether the data array is to be input to the
+          work function (i.e, read from the FITS file), or output
+          from the work function (i.e., written to the FITS file) or
+          both.  Allowed values are InputCol, OutputCol, or InputOutputCol.
+	  Variable-length array columns are supported as InputCol or
+	  InputOutputCol types, but may not be used for an OutputCol type.
+</LI>
+</UL>
+
+<P>
+After the driver routine has initialized all these parameters, it
+can then call the CFITSIO iterator function:
+
+<P>
+<PRE>
+  int fits_iterate_data(int narrays, iteratorCol *data, long offset,
+      long nPerLoop, int (*workFn)( ), void *userPointer, int *status);
+</PRE>
+
+<P>
+
+<UL>
+<LI><P>
+narrays    - the number of columns or images that are to be passed
+                 to the work function.
+</LI>
+<LI>*data -     pointer to array of structures containing information
+                about each column or image.
+
+<P>
+</LI>
+<LI>offset      - if positive, this number of rows at the
+                      beginning of the table (or pixels in the image)
+                      will be skipped and will not be passed to the work
+                      function.
+
+<P>
+</LI>
+<LI>nPerLoop   - specifies the number of table rows (or number of
+                    image pixels) that are to be passed to the work
+                    function on each iteration.  If nPerLoop = 0
+                    then CFITSIO will calculate the optimum number
+                    for greatest efficiency.
+                    If nPerLoop is negative, then all the rows
+                    or pixels will be passed at one time, and the work
+                    function will only be called once.  If any variable
+		    length arrays are being processed, then the nPerLoop
+		    value is ignored, and the iterator will always process
+		    one row of the table at a time.
+
+<P>
+</LI>
+<LI>*workFn     - the name (actually the address) of the work function
+                 that is to be called by fits_iterate_data.
+
+<P>
+</LI>
+<LI>*userPointer - this is a user supplied pointer that can be used
+                  to pass ancillary information from the driver routine
+                  to the work function.  It may point to a single number,
+                  an array, or to a structure containing an arbitrary set
+                  of parameters.
+
+<P>
+</LI>
+<LI>*status      - The CFITSIO error status.  Should = 0 on input;
+                  a non-zero output value indicates an error.
+</LI>
+</UL>
+
+<P>
+When fits_iterate_data is called it first allocates memory to hold
+all the requested columns of data or image pixel arrays.  It then reads
+the input data from the FITS tables or images into the arrays then
+passes the structure with pointers to these data arrays to the work
+function.  After the work function returns, the iterator function
+writes any output columns of data or images back to the FITS files.  It
+then repeats this process for any remaining sets of rows or image
+pixels until it has processed the entire table or image or until the
+work function returns a non-zero status value.  The iterator then frees
+the memory that it initially allocated and returns control to the
+driver routine that called it.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html966"
+  HREF="node56.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html962"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html956"
+  HREF="node54.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html964"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html967"
+  HREF="node56.html">6.3 Guidelines for Using</A>
+<B>Up:</B> <A NAME="tex2html963"
+  HREF="node53.html">6. The CFITSIO Iterator</A>
+<B> Previous:</B> <A NAME="tex2html957"
+  HREF="node54.html">6.1 The Iterator Work</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

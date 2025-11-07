@@ -1,0 +1,312 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>10.10 Column and Keyword Filtering Specification</TITLE>
+<META NAME="description" CONTENT="10.10 Column and Keyword Filtering Specification">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node100.html">
+<LINK REL="previous" HREF="node98.html">
+<LINK REL="up" HREF="node83.html">
+<LINK REL="next" HREF="node100.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1544"
+  HREF="node100.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1540"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1534"
+  HREF="node98.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1542"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1545"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B>Up:</B> <A NAME="tex2html1541"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1535"
+  HREF="node98.html">10.9 Image Transform Filters</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION0011100000000000000000">
+<SPAN CLASS="arabic">10</SPAN>.<SPAN CLASS="arabic">10</SPAN> Column and Keyword Filtering Specification</A>
+</H1>
+
+<P>
+The optional column/keyword filtering specifier is used to modify the
+column structure and/or the header keywords in the HDU that was
+selected with the previous HDU location specifier. This filtering
+specifier must be enclosed in square brackets and can be distinguished
+from a general row filter specifier (described below) by the fact that
+it begins with the string 'col ' and is not immediately followed by an
+equals sign.  The original file is not changed by this filtering
+operation, and instead the modifications are made on a copy of the
+input FITS file (usually in memory), which also contains a copy of all
+the other HDUs in the file.  (If a `#' character is appended to the name
+or number of the
+table HDU then only the primary array, and none of the other
+HDUs in the input file will be copied into memory).
+This temporary file is passed to the
+application program and will persist only until the file is closed or
+until the program exits, unless the outfile specifier (see above) is
+also supplied.
+
+<P>
+The column/keyword filter can be used to perform the following
+operations.  More than one operation may be specified by separating
+them with commas or semi-colons.
+
+<P>
+
+<UL>
+<LI>Copy only a specified list of columns columns to the filtered input file.
+The list of column name should be separated by commas or semi-colons.  Wild card
+characters may be used in the column names to match multiple columns.
+If the expression contains both a list of columns to be included and
+columns to be deleted, then all the columns in the original table
+except the explicitly deleted columns will appear in the filtered
+table (i.e., there is no need to explicitly list the columns to
+be included if any columns are being deleted).
+
+<P>
+</LI>
+<LI>Delete a column or keyword by listing the name preceded by a minus sign
+or an exclamation mark (!), e.g., '-TIME' will delete the TIME column
+if it exists, otherwise the TIME keyword.  An error is returned if
+neither a column nor keyword with this name exists.  Note  that the
+exclamation point,  '!', is a special UNIX character, so if it is used
+on the command line rather than entered at a task prompt, it must be
+preceded by a backslash to force the UNIX shell to ignore it.
+
+<P>
+</LI>
+<LI>Rename an existing column or keyword with the syntax 'NewName ==
+OldName'.  An error is returned if neither a column nor keyword with
+this name exists.
+
+<P>
+</LI>
+<LI>Append a new column or keyword to the table.  To create a column,
+give the new name, optionally followed by the data type in parentheses,
+followed by a single equals sign and an  expression to be used to
+compute the value (e.g., 'newcol(1J) = 0' will create a new 32-bit
+integer column called 'newcol' filled with zeros).  The data type is
+specified using the same syntax that is allowed for the value of the
+FITS TFORMn keyword (e.g., 'I', 'J', 'E', 'D', etc. for binary tables,
+and 'I8', F12.3', 'E20.12', etc. for ASCII tables).  If the data type is
+not specified then an appropriate data type will be chosen depending on
+the form of the expression (may be a character string, logical, bit, long
+integer, or double column). An appropriate vector count (in the case
+of binary tables) will also be added if not explicitly specified.
+
+<P>
+When creating a new keyword, the keyword name must be preceded by a
+pound sign '#', and the expression must evaluate to a scalar
+(i.e., cannot have a column name in the expression).  The comment
+string for the keyword may be specified in parentheses immediately
+following the keyword name (instead of supplying a data type as in
+the case of creating a new column).  If the keyword name ends with a
+pound sign '#', then cfitsio will substitute the number of the
+most recently referenced column for the # character .
+This is especially useful when writing
+a column-related keyword like TUNITn for a newly created column,
+as shown in the following examples.
+
+<P>
+COMMENT and HISTORY keywords may also be created with the following syntax:
+
+<P>
+<PRE>
+   #COMMENT = 'This is a comment keyword'
+   #HISTORY = 'This is a history keyword'
+</PRE>
+Note that the equal sign and the quote characters will be removed, so
+that the resulting header keywords in these cases will look like this:
+
+<P>
+<PRE>
+   COMMENT This is a comment keyword
+   HISTORY This is a history keyword
+</PRE>
+These two special keywords are always appended to the end of the header
+and will not affect any previously existing COMMENT or HISTORY keywords.
+
+<P>
+It is possible to delete an existing keyword using a preceding <code>'-'</code>.
+Either of these examples will delete the keyword named <code>VEL</code>.
+<PRE>
+  -VEL;
+  -#VEL;
+</PRE>
+
+<P>
+</LI>
+<LI>Recompute (overwrite) the values in an existing column or keyword by
+giving the name followed by an equals sign and an arithmetic
+expression.
+</LI>
+</UL>
+
+<P>
+The expression that is used when appending or recomputing columns or
+keywords can be arbitrarily complex and may be a function of other
+header keyword values and other columns (in the same row).  The full
+syntax and available functions for the expression are described below
+in the row filter specification section.
+
+<P>
+If the expression contains both a list of columns to be included and
+columns to be deleted, then all the columns in the original table
+except the explicitly deleted columns will appear in the filtered
+table.  If no columns to be deleted are specified, then only the
+columns that are explicitly listed will be included in the filtered
+output table.  To include all the columns, add the '*' wildcard
+specifier at the end of the list, as shown in the examples.
+
+<P>
+For  complex  or commonly used operations,  one  can  place the
+operations into an external text  file and import it  into the  column
+filter using  the syntax '[col @filename.txt]'.   The operations can
+extend over multiple lines of the  file, but multiple operations must
+still be separated by commas or semi-colons.   Any lines in the external text file
+that begin with 2 slash characters ('//') will be ignored and may be
+used to add comments into the file.
+
+<P>
+When using column filtering to open a file &ldquo;on the fly,&rdquo; it is permitted
+to use multiple column filtering expressions.  For example, the
+syntax
+<PRE>
+  filename.fits[col *][col -Y][col Z=X+1]
+</PRE>
+would be treated as equivalent to joining the expressions with semicolons, 
+or
+<PRE>
+  filename.fits[col *; -Y;col Z=X+1]
+</PRE>
+Please note that if multiple column filtering expressions are used, it is
+not permitted to also use the <code>[col @filename.txt]</code> syntax in any
+of the individual expressions.
+
+<P>
+It is possible to use wildcard syntax to delete either keywords or
+columns that match a pattern.  Recall that to delete either a keyword
+or a column, precede its name with a <code>'-'</code> character.
+
+<P>
+Wildcard patterns are: <code>'*'</code>, which matches any
+string of characters; <code>'?'</code>, which matches any single character; and <code>'#'</code>
+which matches any numerical string.  For example these
+statements:
+<PRE>
+  -VEL*;       # remove single column (or keyword) beginning with VEL
+  -VEL_?;      # remove single column (or keyword) VEL_? where ? is any character
+  -#DEC_*;     # remove single keyword beginning with DEC_
+  -#TUNIT#;    # remove single keyword TUNIT ending w. number
+</PRE>
+will remove the columns or keywords as noted.  Be aware that if a
+<code>'#'</code> is not present, the CFITSIO engine will check for columns
+with the given name first, followed by keywords.
+
+<P>
+The above expressions will only delete the <I>first</I>
+item which matches the pattern.  If following columns or keywords
+in the same CHDU match the pattern, they will not be deleted.
+To delete <I>zero or more</I> keywords that match the pattern, add a
+trailing <code>'+'</code>.
+<PRE>
+  -VEL*+;       # remove all columns (or keywords) beginning with VEL
+  -VEL_?+;      # remove all columns (or keyword) VEL_? where ? is any character
+  -#DEC_*+;     # remove all keywords beginning with DEC_
+  -#TUNIT#+;    # remove all keywords TUNIT ending w. number
+</PRE>
+Note that, as a 0-or-more matching pattern, this form will succeed if
+the requested column or keyword is not present.  In that case, the
+deletion expression will silently proceed as if no deletion was requested.
+
+<P>
+Examples:
+
+<P>
+<PRE>
+   [col Time, rate]              - only the Time and rate columns will
+                                   appear in the filtered input file.
+
+   [col Time, *raw]              - include the Time column and any other
+                                   columns whose name ends with 'raw'.
+
+   [col -TIME, Good == STATUS]   - deletes the TIME column and
+                                   renames the status column to 'Good'
+
+   [col PI=PHA * 1.1 + 0.2; #TUNIT#(column units) = 'counts';*]
+                                 - creates new PI column from PHA values
+                                   and also writes the TUNITn keyword
+                                   for the new column.  The final '*'
+                                   expression means preserve all the
+                                   columns in the input table in the
+                                   virtual output table;  without the '*'
+                                   the output table would only contain
+                                   the single 'PI' column.
+
+   [col rate = rate/exposure; TUNIT#(&amp;) = 'counts/s';*]
+                                 - recomputes the rate column by dividing
+                                   it by the EXPOSURE keyword value. This
+                                   also modifies the value of the TUNITn
+                                   keyword for this column. The use of the
+                                   '&amp;' character for the keyword comment
+                                   string means preserve the existing
+                                   comment string for that keyword. The
+                                   final '*' preserves all the columns
+                                   in the input table in the virtual
+                                   output table.
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1544"
+  HREF="node100.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1540"
+  HREF="node83.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1534"
+  HREF="node98.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1542"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1545"
+  HREF="node100.html">10.11 Row Filtering Specification</A>
+<B>Up:</B> <A NAME="tex2html1541"
+  HREF="node83.html">10. Extended File Name</A>
+<B> Previous:</B> <A NAME="tex2html1535"
+  HREF="node98.html">10.9 Image Transform Filters</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

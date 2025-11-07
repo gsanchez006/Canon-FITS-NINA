@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>11.2 Auto-indexing of Keywords</TITLE>
+<META NAME="description" CONTENT="11.2 Auto-indexing of Keywords">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node112.html">
+<LINK REL="previous" HREF="node110.html">
+<LINK REL="up" HREF="node109.html">
+<LINK REL="next" HREF="node112.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1697"
+  HREF="node112.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1693"
+  HREF="node109.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1687"
+  HREF="node110.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1695"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1698"
+  HREF="node112.html">11.3 Template Parser Directives</A>
+<B>Up:</B> <A NAME="tex2html1694"
+  HREF="node109.html">11. Template Files</A>
+<B> Previous:</B> <A NAME="tex2html1688"
+  HREF="node110.html">11.1 Detailed Template Line</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001220000000000000000">
+<SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">2</SPAN> Auto-indexing of Keywords</A>
+</H1>
+
+<P>
+If a template keyword name ends with a "#" character, it is said to be
+'auto-indexed'.   Each "#" character will be replaced by the current
+integer index value, which gets reset = 1 at the start of each new HDU
+in the file (or 7 in the special case of a GROUP definition).  The
+FIRST indexed keyword in each template HDU definition is used as the
+'incrementor';  each subsequent occurrence of this SAME keyword will
+cause the index value to be incremented.  This behavior can be rather
+subtle, as illustrated in the following examples in which the TTYPE
+keyword is the incrementor in both cases:
+
+<P>
+<PRE>
+  TTYPE# = TIME
+  TFORM# = 1D
+  TTYPE# = RATE
+  TFORM# = 1E
+</PRE>
+will create TTYPE1, TFORM1, TTYPE2, and TFORM2 keywords.  But if the
+template looks like,
+
+<P>
+<PRE>
+  TTYPE# = TIME
+  TTYPE# = RATE
+  TFORM# = 1D
+  TFORM# = 1E
+</PRE>
+this results in a FITS files with  TTYPE1, TTYPE2, TFORM2, and TFORM2,
+which is probably not what was intended!
+
+<P>
+<BR> <HR>
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>

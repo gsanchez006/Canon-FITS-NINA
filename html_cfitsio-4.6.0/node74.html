@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2018.2 (Released May 16, 2018) -->
+<HTML>
+<HEAD>
+<TITLE>9.3.6 Modify Keyword Routines</TITLE>
+<META NAME="description" CONTENT="9.3.6 Modify Keyword Routines">
+<META NAME="keywords" CONTENT="cfitsio">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018.2">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="cfitsio.css">
+
+<LINK REL="next" HREF="node75.html">
+<LINK REL="previous" HREF="node73.html">
+<LINK REL="up" HREF="node68.html">
+<LINK REL="next" HREF="node75.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation">
+<A NAME="tex2html1217"
+  HREF="node75.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1213"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1207"
+  HREF="node73.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1215"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1218"
+  HREF="node75.html">9.3.7 Update Keyword Routines</A>
+<B>Up:</B> <A NAME="tex2html1214"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1208"
+  HREF="node73.html">9.3.5 Read Keyword Routines</A>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION001036000000000000000">
+<SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">6</SPAN> Modify Keyword Routines</A>
+</H2>
+
+<P>
+These routines modify the value of an existing keyword.  An error is
+returned if the keyword does not exist.  Wild card characters may be
+used when specifying the name of the keyword to be modified.  See
+Appendix B for the definition of the parameters used in these
+routines.
+
+<P>
+<DL>
+<DT><STRONG>1 </STRONG></DT>
+<DD>Modify (overwrite) the nth 80-character header record in the CHU. <A NAME="ffmrec"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_modify_record / ffmrec
+      (fitsfile *fptr, int keynum, char *card, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>2 </STRONG></DT>
+<DD>Modify (overwrite) the 80-character header record for the named keyword
+    in the CHU.  This can be used to overwrite the name of the keyword as
+   well as its value and comment fields. <A NAME="ffmcrd"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_modify_card / ffmcrd
+      (fitsfile *fptr, char *keyname, char *card, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>5 </STRONG></DT>
+<DD>Modify the value and comment fields of an existing keyword in the CHU.
+    The `longstr' version has the same functionality as the `str'
+    version except that it also supports the local long string keyword
+    convention for strings longer than 68 characters.  Optionally, one
+    may modify only the value field and leave the comment field
+    unchanged by setting the input COMMENT parameter equal to the
+    ampersand character (&amp;) or by entering a null pointer for the
+    comment parameter.  The flt, dbl, cmp, and dblcmp versions of this
+    routine have the added feature that if the 'decimals' parameter is
+    negative, then the 'G' display format rather then the 'E' format
+    will be used when constructing the keyword value, taking the
+    absolute value of 'decimals' for the precision.  This will suppress
+    trailing zeros, and will use a fixed format rather than an
+    exponential format,
+   depending on the magnitude of the value. <A NAME="ffmkyx"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_modify_key_[str, longstr] / ffm[kys, kls]
+      (fitsfile *fptr, char *keyname, char *value, char *comment,
+       &gt; int *status);
+
+  int fits_modify_key_[log, lng] / ffmky[lj]
+      (fitsfile *fptr, char *keyname, DTYPE numval, char *comment,
+       &gt; int *status)
+
+  int fits_modify_key_[flt, dbl, fixflt, fixdbl] / ffmky[edfg]
+      (fitsfile *fptr, char *keyname, DTYPE numval, int decimals,
+       char *comment, &gt; int *status)
+
+  int fits_modify_key_[cmp, dblcmp, fixcmp, fixdblcmp] / ffmk[yc,ym,fc,fm]
+      (fitsfile *fptr, char *keyname, DTYPE *numval, int decimals,
+       char *comment, &gt; int *status)
+</PRE>
+
+<P>
+<DL>
+<DT><STRONG>6 </STRONG></DT>
+<DD>Modify the value of an existing keyword to be undefined, or null.
+    The value string of the keyword is set to blank.
+    Optionally, one may leave the comment field unchanged by setting the
+    input COMMENT parameter equal to
+   the ampersand character (&amp;) or by entering a null pointer.  <A NAME="ffmkyu"></A></DD>
+</DL>
+
+<P>
+<PRE>
+  int fits_modify_key_null / ffmkyu
+      (fitsfile *fptr, char *keyname, char *comment, &gt; int *status)
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<A NAME="tex2html1217"
+  HREF="node75.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1213"
+  HREF="node68.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1207"
+  HREF="node73.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1215"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+ <A HREF="http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html">FITSIO Home</A>
+<BR>
+<B> Next:</B> <A NAME="tex2html1218"
+  HREF="node75.html">9.3.7 Update Keyword Routines</A>
+<B>Up:</B> <A NAME="tex2html1214"
+  HREF="node68.html">9.3 Specialized Header Keyword</A>
+<B> Previous:</B> <A NAME="tex2html1208"
+  HREF="node73.html">9.3.5 Read Keyword Routines</A>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+ 
+</ADDRESS>
+</BODY>
+</HTML>
