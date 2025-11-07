@@ -1,11 +1,17 @@
 # Build and object files
 bin/
 obj/
-*.dll
 *.pdb
-*.exe
 *.so
 *.dylib
+
+# Build output DLLs only (exclude plugin output, but NOT dependencies)
+bin/**/*.dll
+obj/**/*.dll
+package/**/*.dll
+
+# Allow dependencies folder DLLs to be tracked
+!dependencies/**/*.dll
 
 # NuGet
 *.nupkg
