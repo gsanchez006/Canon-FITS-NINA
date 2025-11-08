@@ -24,6 +24,16 @@ imageArray[y][x] = unchecked((short)(flatData[y * width + x] - 32768));  // ✅ 
 
 **Result:** ✅ Pixel values now match source Canon RAW data exactly
 
+### 📚 Infrastructure Improvements: Windows-Native CFitsio Library
+**Enhancement:** CFitsio 4.6.3 is now compiled with Visual C++ (MSVC) to ensure pure Windows-native dependencies with no external runtime requirements.
+
+**Benefits:**
+- Eliminates dependency on cross-platform libraries
+- Reduced binary footprint and load times
+- Better Windows API integration
+- Improved performance on Windows systems
+- Single distribution package with no external dependencies
+
 ## Verification
 
 **Test Image:** 3-second dark flat exposure (Canon RAW 14-bit)
