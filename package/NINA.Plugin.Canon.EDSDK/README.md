@@ -169,19 +169,34 @@ Automatically delete Canon RAW files after successful FITS conversion (use with 
 ### Build Requirements
 - **Visual Studio 2022** or **VS Code** with C# extension
 - **.NET 8.0 SDK**
-- **Canon EDSDK 13.19.0** (place in `../EDSDK_v13.19.0_Raw_Win/`)
+
+### Cloning the Repository
+All dependencies are included in the repository for reproducible builds:
+
+```bash
+git clone https://github.com/gsanchez006/Canon-FITS-NINA.git
+cd Canon-FITS-NINA
+```
+
+The `dependencies/` folder contains all required DLLs (~212 MB):
+- CSharpFITS v1.1
+- CFitsio 4.6.3 (Windows-native, built with MSVC)
+- Canon EDSDK 13.19.0 with DPP4Lib and IHL
 
 ### Building from Source
 ```batch
-cd NINA.Plugin.Canon.EDSDK.CFitsio
 build.bat
+```
+or
+```powershell
+.\build.ps1
 ```
 
 This will:
 1. Clean previous builds
 2. Restore NuGet packages
 3. Build Release configuration
-4. Copy Canon EDSDK DLLs
+4. Verify all dependencies are present
 5. Create distribution ZIP package
 
 ### Installing Development Build
