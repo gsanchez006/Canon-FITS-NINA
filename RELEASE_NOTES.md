@@ -1,6 +1,35 @@
 # Canon EDSDK to FITS Converter - CFitsio Edition
 
-## Version 1.0.4 - November 2025 (CURRENT)
+## Version 1.0.6 - November 7, 2025 (CURRENT)
+
+### � Critical Bug Fix: CSharpFITS BZERO Offset
+
+**BZERO bug in CSharpFITS engine FIXED**
+- Pixel values no longer offset by +32768
+- FITS files now pixel-perfect with source Canon RAW data
+- Both CSharpFITS and CFitsio engines produce scientifically accurate results
+- Verified with new 3s dark flat test image
+- See [RELEASE_NOTES_v1.0.6.md](RELEASE_NOTES_v1.0.6.md) for details
+
+**New Documentation & Tools**
+- Added `compare_fits_to_cr3.py` for FITS/CR3 pixel comparison analysis
+- Added `HOW_TO_USE_COMPARISON_TOOL.md` for verification instructions
+- Comprehensive analysis and verification reports included
+
+---
+
+## Version 1.0.5 - November 5, 2025
+
+### 🔧 Critical Bug Fix: Last Image Conversion Failure
+
+**Queue-based processing fixes long sequence issues**
+- Last images in bursts (30+) now convert successfully
+- Implemented FIFO queue to prevent file mismatching
+- See [RELEASE_NOTES_v1.0.5.md](RELEASE_NOTES_v1.0.5.md) for details
+
+---
+
+## Version 1.0.4 - November 2025
 
 ### 🔍 Enhancement: Better Logging
 
@@ -8,30 +37,6 @@
 - See exactly which Canon RAW files are being deleted
 - Improved troubleshooting information in NINA logs
 - See [RELEASE_NOTES_v1.0.4.md](RELEASE_NOTES_v1.0.4.md) for details
-
----
-
-## Version 1.0.3 - January 2025
-
-### 🔧 Critical Bug Fix Release
-
-**Fixed: cfitsio.dll Loading Failure on Production Systems**
-- Bundles Visual C++ runtime dependencies (vcruntime140.dll, msvcp140.dll)
-- Fixes error 0x8007007E on systems without Visual Studio installed
-- No user action required - runtime DLLs included automatically
-- See [RELEASE_NOTES_v1.0.3.md](RELEASE_NOTES_v1.0.3.md) for details
-
----
-
-## Version 1.0.2 - January 2025
-
-### 🎯 Multi-Format Support Enhancement
-
-**Added: CR2 and CRW File Format Support**
-- Extended detection to support older Canon RAW formats (CR2, CRW)
-- Improved file search using LINQ SelectMany for multiple extensions
-- Comprehensive documentation and release preparation
-- See [RELEASE_NOTES_v1.0.2.md](RELEASE_NOTES_v1.0.2.md) for details
 
 ---
 

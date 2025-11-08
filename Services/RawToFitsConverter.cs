@@ -143,6 +143,8 @@ namespace NINA.Plugin.Canon.EDSDK.Services
                 Logger.Info($"  Raw data: {flatData.Length} pixels, 16-bit");
 
                 // Convert to jagged array for FITS (CSharpFITS doesn't support rectangular arrays)
+                // Must subtract BZERO offset before casting to signed short
+                // This matches CFitsio's automatic USHORT_IMG behavior
                 short[][] imageArray = new short[height][];
                 
                 for (int y = 0; y < height; y++)
@@ -150,7 +152,9 @@ namespace NINA.Plugin.Canon.EDSDK.Services
                     imageArray[y] = new short[width];
                     for (int x = 0; x < width; x++)
                     {
-                        imageArray[y][x] = (short)flatData[y * width + x];
+                        // Subtract 32768 before casting to properly store unsigned values
+                        // BZERO=32768 header tells readers to add it back
+                        imageArray[y][x] = unchecked((short)(flatData[y * width + x] - 32768));
                     }
                 }
 
